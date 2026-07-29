@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/components/cart-context";
-import logo from "@/assets/logo.jpeg.asset.json";
+import logo from "@/assets/logo-mark.png.asset.json";
 
 const links = [
   { href: "#products", label: "Продукты" },
@@ -39,7 +39,7 @@ export function SiteHeader() {
           <img
             src={logo.url}
             alt="Логотип FonteVita"
-            className="h-10 w-auto rounded-lg sm:h-12"
+            className="h-11 w-auto object-contain sm:h-14"
             width={160}
             height={112}
           />

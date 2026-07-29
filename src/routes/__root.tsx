@@ -10,7 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import logoAsset from "../assets/logo.jpeg.asset.json";
+import logoAsset from "../assets/logo-mark.png.asset.json";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -98,7 +98,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap",
       },
-      { rel: "icon", href: logoAsset.url, type: "image/jpeg" },
+      { rel: "icon", href: logoAsset.url, type: "image/png" },
       { rel: "apple-touch-icon", href: logoAsset.url },
     ],
   }),
