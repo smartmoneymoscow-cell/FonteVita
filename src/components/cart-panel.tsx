@@ -69,7 +69,7 @@ export function CartPanel() {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="h-20 w-20 shrink-0 rounded-xl object-cover"
+                    className="h-20 w-20 shrink-0 rounded-xl bg-secondary object-contain"
                     loading="lazy"
                   />
                   <div className="min-w-0 flex-1">

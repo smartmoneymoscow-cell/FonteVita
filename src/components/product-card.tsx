@@ -3,7 +3,7 @@ import { ChevronDown, ShoppingBag, Check } from "lucide-react";
 import { useCart } from "@/components/cart-context";
 import { formatPrice, type Product } from "@/data/products";
 
-const accentBg: Record<Product["accent"], string> = {
+const accentRing: Record<Product["accent"], string> = {
   sun: "bg-sun-soft",
   sky: "bg-sky-soft",
   coral: "bg-coral-soft",
@@ -41,7 +41,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <article className="soft-card flex h-full flex-col overflow-hidden">
-      <div className={`relative overflow-hidden ${accentBg[product.accent]}`}>
+      <div className={`relative overflow-hidden bg-card ${accentRing[product.accent]}`}>
         <img
           ref={imgRef}
           src={product.image}
