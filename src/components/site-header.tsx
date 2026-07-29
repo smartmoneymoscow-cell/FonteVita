@@ -5,9 +5,12 @@ import logo from "@/assets/logo-mark.png.asset.json";
 
 const links = [
   { href: "#products", label: "Продукты" },
+  { href: "#quiz", label: "Подбор" },
   { href: "#quality", label: "Качество" },
-  { href: "#about", label: "О бренде" },
+  { href: "#reviews", label: "Отзывы" },
+  { href: "#faq", label: "Вопросы" },
 ];
+
 
 export function SiteHeader() {
   const { count, setOpen } = useCart();
