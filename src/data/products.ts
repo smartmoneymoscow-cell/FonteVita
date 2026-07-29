@@ -1,9 +1,6 @@
-import collagenImg from "@/assets/collagen.jpeg.asset.json";
-import magnesiumImg from "@/assets/magnesium.jpeg.asset.json";
-import omegaImg from "@/assets/omega.jpeg.asset.json";
-import collagenInfo from "@/assets/collagen-info.png.asset.json";
-import magnesiumInfo from "@/assets/magnesium-info.png.asset.json";
-import omegaInfo from "@/assets/omega-info.png.asset.json";
+import collagenBottle from "@/assets/collagen-bottle.png.asset.json";
+import magnesiumBottle from "@/assets/magnesium-bottle.png.asset.json";
+import omegaBottle from "@/assets/omega-bottle.png.asset.json";
 
 export type Product = {
   id: string;
@@ -14,8 +11,8 @@ export type Product = {
   price: number;
   oldPrice?: number;
   image: string;
-  detailImage: string;
   accent: "sun" | "sky" | "coral";
+  highlights: { value: string; label: string }[];
   benefits: string[];
   intake: string;
   composition: string;
@@ -30,9 +27,13 @@ export const products: Product[] = [
     capsules: "120 капсул",
     price: 1490,
     oldPrice: 1890,
-    image: collagenImg.url,
-    detailImage: collagenInfo.url,
+    image: collagenBottle.url,
     accent: "coral",
+    highlights: [
+      { value: "2000 мг", label: "коллаген гидролизованный" },
+      { value: "160 мг", label: "витамин C" },
+      { value: "60 дней", label: "курс приёма" },
+    ],
     benefits: [
       "2000 мг гидролизованного коллагена — поддерживает эластичность и упругость кожи",
       "160 мг витамина C — необходим для усвоения всех компонентов",
@@ -50,9 +51,13 @@ export const products: Product[] = [
     capsules: "120 капсул",
     price: 1190,
     oldPrice: 1490,
-    image: magnesiumImg.url,
-    detailImage: magnesiumInfo.url,
+    image: magnesiumBottle.url,
     accent: "sky",
+    highlights: [
+      { value: "2010 мг", label: "хелат магния" },
+      { value: "6 мг", label: "витамин B6" },
+      { value: "40 дней", label: "курс приёма" },
+    ],
     benefits: [
       "Уменьшает мигрени и снижает давление",
       "Предотвращает спазмы мышц",
@@ -70,9 +75,13 @@ export const products: Product[] = [
     capsules: "180 капсул",
     price: 1690,
     oldPrice: 2090,
-    image: omegaImg.url,
-    detailImage: omegaInfo.url,
+    image: omegaBottle.url,
     accent: "sky",
+    highlights: [
+      { value: "3000 мг", label: "в сутки" },
+      { value: "17,94", label: "тотох-индекс при норме 26" },
+      { value: "60 дней", label: "курс приёма" },
+    ],
     benefits: [
       "Высокая концентрация полиненасыщенных жирных кислот",
       "Оптимальная биодоступность — хорошо и быстро усваивается",
