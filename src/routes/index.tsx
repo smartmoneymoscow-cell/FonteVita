@@ -132,7 +132,7 @@ function Index() {
               aria-hidden
               className="pointer-events-none absolute -left-24 top-52 h-72 w-72 rounded-full bg-sky-soft blur-3xl"
             />
-            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-16 pt-10 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pb-24 lg:pt-16">
+            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-16 px-4 pb-16 pt-10 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pb-24 lg:pt-16">
               <div className="animate-rise-in text-center lg:text-left">
                 <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
                   <Sparkles className="h-4 w-4 text-coral" />
