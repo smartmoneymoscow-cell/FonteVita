@@ -388,12 +388,12 @@ function Index() {
                   <div className="relative flex items-center justify-center">
                     <div
                       aria-hidden
-                      className="absolute h-52 w-52 rounded-full bg-sun-soft blur-2xl"
+                      className="absolute h-40 w-40 rounded-full bg-sun-soft blur-2xl"
                     />
                     <img
                       src={logo.url}
                       alt="Логотип FonteVita"
-                      className="relative w-full max-w-[280px] animate-float-soft object-contain"
+                      className="relative w-full max-w-[180px] animate-float-soft object-contain"
                       loading="lazy"
                     />
                   </div>
