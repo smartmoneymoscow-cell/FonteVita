@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,21 +32,37 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Find build output
+        id: find
+        run: |
+          echo "=== Looking for index.html ==="
+          find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" | head -20
+          echo "=== .output ==="
+          ls -la .output/ 2>/dev/null || echo "no .output"
+          ls -laR .output/public/ 2>/dev/null || echo "no .output/public"
+          echo "=== dist ==="
+          ls -la dist/ 2>/dev/null || echo "no dist"
+          # Determine upload dir
+          if [ -d ".output/public" ]; then
+            echo "upload_dir=.output/public" >> $GITHUB_OUTPUT
+          elif [ -d "dist" ]; then
+            echo "upload_dir=dist" >> $GITHUB_OUTPUT
+          elif [ -d ".output/static" ]; then
+            echo "upload_dir=.output/static" >> $GITHUB_OUTPUT
+          else
+            # Find dir containing index.html
+            DIR=$(find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" -exec dirname {} \; | head -1)
+            echo "upload_dir=$DIR" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .output/public
+          path: ${{ steps.find.outputs.upload_dir }}
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
