@@ -1,14 +1,52 @@
-# Welcome to your Lovable project
+# FonteVita: Your Wellness Source
+
+Ты профессиональный дизайнер и веб дизайнер сайтов, ты хорошо разбираешься в UI и UX, ты делаешь современный, красивый сайт для нового инновационного бренда БАДов
+
+
+
+Тебе нужно сделать красивый, понятный, сайт с современным визуалом и анимацией, который будет вызывать у пользователей доверие и желание купить БАДы. 
+
+Логотип компании FonteVita — текст сзади которого желтый круг на бежевом фоне прикреплен первым фото к этому промту, используй строго это лого, а не его измененную копию для сайта и для фавикона сайта. Изучи цвета и шрифт лого, они будут важны для сайта. 
+
+У компании есть три продукта:
+
+1. Коллаген
+
+2. Магний
+
+3. Омега 3
+
+
+
+Карточки этих продуктов прикреплены сразу после лого, используй карточки продуктов для сайта. ВНИМАНИЕ: не меня дизайн баночек или этикеток, используй карточки. Дизайн баночек должен остаться как в карточках. 
+
+Используй анимацию человечков строго как у компании, не рисуй человечков в другом стиле, только в стиле компании как в карточках. 
+
+На сайте должны быть карточки товаров, возможность раскрыть карточку и прочитать подробнее, кнопка добавления в корзину с анимацией добавления в корзину, предпросмотром корзины в правой части сайта и кнопка оформления заказа. 
+
+Сайт должен быть в стиле компании, с анимацией как у компании, дизайном контейнеров и блоков как у компании, цветами как у компании, шрифтом как у компании. Изучи все эти компоненты в карточках очень внимательно. 
+
+
+
+Сайт должен выглядеть очень профессионально, современно, красиво и чисто, вызывать доверие. 
+
+Сайт должен быть сверстан хорошо, с адаптацией под все устройства, с правильными расстояниями текстов, центровкой, хорошо подобранными цветами текста и фона, чтобы текст читался, в едином стиле. 
+
+У сайта должна быть красивая и аккуратная анимация. 
+
+Будь профессионален и строг в самопроверке. Мобильную версию проверяй также тщательно как и веб версию.
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://fontevita-vitality-hub.lovable.app
+
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/145ae035-56a6-4b4a-a65a-eae335fee7f0).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +58,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
