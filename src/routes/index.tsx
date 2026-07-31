@@ -191,7 +191,7 @@ function Index() {
                       className="relative h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56"
                       style={{ animationDelay: "0.6s" }}
                     />
-                    <span className="pointer-events-none absolute right-[8%] top-[18%] z-10 rounded-full bg-coral px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md sm:text-xs">
+                    <span className="pointer-events-none absolute -right-3 top-[15%] z-20 rounded-full bg-sun/90 px-2 py-0.5 text-[9px] font-bold tracking-wide text-foreground shadow-sm sm:-right-5 sm:text-[10px]">
                       Хит продаж
                     </span>
                   </div>

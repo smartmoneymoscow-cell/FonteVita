@@ -42,25 +42,27 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <article className="soft-card flex h-full flex-col overflow-hidden">
-      <div
-        className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10`}
-      >
+      <div className="relative">
         <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-8 h-44 w-44 -translate-x-1/2 rounded-full bg-card/70 blur-2xl"
-        />
-        <img
-          ref={imgRef}
-          src={product.image}
-          alt={`${product.name} FonteVita — ${product.capsules}`}
-          className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 sm:h-64"
-          loading="lazy"
-        />
-        <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
-          {product.capsules}
-        </span>
+          className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10`}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-8 h-44 w-44 -translate-x-1/2 rounded-full bg-card/70 blur-2xl"
+          />
+          <img
+            ref={imgRef}
+            src={product.image}
+            alt={`${product.name} FonteVita — ${product.capsules}`}
+            className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 sm:h-64"
+            loading="lazy"
+          />
+          <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
+            {product.capsules}
+          </span>
+        </div>
         {product.id === "collagen" && (
-          <span className="pointer-events-none absolute right-[8%] top-[22%] z-10 rounded-full bg-coral px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md sm:text-[11px]">
+          <span className="pointer-events-none absolute -right-1 top-3 z-20 rounded-full bg-sun/90 px-2 py-0.5 text-[9px] font-bold tracking-wide text-foreground shadow-sm sm:-right-2 sm:top-4 sm:text-[10px]">
             Хит продаж
           </span>
         )}
