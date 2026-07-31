@@ -36,25 +36,27 @@
 
 Будь профессионален и строг в самопроверке. Мобильную версию проверяй также тщательно как и веб версию.
 
-This project was built with [Lovable](https://lovable.dev).
+## 🌐 Live
 
-**Live app**: https://fontevita-vitality-hub.lovable.app
+- **GitHub Pages**: https://smartmoneymoscow-cell.github.io/fontevita-vitality-hub/
+- **Lovable**: https://fontevita-vitality-hub.lovable.app
 
-## Build with Lovable
+## Tech Stack
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/145ae035-56a6-4b4a-a65a-eae335fee7f0).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+- React 19 + TanStack Start
+- Tailwind CSS 4
+- Radix UI components
+- Vite 8
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+git clone https://github.com/smartmoneymoscow-cell/fontevita-vitality-hub.git
+cd fontevita-vitality-hub
 npm i
 npm run dev
 ```
+
+## Deploy
+
+Деплой на GitHub Pages происходит автоматически при пуше в `main` через GitHub Actions.
