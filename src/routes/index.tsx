@@ -182,23 +182,41 @@ function Index() {
                   aria-hidden
                   className="absolute bottom-10 left-1/2 h-52 w-52 -translate-x-1/2 rounded-full bg-sun/60 blur-2xl"
                 />
-                <img
-                  src={collagenBottle.url}
-                  alt="Коллаген FonteVita, 120 капсул"
-                  className="relative z-10 h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56"
-                  style={{ animationDelay: "0.6s" }}
-                />
-                <img
-                  src={omegaBottle.url}
-                  alt="Омега 3 FonteVita, 180 капсул"
-                  className="relative z-20 h-56 w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-80"
-                />
-                <img
-                  src={magnesiumBottle.url}
-                  alt="Магний + B6 FonteVita, 120 капсул"
-                  className="relative z-10 h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56"
-                  style={{ animationDelay: "1.2s" }}
-                />
+                <div className="relative z-10 flex flex-col items-center">
+                  <span className="mb-1 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-orange-300/40 sm:text-xs">
+                    Лидер продаж
+                  </span>
+                  <div className="relative">
+                    <div aria-hidden className="absolute -inset-4 rounded-full bg-amber-300/20 blur-xl sm:-inset-6" />
+                    <img
+                      src={collagenBottle.url}
+                      alt="Коллаген FonteVita, 120 капсул"
+                      className="relative h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56"
+                      style={{ animationDelay: "0.6s" }}
+                    />
+                  </div>
+                </div>
+                <div className="relative z-20 flex flex-col items-center">
+                  <div className="relative">
+                    <div aria-hidden className="absolute -inset-5 rounded-full bg-sky-300/20 blur-xl sm:-inset-7" />
+                    <img
+                      src={omegaBottle.url}
+                      alt="Омега 3 FonteVita, 180 капсул"
+                      className="relative h-56 w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-80"
+                    />
+                  </div>
+                </div>
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className="relative">
+                    <div aria-hidden className="absolute -inset-4 rounded-full bg-emerald-300/20 blur-xl sm:-inset-6" />
+                    <img
+                      src={magnesiumBottle.url}
+                      alt="Магний + B6 FonteVita, 120 капсул"
+                      className="relative h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56"
+                      style={{ animationDelay: "1.2s" }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </section>
