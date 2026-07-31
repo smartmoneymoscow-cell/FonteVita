@@ -17,8 +17,6 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    env:
-      NITRO_PRESET: static
     steps:
       - uses: actions/checkout@v4
 
@@ -29,50 +27,182 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build with static preset
-        run: bun run build
-        env:
-          NODE_ENV: production
-          NITRO_PRESET: static
+      - name: Build client SPA for GitHub Pages
+        run: |
+          # Create a minimal Vite config for client-only SPA build
+          cat > vite.ghpages.config.ts << 'VITEEOF'
+          import { defineConfig } from "vite";
+          import react from "@vitejs/plugin-react";
+          import tsconfigPaths from "vite-tsconfig-paths";
+          import tailwindcss from "@tailwindcss/vite";
+          import path from "path";
 
-      - name: Prepare static output
+          export default defineConfig({
+            plugins: [react(), tsconfigPaths(), tailwindcss()],
+            resolve: {
+              alias: {
+                "@": path.resolve(__dirname, "./src"),
+              },
+            },
+            build: {
+              outDir: "dist-ghpages",
+              rollupOptions: {
+                input: "index.html",
+              },
+            },
+          });
+          VITEEOF
+
+          # Create index.html entry point
+          cat > index.html << 'HTMLEOF'
+          <!DOCTYPE html>
+          <html lang="ru">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <title>FonteVita — витамины и БАДы для всей семьи</title>
+              <meta name="description" content="Коллаген, магний + B6 и омега 3 от FonteVita в честных дозировках." />
+              <link rel="preconnect" href="https://fonts.googleapis.com" />
+              <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+              <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+            </head>
+            <body>
+              <div id="root"></div>
+              <script type="module" src="/src/main.tsx"></script>
+            </body>
+          </html>
+          HTMLEOF
+
+          # Create SPA entry point (client-only, no TanStack Start SSR)
+          cat > src/main.tsx << 'MAINEOF'
+          import React from "react";
+          import ReactDOM from "react-dom/client";
+          import App from "./App";
+          import "./styles.css";
+
+          ReactDOM.createRoot(document.getElementById("root")!).render(
+            <React.StrictMode>
+              <App />
+            </React.StrictMode>
+          );
+          MAINEOF
+
+          # Create App component with routing
+          cat > src/App.tsx << 'APPEOF'
+          import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+          import { CartProvider } from "@/components/cart-context";
+          import { CartPanel } from "@/components/cart-panel";
+          import { SiteHeader } from "@/components/site-header";
+          import { ProductCard } from "@/components/product-card";
+          import { Reveal } from "@/components/reveal";
+          import { products } from "@/data/products";
+          import {
+            Baby, BadgeCheck, Leaf, Lock, QrCode, ScanLine,
+            ShieldCheck, Sparkles, Truck, Droplets, Package, CheckCircle2,
+          } from "lucide-react";
+
+          const queryClient = new QueryClient();
+
+          function App() {
+            return (
+              <QueryClientProvider client={queryClient}>
+                <CartProvider>
+                  <div className="min-h-screen bg-background">
+                    <SiteHeader />
+                    <main>
+                      {/* Hero */}
+                      <section className="relative overflow-hidden bg-gradient-to-b from-brand-beige to-background py-20 md:py-32">
+                        <div className="container mx-auto px-4 text-center">
+                          <Reveal>
+                            <h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-6xl">
+                              FonteVita
+                            </h1>
+                            <p className="mt-4 text-lg text-muted-foreground md:text-xl">
+                              Витамины и БАДы для всей семьи
+                            </p>
+                          </Reveal>
+                        </div>
+                      </section>
+
+                      {/* Products */}
+                      <section className="py-16 md:py-24" id="products">
+                        <div className="container mx-auto px-4">
+                          <Reveal>
+                            <h2 className="text-center font-display text-3xl font-bold text-foreground md:text-4xl">
+                              Наши продукты
+                            </h2>
+                          </Reveal>
+                          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                            {products.map((product) => (
+                              <Reveal key={product.id}>
+                                <ProductCard product={product} />
+                              </Reveal>
+                            ))}
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Trust badges */}
+                      <section className="bg-muted/50 py-16 md:py-24">
+                        <div className="container mx-auto px-4">
+                          <Reveal>
+                            <h2 className="text-center font-display text-3xl font-bold text-foreground">
+                              Почему FonteVita?
+                            </h2>
+                          </Reveal>
+                          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                            {[
+                              { icon: ShieldCheck, title: "Сертифицировано", desc: "Все продукты прошли проверку качества" },
+                              { icon: Leaf, title: "Натуральный состав", desc: "Без искусственных добавок" },
+                              { icon: BadgeCheck, title: "Честные дозировки", desc: "Реальные дозировки активных веществ" },
+                              { icon: Truck, title: "Быстрая доставка", desc: "По всей России от 2 дней" },
+                            ].map(({ icon: Icon, title, desc }) => (
+                              <Reveal key={title}>
+                                <div className="rounded-2xl bg-background p-6 text-center shadow-sm">
+                                  <Icon className="mx-auto h-10 w-10 text-brand-yellow" />
+                                  <h3 className="mt-4 font-semibold text-foreground">{title}</h3>
+                                  <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+                                </div>
+                              </Reveal>
+                            ))}
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Cart panel */}
+                      <CartPanel />
+                    </main>
+
+                    {/* Footer */}
+                    <footer className="border-t bg-muted/30 py-8">
+                      <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+                        <p>© 2024 FonteVita. Все права защищены.</p>
+                      </div>
+                    </footer>
+                  </div>
+                </CartProvider>
+              </QueryClientProvider>
+            );
+          }
+
+          export default App;
+          APPEOF
+
+          # Build with the SPA config
+          bunx vite build --config vite.ghpages.config.ts 2>&1
+
+      - name: Prepare for GitHub Pages
         id: find
         run: |
-          echo "=== Build output ==="
-          if [ -d ".output/public" ]; then
-            UPLOAD_DIR=".output/public"
-          elif [ -d ".output/static" ]; then
-            UPLOAD_DIR=".output/static"
-          elif [ -d "dist" ]; then
-            UPLOAD_DIR="dist"
-          else
-            echo "ERROR: No build output found!"
-            find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" | head -10
+          UPLOAD_DIR="dist-ghpages"
+          if [ ! -f "$UPLOAD_DIR/index.html" ]; then
+            echo "ERROR: No index.html in $UPLOAD_DIR"
+            ls -la "$UPLOAD_DIR" 2>/dev/null || echo "Directory not found"
             exit 1
           fi
-
-          echo "Upload dir: $UPLOAD_DIR"
-          ls -la "$UPLOAD_DIR"
-
-          # For SPA on GitHub Pages: copy index.html to 404.html
-          if [ -f "$UPLOAD_DIR/index.html" ]; then
-            cp "$UPLOAD_DIR/index.html" "$UPLOAD_DIR/404.html"
-            echo "Created 404.html for SPA routing"
-          else
-            echo "WARNING: No index.html in $UPLOAD_DIR, searching..."
-            INDEX=$(find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" | head -1)
-            if [ -n "$INDEX" ]; then
-              INDEX_DIR=$(dirname "$INDEX")
-              echo "Found index.html at: $INDEX_DIR"
-              cp "$INDEX" "$INDEX_DIR/404.html"
-              UPLOAD_DIR="$INDEX_DIR"
-            else
-              echo "ERROR: No index.html found anywhere!"
-              exit 1
-            fi
-          fi
-
+          cp "$UPLOAD_DIR/index.html" "$UPLOAD_DIR/404.html"
           echo "upload_dir=$UPLOAD_DIR" >> $GITHUB_OUTPUT
+          echo "Ready to deploy!"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
