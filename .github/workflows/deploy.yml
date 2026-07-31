@@ -38,6 +38,7 @@ jobs:
           import path from "path";
 
           export default defineConfig({
+            base: "/fontevita-vitality-hub/",
             plugins: [react(), tsconfigPaths(), tailwindcss()],
             resolve: {
               alias: {
