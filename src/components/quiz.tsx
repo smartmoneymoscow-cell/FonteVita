@@ -37,15 +37,20 @@ export function Quiz() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
 
-  const result = useMemo(() => {
+  const results = useMemo(() => {
     if (answers.length < questions.length) return null;
     const tally = answers.reduce<Record<string, number>>((acc, a) => {
       acc[a] = (acc[a] ?? 0) + 1;
       return acc;
     }, {});
-    const winner = Object.entries(tally).sort((a, b) => b[1] - a[1])[0][0];
-    return products.find((p) => p.id === winner) ?? products[0];
+    const picked = Object.entries(tally)
+      .sort((a, b) => b[1] - a[1])
+      .map(([id]) => products.find((p) => p.id === id))
+      .filter((p): p is (typeof products)[number] => Boolean(p));
+    return picked.length ? picked : [products[0]];
   }, [answers]);
+
+  const total = results?.reduce((sum, p) => sum + p.price, 0) ?? 0;
 
   const reset = () => {
     setStep(0);
