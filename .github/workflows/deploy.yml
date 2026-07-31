@@ -177,12 +177,28 @@ jobs:
                             ))}
                           </dl>
                         </div>
-                        <div className="relative mx-auto flex w-full max-w-lg items-end justify-center gap-2 sm:gap-5">
-                          <div aria-hidden className="absolute bottom-4 left-1/2 h-64 w-[88%] -translate-x-1/2 rounded-[3rem] bg-sky-soft/70 sm:h-72" />
-                          <div aria-hidden className="absolute bottom-10 left-1/2 h-52 w-52 -translate-x-1/2 rounded-full bg-sun/60 blur-2xl" />
-                          <img src={collagenUrl} alt="Коллаген FonteVita, 120 капсул" className="relative z-10 h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56" style={{ animationDelay: "0.6s" }} />
-                          <img src={omegaUrl} alt="Омега 3 FonteVita, 180 капсул" className="relative z-20 h-56 w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-80" />
-                          <img src={magnesiumUrl} alt="Магний + B6 FonteVita, 120 капсул" className="relative z-10 h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56" style={{ animationDelay: "1.2s" }} />
+                        <div className="relative mx-auto flex w-full max-w-xl items-end justify-center gap-2 sm:gap-6">
+                          <div aria-hidden className="absolute bottom-4 left-1/2 h-72 w-[88%] -translate-x-1/2 rounded-[3rem] bg-sky-soft/70 sm:h-80" />
+                          <div aria-hidden className="absolute bottom-10 left-1/2 h-60 w-60 -translate-x-1/2 rounded-full bg-sun/60 blur-2xl" />
+                          <div className="relative z-10 flex flex-col items-center">
+                            <div className="relative">
+                              <div aria-hidden className="absolute -inset-5 rounded-full bg-amber-300/20 blur-xl sm:-inset-7" />
+                              <img src={collagenUrl} alt="Коллаген FonteVita, 120 капсул" className="relative h-48 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-64" style={{ animationDelay: "0.6s" }} />
+                              <span className="pointer-events-none absolute right-[12%] top-[10%] z-20 rounded-full bg-sun/90 px-2 py-0.5 text-[9px] font-bold tracking-wide text-foreground shadow-sm sm:text-[10px]">Хит продаж</span>
+                            </div>
+                          </div>
+                          <div className="relative z-20 flex flex-col items-center">
+                            <div className="relative">
+                              <div aria-hidden className="absolute -inset-6 rounded-full bg-sky-300/20 blur-xl sm:-inset-8" />
+                              <img src={omegaUrl} alt="Омега 3 FonteVita, 180 капсул" className="relative h-64 w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-96" />
+                            </div>
+                          </div>
+                          <div className="relative z-10 flex flex-col items-center">
+                            <div className="relative">
+                              <div aria-hidden className="absolute -inset-5 rounded-full bg-emerald-300/20 blur-xl sm:-inset-7" />
+                              <img src={magnesiumUrl} alt="Магний + B6 FonteVita, 120 капсул" className="relative h-48 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-64" style={{ animationDelay: "1.2s" }} />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </section>
