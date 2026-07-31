@@ -60,7 +60,7 @@ export function ProductCard({ product }: { product: Product }) {
           {product.capsules}
         </span>
         {product.id === "collagen" && (
-          <span className="absolute right-4 top-4 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white shadow-lg shadow-orange-300/40">
+          <span className="pointer-events-none absolute left-1/2 top-[22%] z-10 -translate-x-1/2 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wide text-white shadow-lg shadow-orange-300/40 sm:text-[11px]">
             Хит продаж
           </span>
         )}
