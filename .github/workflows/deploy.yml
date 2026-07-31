@@ -32,28 +32,35 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: Find build output
-        id: find
+      - name: Prepare static output
         run: |
-          echo "=== Looking for index.html ==="
-          find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" | head -20
-          echo "=== .output ==="
-          ls -la .output/ 2>/dev/null || echo "no .output"
-          ls -laR .output/public/ 2>/dev/null || echo "no .output/public"
-          echo "=== dist ==="
-          ls -la dist/ 2>/dev/null || echo "no dist"
-          # Determine upload dir
+          # Determine upload directory
           if [ -d ".output/public" ]; then
-            echo "upload_dir=.output/public" >> $GITHUB_OUTPUT
+            UPLOAD_DIR=".output/public"
           elif [ -d "dist" ]; then
-            echo "upload_dir=dist" >> $GITHUB_OUTPUT
+            UPLOAD_DIR="dist"
           elif [ -d ".output/static" ]; then
-            echo "upload_dir=.output/static" >> $GITHUB_OUTPUT
+            UPLOAD_DIR=".output/static"
           else
-            # Find dir containing index.html
-            DIR=$(find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" -exec dirname {} \; | head -1)
-            echo "upload_dir=$DIR" >> $GITHUB_OUTPUT
+            echo "ERROR: No build output found!"
+            find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" | head -10
+            exit 1
           fi
+
+          echo "Upload dir: $UPLOAD_DIR"
+          ls -la "$UPLOAD_DIR"
+
+          # For SPA on GitHub Pages: copy index.html to 404.html
+          # so that client-side routing works on refresh
+          if [ -f "$UPLOAD_DIR/index.html" ]; then
+            cp "$UPLOAD_DIR/index.html" "$UPLOAD_DIR/404.html"
+            echo "Created 404.html for SPA routing"
+          else
+            echo "WARNING: No index.html found in $UPLOAD_DIR"
+          fi
+
+          echo "upload_dir=$UPLOAD_DIR" >> $GITHUB_OUTPUT
+        id: find
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
