@@ -376,6 +376,17 @@ jobs:
           # Build with the SPA config
           bunx vite build --config vite.ghpages.config.ts 2>&1
 
+      - name: Build Telegram Mini App
+        run: |
+          cd miniapp
+          npm install
+          npm run build
+          cd ..
+          # Copy miniapp build into the main dist under /miniapp/
+          mkdir -p dist-ghpages/miniapp
+          cp -r miniapp/dist/* dist-ghpages/miniapp/
+          echo "Mini app built and copied to dist-ghpages/miniapp/"
+
       - name: Prepare for GitHub Pages
         id: find
         run: |
