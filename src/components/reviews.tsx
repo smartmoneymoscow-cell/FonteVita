@@ -24,6 +24,7 @@ const reviews = [
     city: "Екатеринбург",
     product: "Коллаген",
     text: "Заказывала маме и себе. Упаковка приехала в плёнке, банка непрозрачная, мембрана целая — доверие с первой секунды.",
+    avatar: "/maria-avatar.png",
   },
 ];
 
@@ -34,9 +35,17 @@ export function Reviews() {
         <figure key={r.name + r.product} className="soft-card flex h-full flex-col gap-4 p-6 sm:p-7">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-sun-soft font-display text-base font-bold">
-                {r.name.charAt(0)}
-              </div>
+              {r.avatar ? (
+                <img
+                  src={r.avatar}
+                  alt={r.name}
+                  className="h-11 w-11 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-sun-soft font-display text-base font-bold">
+                  {r.name.charAt(0)}
+                </div>
+              )}
               <div>
                 <figcaption className="text-sm font-bold">{r.name}</figcaption>
                 <p className="text-xs text-muted-foreground">{r.city}</p>
