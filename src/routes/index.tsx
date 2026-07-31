@@ -183,9 +183,6 @@ function Index() {
                   className="absolute bottom-10 left-1/2 h-52 w-52 -translate-x-1/2 rounded-full bg-sun/60 blur-2xl"
                 />
                 <div className="relative z-10 flex flex-col items-center">
-                  <span className="mb-1 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-orange-300/40 sm:text-xs">
-                    Лидер продаж
-                  </span>
                   <div className="relative">
                     <div aria-hidden className="absolute -inset-4 rounded-full bg-amber-300/20 blur-xl sm:-inset-6" />
                     <img
@@ -194,6 +191,9 @@ function Index() {
                       className="relative h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56"
                       style={{ animationDelay: "0.6s" }}
                     />
+                    <span className="pointer-events-none absolute left-1/2 top-[18%] z-10 -translate-x-1/2 rounded-full bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-orange-300/40 sm:text-xs">
+                      Хит продаж
+                    </span>
                   </div>
                 </div>
                 <div className="relative z-20 flex flex-col items-center">
