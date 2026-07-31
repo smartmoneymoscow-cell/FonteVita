@@ -40,7 +40,7 @@ export function BottomNav({
               <span className="relative">
                 <Icon className="h-5 w-5" strokeWidth={isActive ? 2.5 : 2} />
                 {tab.badge != null && tab.badge > 0 && (
-                  <span className="absolute -right-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-coral px-1 text-[10px] font-extrabold text-card">
+                  <span className="absolute -right-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-coral px-1 text-[10px] font-extrabold text-card animate-pop-badge">
                     {tab.badge}
                   </span>
                 )}
