@@ -77,9 +77,9 @@ export function ProductCard({ product }: { product: Product }) {
 
         <dl className="grid grid-cols-3 gap-1.5 sm:gap-2">
           {product.highlights.map((h) => (
-            <div key={h.label} className="rounded-xl bg-secondary px-1.5 py-2.5 text-center sm:rounded-2xl sm:px-2 sm:py-3">
+            <div key={h.label} className="flex flex-col items-center rounded-xl bg-secondary px-1 py-2.5 text-center sm:rounded-2xl sm:px-2 sm:py-3">
               <dt className="font-display text-sm font-bold leading-none sm:text-base">{h.value}</dt>
-              <dd className="mt-0.5 text-[10px] leading-tight text-muted-foreground sm:mt-1 sm:text-[11px]">{h.label}</dd>
+              <dd className="mt-1 line-clamp-2 text-[9px] leading-[1.25] text-muted-foreground sm:text-[11px] sm:leading-tight">{h.label}</dd>
             </div>
           ))}
         </dl>
