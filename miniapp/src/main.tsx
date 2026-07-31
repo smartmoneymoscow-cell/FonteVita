@@ -8,13 +8,26 @@ const tg = window.Telegram?.WebApp;
 if (tg) {
   tg.ready();
   tg.expand();
-  // Apply theme
-  document.documentElement.style.setProperty("--tg-bg", tg.themeParams.bg_color || "");
-  document.documentElement.style.setProperty("--tg-text", tg.themeParams.text_color || "");
+  const params = tg.themeParams;
+  if (params.bg_color) document.documentElement.style.setProperty("--tg-bg", params.bg_color);
+  if (params.text_color) document.documentElement.style.setProperty("--tg-text", params.text_color);
 }
 
-createRoot(document.getElementById("root")!).render(
+// Mount app and hide preloader
+const root = document.getElementById("root")!;
+createRoot(root).render(
   <StrictMode>
     <App />
   </StrictMode>,
 );
+
+// Fade out preloader after first render
+requestAnimationFrame(() => {
+  setTimeout(() => {
+    const preloader = document.getElementById("preloader");
+    if (preloader) {
+      preloader.classList.add("fade-out");
+      setTimeout(() => preloader.remove(), 600);
+    }
+  }, 400);
+});
