@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { products, type Product } from "@/data/products";
 
 export type CartLine = { product: Product; qty: number };
@@ -16,11 +16,25 @@ type CartCtx = {
   clear: () => void;
 };
 
+const CART_KEY = "fv_cart";
+
+function loadCart(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return {};
+}
+
 const Ctx = createContext<CartCtx | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<Record<string, number>>({});
+  const [items, setItems] = useState<Record<string, number>>(loadCart);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem(CART_KEY, JSON.stringify(items));
+  }, [items]);
 
   const add = useCallback((id: string) => {
     setItems((prev) => ({ ...prev, [id]: (prev[id] ?? 0) + 1 }));
