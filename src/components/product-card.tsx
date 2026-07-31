@@ -60,12 +60,12 @@ export function ProductCard({ product }: { product: Product }) {
           <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
             {product.capsules}
           </span>
+          {product.id === "collagen" && (
+            <span className="pointer-events-none absolute right-[12%] top-[10%] z-20 rounded-full bg-sun/90 px-2 py-0.5 text-[9px] font-bold tracking-wide text-foreground shadow-sm sm:text-[10px]">
+              Хит продаж
+            </span>
+          )}
         </div>
-        {product.id === "collagen" && (
-          <span className="pointer-events-none absolute -right-1 top-3 z-20 rounded-full bg-sun/90 px-2 py-0.5 text-[9px] font-bold tracking-wide text-foreground shadow-sm sm:-right-2 sm:top-4 sm:text-[10px]">
-            Хит продаж
-          </span>
-        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
