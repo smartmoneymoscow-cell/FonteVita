@@ -61,7 +61,7 @@ export function ProductCard({ product }: { product: Product }) {
           ref={imgRef}
           src={product.image}
           alt={`${product.name} FonteVita — ${product.capsules}`}
-          className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 sm:h-64"
+          className="relative h-44 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 sm:h-56"
           loading="lazy"
         />
         <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
