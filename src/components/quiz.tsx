@@ -37,15 +37,20 @@ export function Quiz() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answer[]>([]);
 
-  const result = useMemo(() => {
+  const results = useMemo(() => {
     if (answers.length < questions.length) return null;
     const tally = answers.reduce<Record<string, number>>((acc, a) => {
       acc[a] = (acc[a] ?? 0) + 1;
       return acc;
     }, {});
-    const winner = Object.entries(tally).sort((a, b) => b[1] - a[1])[0][0];
-    return products.find((p) => p.id === winner) ?? products[0];
+    const picked = Object.entries(tally)
+      .sort((a, b) => b[1] - a[1])
+      .map(([id]) => products.find((p) => p.id === id))
+      .filter((p): p is (typeof products)[number] => Boolean(p));
+    return picked.length ? picked : [products[0]];
   }, [answers]);
+
+  const total = results?.reduce((sum, p) => sum + p.price, 0) ?? 0;
 
   const reset = () => {
     setStep(0);
@@ -63,7 +68,7 @@ export function Quiz() {
             Мини-подбор за 30 секунд
           </span>
 
-          {!result ? (
+          {!results ? (
             <>
               <div className="mt-6 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
                 <div
@@ -96,20 +101,49 @@ export function Quiz() {
           ) : (
             <div className="animate-rise-in">
               <h3 className="mt-6 text-2xl font-bold sm:text-3xl">
-                Ваш продукт — {result.name}
+                {results.length === 1
+                  ? `Ваш продукт — ${results[0].name}`
+                  : `Ваша комбинация — ${results.map((p) => p.name).join(" + ")}`}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {result.tagline}. {result.dose}. {result.intake}
+                {results.length === 1
+                  ? "По вашим ответам достаточно одного продукта."
+                  : "По вашим ответам подойдёт связка из нескольких продуктов — они дополняют друг друга."}
               </p>
+
+              <div className="mt-5 grid gap-3">
+                {results.map((p) => (
+                  <div
+                    key={p.id}
+                    className="flex items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3"
+                  >
+                    <img
+                      src={p.image}
+                      alt={`${p.name} FonteVita`}
+                      className="h-14 w-14 shrink-0 object-contain"
+                      loading="lazy"
+                    />
+                    <div className="min-w-0">
+                      <p className="text-sm font-extrabold">{p.name}</p>
+                      <p className="truncate text-xs text-muted-foreground">{p.tagline}</p>
+                    </div>
+                    <span className="ml-auto shrink-0 text-sm font-bold">
+                      {formatPrice(p.price)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => {
-                    add(result.id);
+                    results.forEach((p) => add(p.id));
                     setOpen(true);
                   }}
                   className="rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
                 >
-                  Добавить в корзину · {formatPrice(result.price)}
+                  {results.length === 1 ? "Добавить в корзину" : "Добавить всё в корзину"} ·{" "}
+                  {formatPrice(total)}
                 </button>
                 <button
                   onClick={reset}
@@ -123,17 +157,21 @@ export function Quiz() {
           )}
         </div>
 
-        <div className="relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-8">
+        <div className="relative flex items-center justify-center gap-2 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-8">
           <div
             aria-hidden
             className="pointer-events-none absolute h-56 w-56 rounded-full bg-card/60 blur-3xl"
           />
-          <img
-            src={(result ?? products[1]).image}
-            alt={`${(result ?? products[1]).name} FonteVita`}
-            className="relative h-56 w-auto animate-float-soft object-contain drop-shadow-[0_24px_30px_rgba(60,70,90,0.2)] sm:h-72"
-            loading="lazy"
-          />
+          {(results ?? [products[1]]).map((p, i) => (
+            <img
+              key={p.id}
+              src={p.image}
+              alt={`${p.name} FonteVita`}
+              style={{ animationDelay: `${i * 0.4}s` }}
+              className="relative h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_30px_rgba(60,70,90,0.2)] sm:h-56 md:h-64"
+              loading="lazy"
+            />
+          ))}
         </div>
       </div>
     </div>
