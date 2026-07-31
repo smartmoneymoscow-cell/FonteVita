@@ -24,7 +24,7 @@ const reviews = [
     city: "Екатеринбург",
     product: "Коллаген",
     text: "Заказывала маме и себе. Упаковка приехала в плёнке, банка непрозрачная, мембрана целая — доверие с первой секунды.",
-    avatar: "/maria-avatar.png",
+    avatar: "/fontevita-vitality-hub/maria-avatar.png",
   },
 ];
 
