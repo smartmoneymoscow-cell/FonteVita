@@ -141,18 +141,18 @@ export default function App() {
                   className="absolute bottom-10 left-1/2 h-52 w-52 -translate-x-1/2 rounded-full bg-sun/60 blur-2xl"
                 />
                 <img
-                  src="/collagen.png"
+                  src="./collagen.png"
                   alt="Коллаген FonteVita, 120 капсул"
                   className="relative z-10 h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56"
                   style={{ animationDelay: "0.6s" }}
                 />
                 <img
-                  src="/omega.png"
+                  src="./omega.png"
                   alt="Омега 3 FonteVita, 180 капсул"
                   className="relative z-20 h-56 w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-80"
                 />
                 <img
-                  src="/magnesium.png"
+                  src="./magnesium.png"
                   alt="Магний + B6 FonteVita, 120 капсул"
                   className="relative z-10 h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_28px_rgba(60,70,90,0.22)] sm:h-56"
                   style={{ animationDelay: "1.2s" }}
@@ -310,7 +310,7 @@ export default function App() {
               </Reveal>
               <Reveal delay={120}>
                 <img
-                  src="/combo.png"
+                  src="./combo.png"
                   alt="Омега 3 и витамин D3+K2 FonteVita рядом"
                   className="mx-auto w-full max-w-md rounded-[2rem] object-contain"
                   loading="lazy"
@@ -349,7 +349,7 @@ export default function App() {
                       className="absolute h-40 w-40 rounded-full bg-sun-soft blur-2xl"
                     />
                     <img
-                      src="/logo.png"
+                      src="./logo.png"
                       alt="Логотип FonteVita"
                       className="relative w-full max-w-[180px] animate-float-soft object-contain"
                       loading="lazy"
@@ -411,7 +411,7 @@ export default function App() {
         <footer className="border-t border-border bg-sand py-10">
           <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-4 text-center sm:px-6 md:flex-row md:justify-between md:text-left">
             <img
-              src="/logo.png"
+              src="./logo.png"
               alt="FonteVita"
               className="h-12 w-auto object-contain"
               loading="lazy"

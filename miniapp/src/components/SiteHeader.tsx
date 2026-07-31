@@ -49,7 +49,7 @@ export function SiteHeader() {
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <a href="#top" className="flex items-center" aria-label="FonteVita — на главную">
           <img
-            src="/logo.png"
+            src="./logo.png"
             alt="Логотип FonteVita"
             className="h-11 w-auto object-contain sm:h-14"
             width={160}
