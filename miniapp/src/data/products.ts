@@ -14,6 +14,8 @@ export type Product = {
   composition: string;
 };
 
+const base = import.meta.env.BASE_URL;
+
 export const products: Product[] = [
   {
     id: "collagen",
@@ -23,7 +25,7 @@ export const products: Product[] = [
     capsules: "120 капсул",
     price: 1490,
     oldPrice: 1890,
-    image: "/collagen.png",
+    image: `${base}collagen.png`,
     accent: "coral",
     highlights: [
       { value: "2000 мг", label: "коллаген гидролизованный" },
@@ -47,7 +49,7 @@ export const products: Product[] = [
     capsules: "120 капсул",
     price: 1190,
     oldPrice: 1490,
-    image: "/magnesium.png",
+    image: `${base}magnesium.png`,
     accent: "sky",
     highlights: [
       { value: "2010 мг", label: "хелат магния" },
@@ -71,7 +73,7 @@ export const products: Product[] = [
     capsules: "180 капсул",
     price: 1690,
     oldPrice: 2090,
-    image: "/omega.png",
+    image: `${base}omega.png`,
     accent: "sky",
     highlights: [
       { value: "3000 мг", label: "в сутки" },
