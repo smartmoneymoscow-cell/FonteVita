@@ -61,7 +61,7 @@ export function ProductCard({ product }: { product: Product }) {
           ref={imgRef}
           src={product.image}
           alt={`${product.name} FonteVita — ${product.capsules}`}
-          className="relative h-44 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 sm:h-56"
+          className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 sm:h-64"
           loading="lazy"
         />
         <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
@@ -75,11 +75,11 @@ export function ProductCard({ product }: { product: Product }) {
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{product.tagline}</p>
         </div>
 
-        <dl className="grid grid-cols-3 gap-2">
+        <dl className="grid grid-cols-3 gap-1.5 sm:gap-2">
           {product.highlights.map((h) => (
-            <div key={h.label} className="rounded-2xl bg-secondary px-2 py-3 text-center">
-              <dt className="font-display text-base font-bold leading-none">{h.value}</dt>
-              <dd className="mt-1 text-[11px] leading-tight text-muted-foreground">{h.label}</dd>
+            <div key={h.label} className="rounded-xl bg-secondary px-1.5 py-2.5 text-center sm:rounded-2xl sm:px-2 sm:py-3">
+              <dt className="font-display text-sm font-bold leading-none sm:text-base">{h.value}</dt>
+              <dd className="mt-0.5 text-[10px] leading-tight text-muted-foreground sm:mt-1 sm:text-[11px]">{h.label}</dd>
             </div>
           ))}
         </dl>
