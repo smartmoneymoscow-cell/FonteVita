@@ -17,6 +17,8 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      NITRO_PRESET: static
     steps:
       - uses: actions/checkout@v4
 
@@ -27,20 +29,22 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Build
+      - name: Build with static preset
         run: bun run build
         env:
           NODE_ENV: production
+          NITRO_PRESET: static
 
       - name: Prepare static output
+        id: find
         run: |
-          # Determine upload directory
+          echo "=== Build output ==="
           if [ -d ".output/public" ]; then
             UPLOAD_DIR=".output/public"
-          elif [ -d "dist" ]; then
-            UPLOAD_DIR="dist"
           elif [ -d ".output/static" ]; then
             UPLOAD_DIR=".output/static"
+          elif [ -d "dist" ]; then
+            UPLOAD_DIR="dist"
           else
             echo "ERROR: No build output found!"
             find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" | head -10
@@ -51,16 +55,24 @@ jobs:
           ls -la "$UPLOAD_DIR"
 
           # For SPA on GitHub Pages: copy index.html to 404.html
-          # so that client-side routing works on refresh
           if [ -f "$UPLOAD_DIR/index.html" ]; then
             cp "$UPLOAD_DIR/index.html" "$UPLOAD_DIR/404.html"
             echo "Created 404.html for SPA routing"
           else
-            echo "WARNING: No index.html found in $UPLOAD_DIR"
+            echo "WARNING: No index.html in $UPLOAD_DIR, searching..."
+            INDEX=$(find . -name "index.html" -not -path "*/node_modules/*" -not -path "*/.git/*" | head -1)
+            if [ -n "$INDEX" ]; then
+              INDEX_DIR=$(dirname "$INDEX")
+              echo "Found index.html at: $INDEX_DIR"
+              cp "$INDEX" "$INDEX_DIR/404.html"
+              UPLOAD_DIR="$INDEX_DIR"
+            else
+              echo "ERROR: No index.html found anywhere!"
+              exit 1
+            fi
           fi
 
           echo "upload_dir=$UPLOAD_DIR" >> $GITHUB_OUTPUT
-        id: find
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
