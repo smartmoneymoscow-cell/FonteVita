@@ -50,21 +50,23 @@ export function ProductCard({ product }: { product: Product }) {
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-8 h-44 w-44 -translate-x-1/2 rounded-full bg-card/70 blur-2xl"
           />
-          <img
-            ref={imgRef}
-            src={product.image}
-            alt={`${product.name} FonteVita — ${product.capsules}`}
-            className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 sm:h-64"
-            loading="lazy"
-          />
-          <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
-            {product.capsules}
-          </span>
-          {product.id === "collagen" && (
-            <span className="pointer-events-none absolute right-[12%] top-[10%] z-20 rounded-full bg-sun/90 px-2 py-0.5 text-[9px] font-bold tracking-wide text-foreground shadow-sm sm:text-[10px]">
-              Хит продаж
+          <div className="relative transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2">
+            <img
+              ref={imgRef}
+              src={product.image}
+              alt={`${product.name} FonteVita — ${product.capsules}`}
+              className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] sm:h-64"
+              loading="lazy"
+            />
+            <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
+              {product.capsules}
             </span>
-          )}
+            {product.id === "collagen" && (
+              <span className="pointer-events-none absolute right-[12%] top-[10%] z-20 rounded-full bg-sun/90 px-2 py-0.5 text-[9px] font-bold tracking-wide text-foreground shadow-sm sm:text-[10px]">
+                Хит продаж
+              </span>
+            )}
+          </div>
         </div>
       </div>
 

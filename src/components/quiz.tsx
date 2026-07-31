@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ArrowRight, RotateCcw, Sparkles } from "lucide-react";
 import { useCart } from "@/components/cart-context";
 import { products, formatPrice } from "@/data/products";
@@ -35,6 +35,7 @@ const questions: { q: string; options: { label: string; value: Answer }[] }[] = 
 export function Quiz() {
   const { add, setOpen } = useCart();
   const [step, setStep] = useState(0);
+  const [fillingIdx, setFillingIdx] = useState<number | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
 
   const results = useMemo(() => {
@@ -87,10 +88,14 @@ export function Quiz() {
                   <button
                     key={o.value + i}
                     onClick={() => {
-                      setAnswers((prev) => [...prev, o.value]);
-                      setStep((s) => s + 1);
+                      setFillingIdx(i);
+                      setTimeout(() => {
+                        setAnswers((prev) => [...prev, o.value]);
+                        setStep((s) => s + 1);
+                        setFillingIdx(null);
+                      }, 500);
                     }}
-                    className="group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 text-left text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:shadow-soft"
+                    className={`quiz-fill group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 text-left text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:shadow-soft ${fillingIdx === i ? "filling" : ""}`}
                   >
                     {o.label}
                     <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-foreground" />
