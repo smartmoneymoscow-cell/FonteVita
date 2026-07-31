@@ -61,7 +61,7 @@ export function ProductCard({ product }: { product: Product }) {
           ref={imgRef}
           src={product.image}
           alt={`${product.name} FonteVita — ${product.capsules}`}
-          className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 sm:h-64"
+          className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] sm:h-64"
           loading="lazy"
         />
         <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
@@ -138,7 +138,11 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
           <button
             onClick={handleAdd}
-            className="flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
+            className={`flex items-center gap-2 rounded-full px-5 py-3 text-sm font-extrabold shadow-soft transition-all duration-300 active:scale-95 ${
+              added
+                ? "bg-leaf text-white"
+                : "bg-primary text-primary-foreground hover:brightness-105"
+            }`}
           >
             {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
             {added ? "Добавлено" : "В корзину"}

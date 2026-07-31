@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { User, Phone, AtSign, LogOut, Edit3, Check, X } from "lucide-react";
+import { User, Phone, AtSign, Edit3, Check, X, Package, Heart, Shield, ChevronRight } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
 
 type ProfileData = {
@@ -31,7 +31,6 @@ export function ProfilePage() {
   const [editing, setEditing] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Load saved profile from localStorage
   useEffect(() => {
     const savedProfile = localStorage.getItem("fv_profile");
     if (savedProfile) {
@@ -68,119 +67,168 @@ export function ProfilePage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-lg px-4 pb-28 pt-6">
-      {/* Avatar + Name */}
-      <div className="flex flex-col items-center gap-4">
-        <div className="relative">
-          {tgUser?.photo_url ? (
-            <img
-              src={tgUser.photo_url}
-              alt="Аватар"
-              className="h-24 w-24 rounded-full object-cover ring-4 ring-sun-soft"
-            />
-          ) : (
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-sun-soft ring-4 ring-sun-soft/50">
-              <User className="h-10 w-10 text-muted-foreground" />
-            </div>
-          )}
-          {tgUser?.is_premium && (
-            <span className="absolute -bottom-1 -right-1 rounded-full bg-sun px-2 py-0.5 text-[10px] font-bold shadow-soft">
-              ⭐ Premium
-            </span>
-          )}
-        </div>
+    <div className="mx-auto w-full max-w-lg pb-28">
+      {/* Header with gradient */}
+      <div className="relative overflow-hidden bg-gradient-to-b from-sun-soft to-background px-4 pb-8 pt-8">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-sun/20 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-8 bottom-0 h-28 w-28 rounded-full bg-coral/10 blur-2xl"
+        />
 
-        <div className="text-center">
-          <h2 className="text-xl font-bold">
-            {profile.firstName} {profile.lastName}
-          </h2>
-          {tgUser?.username && (
-            <p className="mt-1 flex items-center justify-center gap-1 text-sm text-muted-foreground">
-              <AtSign className="h-3.5 w-3.5" />
-              {tgUser.username}
-            </p>
-          )}
+        <div className="relative flex flex-col items-center gap-3">
+          <div className="relative">
+            {tgUser?.photo_url ? (
+              <img
+                src={tgUser.photo_url}
+                alt="Аватар"
+                className="h-24 w-24 rounded-full object-cover ring-4 ring-card shadow-soft"
+              />
+            ) : (
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-card ring-4 ring-card shadow-soft">
+                <User className="h-10 w-10 text-muted-foreground" />
+              </div>
+            )}
+            {tgUser?.is_premium && (
+              <span className="absolute -bottom-1 -right-1 rounded-full bg-sun px-2 py-0.5 text-[10px] font-bold shadow-soft">
+                ⭐ Premium
+              </span>
+            )}
+          </div>
+
+          <div className="text-center">
+            <h2 className="text-xl font-bold">
+              {profile.firstName || "Гость"} {profile.lastName}
+            </h2>
+            {tgUser?.username && (
+              <p className="mt-0.5 flex items-center justify-center gap-1 text-sm text-muted-foreground">
+                <AtSign className="h-3.5 w-3.5" />
+                {tgUser.username}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Saved notification */}
-      {saved && (
-        <div className="mt-4 flex items-center gap-2 rounded-2xl bg-sky-soft px-4 py-3 text-sm animate-rise-in">
-          <Check className="h-4 w-4 text-leaf" />
-          Данные сохранены
-        </div>
-      )}
+      <div className="px-4">
+        {/* Saved notification */}
+        {saved && (
+          <div className="mb-4 flex items-center gap-2 rounded-2xl bg-sky-soft px-4 py-3 text-sm animate-rise-in">
+            <Check className="h-4 w-4 text-leaf" />
+            Данные сохранены
+          </div>
+        )}
 
-      {/* Profile form */}
-      <div className="mt-8 space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold">Личные данные</h3>
-          {!editing ? (
+        {/* Quick actions */}
+        <div className="mb-6 grid grid-cols-3 gap-2">
+          {[
+            { icon: Package, label: "Заказы", color: "bg-sky-soft text-sky" },
+            { icon: Heart, label: "Избранное", color: "bg-coral-soft text-coral" },
+            { icon: Shield, label: "Гарантия", color: "bg-sun-soft text-sun" },
+          ].map((item) => (
             <button
-              onClick={() => {
-                haptic("light");
-                setEditing(true);
-              }}
-              className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              key={item.label}
+              onClick={() => haptic("light")}
+              className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 transition-all active:scale-95"
             >
-              <Edit3 className="h-4 w-4" />
-              Изменить
+              <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${item.color}`}>
+                <item.icon className="h-5 w-5" />
+              </span>
+              <span className="text-xs font-bold">{item.label}</span>
             </button>
-          ) : (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleCancel}
-                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-              >
-                <X className="h-4 w-4" />
-              </button>
-              <button
-                onClick={handleSave}
-                className="flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-sm font-bold text-primary-foreground shadow-soft transition-all hover:brightness-105"
-              >
-                <Check className="h-4 w-4" />
-                Сохранить
-              </button>
-            </div>
-          )}
+          ))}
         </div>
 
-        <div className="space-y-3">
-          <Field
-            icon={<User className="h-4 w-4" />}
-            label="Имя"
-            value={profile.firstName}
-            editing={editing}
-            onChange={(v) => setProfile((p) => ({ ...p, firstName: v }))}
-            placeholder="Введите имя"
-          />
-          <Field
-            icon={<User className="h-4 w-4" />}
-            label="Фамилия"
-            value={profile.lastName}
-            editing={editing}
-            onChange={(v) => setProfile((p) => ({ ...p, lastName: v }))}
-            placeholder="Введите фамилию"
-          />
-          <Field
-            icon={<Phone className="h-4 w-4" />}
-            label="Телефон"
-            value={profile.phone}
-            editing={editing}
-            onChange={(v) => setProfile((p) => ({ ...p, phone: v }))}
-            placeholder="+7 (___) ___-__-__"
-            type="tel"
-          />
-        </div>
-      </div>
+        {/* Profile form */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold">Личные данные</h3>
+            {!editing ? (
+              <button
+                onClick={() => {
+                  haptic("light");
+                  setEditing(true);
+                }}
+                className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                <Edit3 className="h-4 w-4" />
+                Изменить
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleCancel}
+                  className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={handleSave}
+                  className="flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-sm font-bold text-primary-foreground shadow-soft transition-all hover:brightness-105"
+                >
+                  <Check className="h-4 w-4" />
+                  Сохранить
+                </button>
+              </div>
+            )}
+          </div>
 
-      {/* Order history placeholder */}
-      <div className="mt-10">
-        <h3 className="text-lg font-bold">Заказы</h3>
-        <div className="mt-4 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border py-8 text-center">
-          <Package className="h-8 w-8 text-muted-foreground/50" />
-          <p className="text-sm text-muted-foreground">У вас пока нет заказов</p>
+          <div className="space-y-2">
+            <Field
+              icon={<User className="h-4 w-4" />}
+              label="Имя"
+              value={profile.firstName}
+              editing={editing}
+              onChange={(v) => setProfile((p) => ({ ...p, firstName: v }))}
+              placeholder="Введите имя"
+            />
+            <Field
+              icon={<User className="h-4 w-4" />}
+              label="Фамилия"
+              value={profile.lastName}
+              editing={editing}
+              onChange={(v) => setProfile((p) => ({ ...p, lastName: v }))}
+              placeholder="Введите фамилию"
+            />
+            <Field
+              icon={<Phone className="h-4 w-4" />}
+              label="Телефон"
+              value={profile.phone}
+              editing={editing}
+              onChange={(v) => setProfile((p) => ({ ...p, phone: v }))}
+              placeholder="+7 (___) ___-__-__"
+              type="tel"
+            />
+          </div>
         </div>
+
+        {/* Links */}
+        <div className="mt-6 space-y-1 rounded-2xl border border-border bg-card overflow-hidden">
+          {[
+            { label: "О бренде FonteVita", icon: "🌿" },
+            { label: "Сертификаты качества", icon: "📋" },
+            { label: "Связаться с поддержкой", icon: "💬" },
+            { label: "Политика конфиденциальности", icon: "🔒" },
+          ].map((item) => (
+            <button
+              key={item.label}
+              onClick={() => haptic("light")}
+              className="flex w-full items-center gap-3 px-4 py-3.5 text-left text-sm font-semibold transition-colors active:bg-secondary"
+            >
+              <span className="text-base">{item.icon}</span>
+              <span className="flex-1">{item.label}</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground/50" />
+            </button>
+          ))}
+        </div>
+
+        {/* App version */}
+        <p className="mt-6 text-center text-xs text-muted-foreground/50">
+          FonteVita Mini App v1.0
+        </p>
       </div>
     </div>
   );
@@ -225,27 +273,5 @@ function Field({
         )}
       </div>
     </label>
-  );
-}
-
-function Package(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M16.5 9.4 7.55 4.24" />
-      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-      <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-      <line x1="12" y1="22.08" x2="12" y2="12" />
-    </svg>
   );
 }
