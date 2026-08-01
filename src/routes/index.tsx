@@ -173,14 +173,14 @@ function Index() {
               </div>
 
               {/* Bottle composition */}
-              <div className="relative mx-auto flex w-full max-w-lg items-end justify-center gap-2 sm:gap-5">
+              <div className="relative mx-auto flex w-full max-w-2xl items-end justify-center gap-1 sm:gap-4">
                 <div
                   aria-hidden
-                  className="absolute bottom-4 left-1/2 h-[24.3rem] w-[88%] -translate-x-1/2 rounded-[3rem] bg-sky-soft/70 sm:h-[27rem]"
+                  className="absolute bottom-4 left-1/2 h-[30rem] w-[92%] -translate-x-1/2 rounded-[3.5rem] bg-sky-soft/70 sm:h-[34rem]"
                 />
                 <div
                   aria-hidden
-                  className="absolute bottom-10 left-1/2 h-[20.25rem] w-[20.25rem] -translate-x-1/2 rounded-full bg-sun/60 blur-2xl"
+                  className="absolute bottom-10 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full bg-sun/60 blur-2xl"
                 />
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="relative">
@@ -188,7 +188,7 @@ function Index() {
                     <img
                       src={collagenBottle.url}
                       alt="Коллаген FonteVita, 120 капсул"
-                      className="relative h-[21.6rem] w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-[32.4rem]"
+                      className="relative h-[27rem] w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-[41rem]"
                       style={{ animationDelay: "0.6s" }}
                     />
                     <span className="pointer-events-none absolute right-[10%] top-[65%] z-20 flex flex-col items-center rounded-full bg-sun/90 px-2.5 py-0.5 text-[7px] font-bold leading-none tracking-wide text-foreground shadow-sm sm:text-[8px]"><span>Хит</span><span>продаж</span></span>
@@ -200,7 +200,7 @@ function Index() {
                     <img
                       src={omegaBottle.url}
                       alt="Омега 3 FonteVita, 180 капсул"
-                      className="relative h-[21.6rem] w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-[32.4rem]"
+                      className="relative h-[27rem] w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-[41rem]"
                     />
                   </div>
                 </div>
@@ -210,7 +210,7 @@ function Index() {
                     <img
                       src={magnesiumBottle.url}
                       alt="Магний + B6 FonteVita, 120 капсул"
-                      className="relative h-[21.6rem] w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-[32.4rem]"
+                      className="relative h-[27rem] w-auto animate-float-soft object-contain drop-shadow-[0_28px_34px_rgba(60,70,90,0.25)] sm:h-[41rem]"
                       style={{ animationDelay: "1.2s" }}
                     />
                   </div>
