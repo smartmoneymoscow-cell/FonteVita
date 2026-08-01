@@ -2,8 +2,10 @@ import collagenBottle from "@/assets/collagen-bottle.png.asset.json";
 import magnesiumBottle from "@/assets/magnesium-bottle.png.asset.json";
 import omegaBottle from "@/assets/omega-bottle.png.asset.json";
 
+export type ProductId = "collagen" | "magnesium" | "omega";
+
 export type Product = {
-  id: string;
+  id: ProductId;
   name: string;
   tagline: string;
   dose: string;

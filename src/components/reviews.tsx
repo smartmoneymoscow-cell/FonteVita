@@ -1,33 +1,35 @@
 import { Star } from "lucide-react";
 
+const base = import.meta.env.BASE_URL;
+
 const reviews = [
   {
     name: "Анна, 34",
     city: "Москва",
     product: "Коллаген",
     text: "Пью второй месяц вместе с витамином C. Кожа стала заметно ровнее, а ногти перестали слоиться. Отдельное спасибо за честную дозировку на банке.",
-    avatar: "/fontevita-vitality-hub/anna-avatar.png",
+    avatar: `${base}anna-avatar.png`,
   },
   {
     name: "Дмитрий, 41",
     city: "Казань",
     product: "Омега 3",
     text: "Брал для всей семьи. Капсулы без рыбного послевкусия, дети пьют спокойно. Проверил маркировку в «Честном знаке» — всё сходится.",
-    avatar: "/fontevita-vitality-hub/dmitry-avatar.png",
+    avatar: `${base}dmitry-avatar.png`,
   },
   {
     name: "Ольга, 29",
     city: "Санкт-Петербург",
     product: "Магний + B6",
     text: "Наконец-то засыпаю без пролистывания ленты до двух ночи. Стало меньше судорог в икрах после тренировок.",
-    avatar: "/fontevita-vitality-hub/olga-avatar.png",
+    avatar: `${base}olga-avatar.png`,
   },
   {
     name: "Мария, 47",
     city: "Екатеринбург",
     product: "Коллаген",
     text: "Заказывала маме и себе. Упаковка приехала в плёнке, банка непрозрачная, мембрана целая — доверие с первой секунды.",
-    avatar: "/fontevita-vitality-hub/maria-avatar.png",
+    avatar: `${base}maria-avatar.png`,
   },
 ];
 
