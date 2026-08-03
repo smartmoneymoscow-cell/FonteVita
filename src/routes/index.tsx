@@ -180,7 +180,7 @@ function Index() {
                 />
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-amber-300/20 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/10 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={collagenBottle.url}
                       alt="Коллаген FonteVita, 120 капсул"
@@ -192,7 +192,7 @@ function Index() {
                 </div>
                 <div className="relative z-20 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-sky-300/20 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/10 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={omegaBottle.url}
                       alt="Омега 3 FonteVita, 180 капсул"
@@ -202,7 +202,7 @@ function Index() {
                 </div>
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-emerald-300/20 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/10 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={magnesiumBottle.url}
                       alt="Магний + B6 FonteVita, 120 капсул"
