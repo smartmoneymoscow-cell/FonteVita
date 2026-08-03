@@ -132,22 +132,22 @@ function Index() {
               aria-hidden
               className="pointer-events-none absolute -left-24 top-52 h-72 w-72 rounded-full bg-sky-soft blur-3xl"
             />
-            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-16 px-4 pb-16 pt-10 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:pb-24 lg:pt-16">
-              <div className="animate-rise-in text-center lg:text-left">
+            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pb-24 lg:pt-12">
+              <div className="animate-rise-in flex h-full flex-col justify-center text-center lg:text-left">
                 <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
                   <Sparkles className="h-4 w-4 text-coral" />
                   Витамины для всей семьи
                 </span>
-                <h1 className="mt-6 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-[3.6rem]">
+                <h1 className="mt-5 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-[3.6rem]">
                   Забота, которая
                   <span className="sun-blob mx-2 inline-block px-2">чувствуется</span>
                   каждый день
                 </h1>
-                <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
+                <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
                   Коллаген, магний с витамином B6 и омега 3 в честных дозировках. Спокойный сон,
                   крепкий иммунитет и энергия для родителей и детей.
                 </p>
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+                <div className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
                   <a
                     href="#products"
                     className="rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
@@ -162,7 +162,7 @@ function Index() {
                   </a>
                 </div>
 
-                <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 lg:mx-0">
+                <dl className="mt-9 grid max-w-md grid-cols-3 gap-4 lg:mx-0">
                   {stats.map((s) => (
                     <div key={s.label} className="text-center lg:text-left">
                       <dt className="font-display text-2xl font-bold sm:text-3xl">{s.value}</dt>
