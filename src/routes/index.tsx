@@ -132,8 +132,8 @@ function Index() {
               aria-hidden
               className="pointer-events-none absolute -left-24 top-52 h-72 w-72 rounded-full bg-sky-soft blur-3xl"
             />
-            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16 lg:pb-24 lg:pt-12">
-              <div className="animate-rise-in flex h-full flex-col justify-center text-center lg:text-left">
+            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-16 pt-8 sm:px-6 md:grid-cols-[0.95fr_1.05fr] md:pb-20 md:pt-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:pb-24 lg:pt-12">
+              <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
                 <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
                   <Sparkles className="h-4 w-4 text-coral" />
                   Витамины для всей семьи
@@ -147,7 +147,7 @@ function Index() {
                   Коллаген, магний с витамином B6 и омега 3 в честных дозировках. Спокойный сон,
                   крепкий иммунитет и энергия для родителей и детей.
                 </p>
-                <div className="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+                <div className="mt-7 flex flex-wrap items-center justify-center gap-3 md:justify-start">
                   <a
                     href="#products"
                     className="rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
@@ -162,7 +162,7 @@ function Index() {
                   </a>
                 </div>
 
-                <dl className="mt-9 grid max-w-md grid-cols-3 gap-4 lg:mx-0">
+                <dl className="mt-9 grid max-w-md grid-cols-3 gap-4 md:mx-0">
                   {stats.map((s) => (
                     <div key={s.label} className="text-center lg:text-left">
                       <dt className="font-display text-2xl font-bold sm:text-3xl">{s.value}</dt>
@@ -173,18 +173,18 @@ function Index() {
               </div>
 
               {/* Bottle composition */}
-              <div className="relative mx-auto flex w-full max-w-[44rem] items-end justify-center gap-1 sm:gap-4">
+              <div className="relative mx-auto flex w-full max-w-[44rem] items-end justify-center gap-1 sm:gap-3 md:gap-0.5 lg:gap-2">
                 <div
                   aria-hidden
-                  className="absolute bottom-10 left-1/2 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-sun/55 blur-2xl sm:bottom-12 sm:h-[46rem] sm:w-[46rem]"
+                  className="absolute bottom-8 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-sun/55 blur-2xl sm:bottom-10 sm:h-[38rem] sm:w-[38rem] md:bottom-8 md:h-[32rem] md:w-[32rem] lg:bottom-12 lg:h-[46rem] lg:w-[46rem]"
                 />
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-12 rounded-full bg-amber-300/20 blur-xl sm:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-amber-300/20 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={collagenBottle.url}
                       alt="Коллаген FonteVita, 120 капсул"
-                      className="relative h-[34rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[56rem]"
+                      className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]"
                       style={{ animationDelay: "0.6s" }}
                     />
                     <span className="pointer-events-none absolute right-[10%] top-[34%] z-20 flex flex-col items-center rounded-full bg-sun/90 px-2.5 py-0.5 text-[7px] font-bold leading-none tracking-wide text-foreground shadow-sm sm:text-[9px]"><span>Хит</span><span>продаж</span></span>
@@ -192,21 +192,21 @@ function Index() {
                 </div>
                 <div className="relative z-20 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-12 rounded-full bg-sky-300/20 blur-xl sm:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-sky-300/20 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={omegaBottle.url}
                       alt="Омега 3 FonteVita, 180 капсул"
-                      className="relative h-[34rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[56rem]"
+                      className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]"
                     />
                   </div>
                 </div>
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-12 rounded-full bg-emerald-300/20 blur-xl sm:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-emerald-300/20 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={magnesiumBottle.url}
                       alt="Магний + B6 FonteVita, 120 капсул"
-                      className="relative h-[34rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[56rem]"
+                      className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]"
                       style={{ animationDelay: "1.2s" }}
                     />
                   </div>
