@@ -3,6 +3,16 @@ import { Link } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
 import logo from "@/assets/logo-mark.png.asset.json";
 
+const base = import.meta.env.BASE_URL;
+
+const links = [
+  { href: `${base}#products`, label: "Продукты" },
+  { href: `${base}#quiz`, label: "Подбор" },
+  { href: `${base}#quality`, label: "Качество" },
+  { href: `${base}#reviews`, label: "Отзывы" },
+  { href: `${base}#faq`, label: "Вопросы" },
+];
+
 export function BlogHeader() {
   const [scrolled, setScrolled] = useState(false);
 
@@ -19,7 +29,7 @@ export function BlogHeader() {
         scrolled ? "bg-background/85 shadow-soft backdrop-blur-md" : "bg-background/60 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" style={{ paddingTop: "4px", paddingBottom: "4px" }}>
         <Link to="/" className="flex items-center" aria-label="FonteVita — на главную">
           <img
             src={logo.url}
@@ -31,38 +41,29 @@ export function BlogHeader() {
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
-          <Link
-            to="/"
-            className="text-base font-bold text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Главная
-          </Link>
-          <a
-            href="/#products"
-            className="text-base font-bold text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Продукты
-          </a>
+          {links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              className="relative text-base font-bold text-muted-foreground transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100"
+            >
+              {l.label}
+            </a>
+          ))}
           <Link
             to="/blog"
-            className="text-base font-bold text-foreground transition-colors hover:text-foreground"
+            className="relative text-base font-bold text-foreground transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100"
           >
             Блог
           </Link>
-          <a
-            href="/#faq"
-            className="text-base font-bold text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Вопросы
-          </a>
         </nav>
 
         <a
-          href="/#products"
+          href={`${base}#products`}
           className="flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
         >
           <ShoppingBag className="h-4 w-4" />
-          <span className="hidden sm:inline">В каталог</span>
+          <span className="hidden sm:inline">Корзина</span>
         </a>
       </div>
     </header>

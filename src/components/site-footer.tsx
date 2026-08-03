@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo-mark.png.asset.json";
 
+const base = import.meta.env.BASE_URL;
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-sand py-10">
@@ -12,13 +14,13 @@ export function SiteFooter() {
           <Link to="/" className="transition-colors hover:text-foreground">
             Главная
           </Link>
-          <a href="/#products" className="transition-colors hover:text-foreground">
+          <a href={`${base}#products`} className="transition-colors hover:text-foreground">
             Продукты
           </a>
           <Link to="/blog" className="transition-colors hover:text-foreground">
             Блог
           </Link>
-          <a href="/#faq" className="transition-colors hover:text-foreground">
+          <a href={`${base}#faq`} className="transition-colors hover:text-foreground">
             Вопросы
           </a>
         </nav>
