@@ -240,7 +240,7 @@ jobs:
                   <main>
                     <section className="relative bg-gradient-to-b from-sand via-background to-background">
                       <div aria-hidden className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-sun-soft blur-3xl sm:h-[26rem] sm:w-[26rem]" />
-                      <div className="relative mx-auto grid w-full max-w-6xl items-start gap-12 px-4 sm:px-6 md:grid-cols-[0.95fr_1.05fr] lg:grid-cols-[0.9fr_1.1fr] lg:gap-16" style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
+                      <div className="relative mx-auto grid w-full max-w-6xl items-start gap-12 px-4 sm:px-6 md:grid-cols-[0.95fr_1.05fr] lg:grid-cols-[0.9fr_1.1fr] lg:gap-16" style={{ paddingTop: 0, paddingBottom: "1.5rem" }}>
                         <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
                           <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><Sparkles className="h-4 w-4 text-coral" />Витамины для всей семьи</span>
                           <h1 className="mt-6 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-[3.6rem]">Забота, которая<span className="sun-blob mx-2 inline-block px-2">чувствуется</span>каждый день</h1>
