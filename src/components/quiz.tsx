@@ -112,6 +112,7 @@ export function Quiz() {
                   </button>
                 ))}
               </div>
+              </div>
             </>
           ) : (
             <div className="animate-rise-in">
