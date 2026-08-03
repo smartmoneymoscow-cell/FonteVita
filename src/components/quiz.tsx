@@ -37,6 +37,7 @@ export function Quiz() {
   const [step, setStep] = useState(0);
   const [fillingIdx, setFillingIdx] = useState<number | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
+  const [phase, setPhase] = useState<"in" | "out" | "idle">("in");
 
   const results = useMemo(() => {
     if (answers.length < questions.length) return null;
@@ -77,13 +78,14 @@ export function Quiz() {
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <p className="mt-4 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-                Вопрос {step + 1} из {questions.length}
-              </p>
-              <h3 key={step} className="mt-2 animate-rise-in text-2xl font-bold sm:text-3xl">
-                {questions[step].q}
-              </h3>
-              <div className="mt-6 grid gap-3">
+              <div className={phase === "out" ? "quiz-slide-out" : "">
+                <p className="mt-4 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                  Вопрос {step + 1} из {questions.length}
+                </p>
+                <h3 className={"mt-2 text-2xl font-bold sm:text-3xl" + (phase === "in" ? " quiz-slide-in" : "")}>
+                  {questions[step].q}
+                </h3>
+                <div className="mt-6 grid gap-3">
                 {questions[step].options.map((o, i) => (
                   <button
                     key={o.value + i}
@@ -91,11 +93,19 @@ export function Quiz() {
                       setFillingIdx(i);
                       setTimeout(() => {
                         setAnswers((prev) => [...prev, o.value]);
-                        setStep((s) => s + 1);
-                        setFillingIdx(null);
+                        setPhase("out");
+                        setTimeout(() => {
+                          setStep((s) => s + 1);
+                          setFillingIdx(null);
+                          setPhase("in");
+                        }, 350);
                       }, 500);
                     }}
                     className={`quiz-fill group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 text-left text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:shadow-soft ${fillingIdx === i ? "filling" : ""}`}
+                    style={{
+                      animationDelay: phase === "in" ? `${i * 80}ms` : "0ms",
+                      animation: phase === "in" ? `rise-in 0.45s cubic-bezier(0.22,1,0.36,1) ${i * 80}ms both` : undefined,
+                    }}
                   >
                     {o.label}
                     <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-foreground" />
