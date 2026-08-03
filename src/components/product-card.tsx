@@ -41,7 +41,7 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <article className="soft-card flex h-full flex-col overflow-hidden">
+    <article id={`product-${product.id}`} className="soft-card flex h-full scroll-mt-24 flex-col overflow-hidden">
       <div className="relative">
         <div
           className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10`}

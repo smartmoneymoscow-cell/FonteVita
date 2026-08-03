@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/components/cart-context";
 import logo from "@/assets/logo-mark.png.asset.json";
@@ -58,6 +59,12 @@ export function SiteHeader() {
               {l.label}
             </a>
           ))}
+          <Link
+            to="/blog"
+            className="relative text-base font-bold text-muted-foreground transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100"
+          >
+            Блог
+          </Link>
         </nav>
 
         <button

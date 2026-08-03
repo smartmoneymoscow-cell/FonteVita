@@ -16,6 +16,7 @@ import {
 import { CartProvider } from "@/components/cart-context";
 import { CartPanel } from "@/components/cart-panel";
 import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
 import { Quiz } from "@/components/quiz";
@@ -488,21 +489,7 @@ function Index() {
           </section>
         </main>
 
-        <footer className="border-t border-border bg-sand py-10">
-          <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-4 text-center sm:px-6 md:flex-row md:justify-between md:text-left">
-            <img
-              src={logo.url}
-              alt="FonteVita"
-              className="h-12 w-auto object-contain"
-              loading="lazy"
-            />
-            <p className="max-w-md text-xs leading-relaxed text-muted-foreground">
-              БАД. Не является лекарственным средством. Перед применением проконсультируйтесь со
-              специалистом.
-            </p>
-            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} FonteVita</p>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </CartProvider>
   );
