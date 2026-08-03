@@ -78,7 +78,7 @@ export function Quiz() {
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <div className={phase === "out" ? "quiz-slide-out" : "">
+              <div className={phase === "out" ? "quiz-slide-out" : ""}>
                 <p className="mt-4 text-xs font-bold uppercase tracking-wide text-muted-foreground">
                   Вопрос {step + 1} из {questions.length}
                 </p>
