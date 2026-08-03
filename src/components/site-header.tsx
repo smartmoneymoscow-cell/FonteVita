@@ -37,7 +37,7 @@ export function SiteHeader() {
         scrolled ? "bg-background/85 shadow-soft backdrop-blur-md" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" style={{ paddingTop: "4px", paddingBottom: "4px" }}>
         <a href="#top" className="flex items-center" aria-label="FonteVita — на главную">
           <img
             src={logo.url}
