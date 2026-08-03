@@ -176,11 +176,11 @@ function Index() {
               <div className="relative mx-auto flex w-full max-w-[44rem] items-end justify-center gap-1 sm:gap-3 md:gap-0.5 lg:gap-2">
                 <div
                   aria-hidden
-                  className="absolute bottom-8 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-sun/55 blur-2xl sm:bottom-10 sm:h-[38rem] sm:w-[38rem] md:bottom-8 md:h-[32rem] md:w-[32rem] lg:bottom-12 lg:h-[46rem] lg:w-[46rem]"
+                  className="absolute bottom-8 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-sun/25 blur-2xl sm:bottom-10 sm:h-[38rem] sm:w-[38rem] md:bottom-8 md:h-[32rem] md:w-[32rem] lg:bottom-12 lg:h-[46rem] lg:w-[46rem]"
                 />
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/10 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/5 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={collagenBottle.url}
                       alt="Коллаген FonteVita, 120 капсул"
@@ -192,7 +192,7 @@ function Index() {
                 </div>
                 <div className="relative z-20 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/10 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/5 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={omegaBottle.url}
                       alt="Омега 3 FonteVita, 180 капсул"
@@ -202,7 +202,7 @@ function Index() {
                 </div>
                 <div className="relative z-10 flex flex-col items-center">
                   <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/10 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
+                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/5 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
                     <img
                       src={magnesiumBottle.url}
                       alt="Магний + B6 FonteVita, 120 капсул"
