@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-inprogress: false
 
 jobs:
   build-and-deploy:
@@ -25,7 +25,9 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install
+        run: |
+          bun install
+          bun add react-router-dom
 
       - name: Build client SPA for GitHub Pages
         run: |
@@ -43,6 +45,7 @@ jobs:
             resolve: {
               alias: {
                 "@": path.resolve(__dirname, "./src"),
+                "@tanstack/react-router": path.resolve(__dirname, "./src/__mocks__/tanstack-router.tsx"),
               },
             },
             build: {
@@ -53,6 +56,38 @@ jobs:
             },
           });
           VITEEOF
+
+          # Create mock for @tanstack/react-router
+          mkdir -p src/__mocks__
+          cat > src/__mocks__/tanstack-router.tsx << 'MOCKEOF'
+          import React from "react";
+          import { Link as RRDLink } from "react-router-dom";
+
+          function resolvePath(to: string, params?: Record<string, string>): string {
+            if (!params) return to;
+            let resolved = to;
+            for (const [key, value] of Object.entries(params)) {
+              resolved = resolved.replace(`$${key}`, value);
+            }
+            return resolved;
+          }
+
+          export function Link({ to, params, hash, children, ...rest }: any) {
+            const href = resolvePath(to, params) + (hash ? `#${hash}` : "");
+            return <RRDLink to={href} {...rest}>{children}</RRDLink>;
+          }
+
+          export function createFileRoute() {
+            return { component: () => null, loader: () => null, head: () => ({}) };
+          }
+          export function createRootRouteWithContext() {
+            return () => ({ component: () => null, head: () => ({}) });
+          }
+          export function notFound() { throw new Error("Not found"); }
+          export const Outlet = () => null;
+          export const HeadContent = () => null;
+          export const Scripts = () => null;
+          MOCKEOF
 
           # Create index.html entry point
           cat > index.html << 'HTMLEOF'
@@ -76,74 +111,31 @@ jobs:
               <meta name="robots" content="index, follow" />
               <meta name="theme-color" content="#f5a623" />
               <meta name="author" content="FonteVita" />
-              <meta name="keywords" content="FonteVita, витамины, БАДы, коллаген, магний, омега 3, добавки, здоровье, Россия" />
+              <meta name="keywords" content="FonteVita, витамины, БАДы, коллаген, магний, омега 3, добавки, здоровье, Россия, блог" />
               <link rel="canonical" href="https://fontevita.ru/" />
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
               <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
               <script type="application/ld+json">
-              {
-                "@context": "https://schema.org",
-                "@type": "Organization",
-                "name": "FonteVita",
-                "url": "https://fontevita.ru",
-                "logo": "https://fontevita-vitality-hub.lovable.app/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png",
-                "description": "Российский бренд витаминов и биологически активных добавок для всей семьи.",
-                "contactPoint": { "@type": "ContactPoint", "contactType": "customer service", "availableLanguage": "Russian" }
-              }
+              {"@context":"https://schema.org","@type":"Organization","name":"FonteVita","url":"https://fontevita.ru","logo":"https://fontevita-vitality-hub.lovable.app/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png","description":"Российский бренд витаминов и БАДов для всей семьи."}
               </script>
               <script type="application/ld+json">
-              {
-                "@context": "https://schema.org",
-                "@type": "WebSite",
-                "name": "FonteVita",
-                "url": "https://fontevita.ru"
-              }
+              {"@context":"https://schema.org","@type":"WebSite","name":"FonteVita","url":"https://fontevita.ru"}
               </script>
               <script type="application/ld+json">
-              {
-                "@context": "https://schema.org",
-                "@type": "FAQPage",
-                "mainEntity": [
-                  { "@type": "Question", "name": "Чем FonteVita отличается от других БАДов?", "acceptedAnswer": { "@type": "Answer", "text": "Мы указываем реальные рабочие дозировки прямо на упаковке, не разбавляем формулы вспомогательными веществами и проверяем каждую партию в лаборатории." } },
-                  { "@type": "Question", "name": "Можно ли принимать продукты вместе?", "acceptedAnswer": { "@type": "Answer", "text": "Да, формулы совместимы. Омега 3 хорошо сочетается с витамином D3, магний с B6 лучше принимать вечером, а коллаген с витамином C — во время еды." } },
-                  { "@type": "Question", "name": "Когда будет заметен результат?", "acceptedAnswer": { "@type": "Answer", "text": "Первые изменения самочувствия обычно ощущаются на 3–4 неделе регулярного приёма. Полный курс — от 2 месяцев." } },
-                  { "@type": "Question", "name": "Как проходит доставка и оплата?", "acceptedAnswer": { "@type": "Answer", "text": "Отправляем по всей России в течение 1–2 рабочих дней. Доставка бесплатна при заказе от 3000 ₽." } }
-                ]
-              }
+              {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Чем FonteVita отличается от других БАДов?","acceptedAnswer":{"@type":"Answer","text":"Мы указываем реальные рабочие дозировки прямо на упаковке, проверяем каждую партию в лаборатории."}},{"@type":"Question","name":"Можно ли принимать продукты вместе?","acceptedAnswer":{"@type":"Answer","text":"Да, формулы совместимы."}},{"@type":"Question","name":"Когда будет заметен результат?","acceptedAnswer":{"@type":"Answer","text":"Первые изменения обычно на 3–4 неделе приёма."}},{"@type":"Question","name":"Как проходит доставка?","acceptedAnswer":{"@type":"Answer","text":"По России 1–2 дня, бесплатно от 3000 ₽."}}]}
               </script>
               <script type="application/ld+json">
-              {
-                "@context": "https://schema.org",
-                "@type": "Product",
-                "name": "FonteVita Коллаген",
-                "description": "Упругость кожи, крепкие волосы и ногти",
-                "brand": { "@type": "Brand", "name": "FonteVita" },
-                "offers": { "@type": "Offer", "priceCurrency": "RUB", "price": "1490", "availability": "https://schema.org/InStock" },
-                "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "247" }
-              }
+              {"@context":"https://schema.org","@type":"Product","name":"FonteVita Коллаген","brand":{"@type":"Brand","name":"FonteVita"},"offers":{"@type":"Offer","priceCurrency":"RUB","price":"1490","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"247"}}
               </script>
               <script type="application/ld+json">
-              {
-                "@context": "https://schema.org",
-                "@type": "Product",
-                "name": "FonteVita Магний + B6",
-                "description": "Для защиты от стресса и здорового сна",
-                "brand": { "@type": "Brand", "name": "FonteVita" },
-                "offers": { "@type": "Offer", "priceCurrency": "RUB", "price": "1190", "availability": "https://schema.org/InStock" },
-                "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "247" }
-              }
+              {"@context":"https://schema.org","@type":"Product","name":"FonteVita Магний + B6","brand":{"@type":"Brand","name":"FonteVita"},"offers":{"@type":"Offer","priceCurrency":"RUB","price":"1190","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"247"}}
               </script>
               <script type="application/ld+json">
-              {
-                "@context": "https://schema.org",
-                "@type": "Product",
-                "name": "FonteVita Омега 3",
-                "description": "Липидный комплекс из 3 источников",
-                "brand": { "@type": "Brand", "name": "FonteVita" },
-                "offers": { "@type": "Offer", "priceCurrency": "RUB", "price": "1690", "availability": "https://schema.org/InStock" },
-                "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "247" }
-              }
+              {"@context":"https://schema.org","@type":"Product","name":"FonteVita Омега 3","brand":{"@type":"Brand","name":"FonteVita"},"offers":{"@type":"Offer","priceCurrency":"RUB","price":"1690","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"247"}}
+              </script>
+              <script type="application/ld+json">
+              {"@context":"https://schema.org","@type":"Blog","name":"Блог FonteVita","description":"Статьи о витаминах и БАДах","url":"https://fontevita.ru/blog"}
               </script>
             </head>
             <body>
@@ -153,23 +145,27 @@ jobs:
           </html>
           HTMLEOF
 
-          # Create SPA entry point
+          # Create SPA entry point with BrowserRouter
           cat > src/main.tsx << 'MAINEOF'
           import React from "react";
           import ReactDOM from "react-dom/client";
+          import { BrowserRouter } from "react-router-dom";
           import App from "./App";
           import "./styles.css";
 
           ReactDOM.createRoot(document.getElementById("root")!).render(
             <React.StrictMode>
-              <App />
+              <BrowserRouter basename="/fontevita-vitality-hub">
+                <App />
+              </BrowserRouter>
             </React.StrictMode>
           );
           MAINEOF
 
-          # Create App.tsx — exact copy of src/routes/index.tsx adapted for SPA
-          # Uses Lovable CDN for images since .asset.json paths are relative to Lovable
+          # Create App.tsx with routing for main page + blog
           cat > src/App.tsx << 'APPEOF'
+          import { Routes, Route, useParams, Link as RRDLink, useLocation } from "react-router-dom";
+          import { useEffect } from "react";
           import {
             Baby, BadgeCheck, Leaf, Lock, QrCode, ScanLine,
             ShieldCheck, Sparkles, Truck, Droplets, Package, CheckCircle2,
@@ -182,9 +178,21 @@ jobs:
           import { Quiz } from "@/components/quiz";
           import { Reviews } from "@/components/reviews";
           import { Faq } from "@/components/faq";
-          import { products, type Product } from "@/data/products";
+          import { SiteFooter } from "@/components/site-footer";
+          import { products } from "@/data/products";
+          import { BlogHeader } from "@/components/blog/blog-header";
+          import { ArticleCard } from "@/components/blog/article-card";
+          import { ArticleContent } from "@/components/blog/article-content";
+          import { ArticleFaq } from "@/components/blog/article-faq";
+          import { ArticleCover } from "@/components/blog/article-cover";
+          import { CategoryPill } from "@/components/blog/category-pill";
+          import { RelatedProducts } from "@/components/blog/related-products";
+          import { TableOfContents } from "@/components/blog/table-of-contents";
+          import { Breadcrumbs } from "@/components/blog/breadcrumbs";
+          import { getAllPosts, getPostBySlug, getPostsByCategory, getRelatedPosts, formatDate } from "@/data/blog-posts";
+          import { blogCategories, getCategoryBySlug } from "@/data/blog-categories";
+          import { Clock } from "lucide-react";
 
-          // Override product images with absolute Lovable CDN URLs for GitHub Pages
           const LOVABLE = "https://fontevita-vitality-hub.lovable.app";
           const logoUrl = LOVABLE + "/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png";
           const collagenUrl = LOVABLE + "/__l5e/assets-v1/cdcddfb7-2c0a-4e84-8f05-9b44e84e6318/collagen-bottle.png";
@@ -192,269 +200,180 @@ jobs:
           const omegaUrl = LOVABLE + "/__l5e/assets-v1/7a62c490-31a6-4603-8620-fc18b1c8b48d/omega-bottle.png";
           const comboUrl = LOVABLE + "/__l5e/assets-v1/b2d76a6b-8d07-47af-bea8-345a6a1917be/combo.png";
 
+          function ScrollToTop() {
+            const { pathname } = useLocation();
+            useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+            return null;
+          }
+
           const advantages = [
             { icon: ShieldCheck, title: "Сертифицировано", text: "Каждая партия проходит контроль качества" },
             { icon: Leaf, title: "Честный состав", text: "Без лишних добавок и красителей" },
             { icon: Sparkles, title: "Рабочие дозировки", text: "Дозировки указаны прямо на упаковке" },
             { icon: Truck, title: "Быстрая доставка", text: "По всей России, бесплатно от 3000 ₽" },
           ];
-
           const qualityPoints = [
-            { icon: Baby, title: "Крышка с защитой от детей", text: "Открывается только с нажатием — банка безопасна дома, где есть малыши." },
-            { icon: Lock, title: "Защитная мембрана", text: "Герметичная фольга под крышкой подтверждает, что банку никто не вскрывал." },
-            { icon: Droplets, title: "Непрозрачная банка", text: "Плотный пластик не пропускает свет и сохраняет активность формулы до конца курса." },
-            { icon: Package, title: "Термоусадочная плёнка", text: "Заводская плёнка на крышке — гарантия целостности при доставке." },
+            { icon: Baby, title: "Крышка с защитой от детей", text: "Открывается только с нажатием." },
+            { icon: Lock, title: "Защитная мембрана", text: "Герметичная фольга под крышкой." },
+            { icon: Droplets, title: "Непрозрачная банка", text: "Плотный пластик не пропускает свет." },
+            { icon: Package, title: "Термоусадочная плёнка", text: "Заводская плёнка на крышке." },
           ];
-
           const authSteps = [
-            { icon: QrCode, title: "Найдите код", text: "Код Data Matrix напечатан на упаковке продукта." },
-            { icon: ScanLine, title: "Отсканируйте", text: "Наведите камеру в бесплатном приложении «Честный знак»." },
-            { icon: BadgeCheck, title: "Проверьте статус", text: "Приложение покажет производителя, партию и срок годности." },
+            { icon: QrCode, title: "Найдите код", text: "Код Data Matrix напечатан на упаковке." },
+            { icon: ScanLine, title: "Отсканируйте", text: "Наведите камеру в приложении «Честный знак»." },
+            { icon: BadgeCheck, title: "Проверьте статус", text: "Приложение покажет производителя и партию." },
           ];
-
           const stats = [
             { value: "12 000+", label: "семей уже с нами" },
             { value: "4,9", label: "средняя оценка покупателей" },
             { value: "100%", label: "партий с лабораторным протоколом" },
           ];
 
-          function App() {
+          function HomePage() {
             return (
               <CartProvider>
                 <div id="top" className="min-h-dvh overflow-x-hidden">
                   <SiteHeader />
                   <CartPanel />
                   <main>
-                    {/* Hero */}
                     <section className="relative overflow-hidden bg-gradient-to-b from-sand via-background to-background">
                       <div aria-hidden className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-sun-soft blur-3xl sm:h-[26rem] sm:w-[26rem]" />
-                      <div aria-hidden className="pointer-events-none absolute -left-24 top-52 h-72 w-72 rounded-full bg-sky-soft blur-3xl" />
                       <div className="relative mx-auto grid w-full max-w-6xl items-start gap-12 px-4 sm:px-6 md:grid-cols-[0.95fr_1.05fr] lg:grid-cols-[0.9fr_1.1fr] lg:gap-16" style={{ paddingTop: 0, paddingBottom: "2rem" }}>
                         <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
-                          <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
-                            <Sparkles className="h-4 w-4 text-coral" />
-                            Витамины для всей семьи
-                          </span>
-                          <h1 className="mt-6 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-[3.6rem]">
-                            Забота, которая
-                            <span className="sun-blob mx-2 inline-block px-2">чувствуется</span>
-                            каждый день
-                          </h1>
-                          <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">
-                            Коллаген, магний с витамином B6 и омега 3 в честных дозировках. Спокойный сон, крепкий иммунитет и энергия для родителей и детей.
-                          </p>
+                          <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><Sparkles className="h-4 w-4 text-coral" />Витамины для всей семьи</span>
+                          <h1 className="mt-6 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-[3.6rem]">Забота, которая<span className="sun-blob mx-2 inline-block px-2">чувствуется</span>каждый день</h1>
+                          <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">Коллаген, магний с витамином B6 и омега 3 в честных дозировках.</p>
                           <div className="mt-7 flex flex-wrap items-center justify-center gap-3 md:justify-start">
                             <a href="#products" className="rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95">Выбрать продукт</a>
                             <a href="#quiz" className="rounded-full border-2 border-border px-7 py-3 text-sm font-extrabold transition-colors duration-300 hover:bg-secondary">Подобрать за 30 секунд</a>
                           </div>
-                          <dl className="mt-9 grid max-w-md grid-cols-3 gap-4 md:mx-0">
-                            {stats.map((s) => (
-                              <div key={s.label} className="text-center lg:text-left">
-                                <dt className="font-display text-2xl font-bold sm:text-3xl">{s.value}</dt>
-                                <dd className="mt-1 text-xs leading-snug text-muted-foreground">{s.label}</dd>
-                              </div>
-                            ))}
-                          </dl>
+                          <dl className="mt-9 grid max-w-md grid-cols-3 gap-4 md:mx-0">{stats.map((s) => (<div key={s.label} className="text-center lg:text-left"><dt className="font-display text-2xl font-bold sm:text-3xl">{s.value}</dt><dd className="mt-1 text-xs leading-snug text-muted-foreground">{s.label}</dd></div>))}</dl>
                         </div>
                         <div className="relative mx-auto flex w-full max-w-[44rem] items-end justify-center gap-1 sm:gap-3 md:gap-0.5 lg:gap-2">
-                          <div aria-hidden className="absolute bottom-8 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-sun/15 blur-2xl sm:bottom-10 sm:h-[38rem] sm:w-[38rem] md:bottom-8 md:h-[32rem] md:w-[32rem] lg:bottom-12 lg:h-[46rem] lg:w-[46rem]" />
-                          <div className="relative z-10 flex flex-col items-center">
-                            <div className="relative">
-                              <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/3 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
-                              <img src={collagenUrl} alt="Коллаген FonteVita, 120 капсул" className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]" style={{ animationDelay: "0.6s" }} />
-                            </div>
-                          </div>
-                          <div className="relative z-20 flex flex-col items-center">
-                            <div className="relative">
-                              <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/3 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
-                              <img src={omegaUrl} alt="Омега 3 FonteVita, 180 капсул" className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]" />
-                            </div>
-                          </div>
-                          <div className="relative z-10 flex flex-col items-center">
-                            <div className="relative">
-                              <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/3 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
-                              <img src={magnesiumUrl} alt="Магний + B6 FonteVita, 120 капсул" className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]" style={{ animationDelay: "1.2s" }} />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-
-                    {/* Advantages */}
-                    <section className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6">
-                      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                        {advantages.map((a, i) => (
-                          <Reveal key={a.title} delay={i * 90} className="h-full">
-                            <div className="soft-card flex h-full flex-col items-center gap-2 p-6 text-center">
-                              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sun-soft"><a.icon className="h-6 w-6" /></div>
-                              <h3 className="text-base font-bold">{a.title}</h3>
-                              <p className="text-sm leading-relaxed text-muted-foreground">{a.text}</p>
-                            </div>
-                          </Reveal>
-                        ))}
-                      </div>
-                    </section>
-
-                    {/* Products */}
-                    <section id="products" className="scroll-mt-24 bg-sand py-16 sm:py-20">
-                      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-                        <Reveal>
-                          <div className="mx-auto max-w-2xl text-center">
-                            <h2 className="text-3xl font-bold sm:text-4xl">Наши продукты</h2>
-                            <p className="mt-3 text-base leading-relaxed text-muted-foreground">Три формулы, которые закрывают базовые потребности организма. Раскройте карточку, чтобы увидеть состав и схему приёма.</p>
-                          </div>
-                        </Reveal>
-                        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                          {products.map((p, i) => (
-                            <Reveal key={p.id} delay={i * 110} className="h-full">
-                              <ProductCard product={p} />
-                            </Reveal>
+                          <div aria-hidden className="absolute bottom-8 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-sun/15 blur-2xl sm:bottom-10 sm:h-[38rem] sm:w-[38rem] lg:bottom-12 lg:h-[46rem] lg:w-[46rem]" />
+                          {[{ src: collagenUrl, alt: "Коллаген", z: "z-10", delay: "0.6s" }, { src: omegaUrl, alt: "Омега 3", z: "z-20", delay: undefined }, { src: magnesiumUrl, alt: "Магний + B6", z: "z-10", delay: "1.2s" }].map((b) => (
+                            <div key={b.alt} className={`relative ${b.z} flex flex-col items-center`}><div className="relative"><div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/3 blur-xl sm:-inset-14 lg:-inset-16" /><img src={b.src} alt={`${b.alt} FonteVita`} className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] lg:h-[54rem]" style={{ animationDelay: b.delay }} /></div></div>
                           ))}
                         </div>
                       </div>
                     </section>
-
-                    {/* Quiz */}
-                    <section id="quiz" className="scroll-mt-24 py-16 sm:py-20">
-                      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-                        <Reveal>
-                          <div className="mx-auto mb-10 max-w-2xl text-center">
-                            <h2 className="text-3xl font-bold sm:text-4xl">Какой БАД вам подойдёт</h2>
-                            <p className="mt-3 text-base leading-relaxed text-muted-foreground">Три вопроса о самочувствии — и мы подскажем формулу, с которой стоит начать.</p>
-                          </div>
-                        </Reveal>
-                        <Reveal delay={100}><Quiz /></Reveal>
-                      </div>
-                    </section>
-
-                    {/* Quality */}
-                    <section id="quality" className="scroll-mt-24 bg-sand py-16 sm:py-20">
-                      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-                        <Reveal>
-                          <div className="mx-auto max-w-2xl text-center">
-                            <h2 className="text-3xl font-bold sm:text-4xl">Качество и подлинность</h2>
-                            <p className="mt-3 text-base leading-relaxed text-muted-foreground">Мы бережём каждую капсулу: от непрозрачной банки до маркировки «Честный знак», которую вы можете проверить сами.</p>
-                          </div>
-                        </Reveal>
-                        <div className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-                          <Reveal>
-                            <div className="soft-card h-full p-6 sm:p-8">
-                              <h3 className="text-xl font-bold">Четыре уровня защиты банки</h3>
-                              <ul className="mt-6 grid gap-5 sm:grid-cols-2">
-                                {qualityPoints.map((p) => (
-                                  <li key={p.title} className="flex gap-3">
-                                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-soft"><p.icon className="h-5 w-5" /></span>
-                                    <span><span className="block text-sm font-bold">{p.title}</span><span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{p.text}</span></span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </Reveal>
-                          <Reveal delay={120}>
-                            <div className="soft-card h-full p-6 sm:p-8">
-                              <h3 className="text-xl font-bold">Проверьте подлинность за 10 секунд</h3>
-                              <ol className="mt-6 space-y-5">
-                                {authSteps.map((s, i) => (
-                                  <li key={s.title} className="flex gap-4">
-                                    <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sun-soft font-display text-base font-bold">
-                                      {i + 1}
-                                      {i < authSteps.length - 1 && (<span aria-hidden className="absolute left-1/2 top-full h-5 w-px -translate-x-1/2 bg-border" />)}
-                                    </span>
-                                    <span>
-                                      <span className="flex items-center gap-2 text-sm font-bold"><s.icon className="h-4 w-4" />{s.title}</span>
-                                      <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{s.text}</span>
-                                    </span>
-                                  </li>
-                                ))}
-                              </ol>
-                              <p className="mt-6 flex items-start gap-2 rounded-2xl bg-secondary px-4 py-3 text-sm leading-relaxed">
-                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-leaf" />
-                                Все продукты FonteVita зарегистрированы и промаркированы в государственной системе «Честный знак».
-                              </p>
-                            </div>
-                          </Reveal>
-                        </div>
-                      </div>
-                    </section>
-
-                    {/* Combo */}
-                    <section className="bg-sky-soft py-16 sm:py-20">
-                      <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 sm:px-6 lg:grid-cols-2">
-                        <Reveal>
-                          <div className="text-center lg:text-left">
-                            <h2 className="text-3xl font-bold sm:text-4xl">Работают лучше вместе</h2>
-                            <p className="mt-4 text-base leading-relaxed">Для укрепления иммунитета сочетайте приём Омега-3 с витамином D3. Магний с B6 поддержит спокойствие, а коллаген — кожу, волосы и суставы.</p>
-                            <a href="#products" className="mt-7 inline-block rounded-full bg-card px-7 py-3.5 text-sm font-extrabold shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95">Собрать комплекс</a>
-                          </div>
-                        </Reveal>
-                        <Reveal delay={120}>
-                          <img src={comboUrl} alt="Омега 3 и витамин D3+K2 FonteVita рядом" className="mx-auto w-full max-w-md rounded-[2rem] object-contain" loading="lazy" />
-                        </Reveal>
-                      </div>
-                    </section>
-
-                    {/* Reviews */}
-                    <section id="reviews" className="scroll-mt-24 py-16 sm:py-20">
-                      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-                        <Reveal>
-                          <div className="mx-auto max-w-2xl text-center">
-                            <h2 className="text-3xl font-bold sm:text-4xl">Отзывы покупателей</h2>
-                            <p className="mt-3 text-base leading-relaxed text-muted-foreground">Более 12 000 семей уже принимают FonteVita. Вот что они рассказывают.</p>
-                          </div>
-                        </Reveal>
-                        <div className="mt-10"><Reveal delay={100}><Reviews /></Reveal></div>
-                      </div>
-                    </section>
-
-                    {/* About */}
-                    <section id="about" className="scroll-mt-24 bg-sand py-16 sm:py-20">
-                      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-                        <div className="soft-card grid items-center gap-10 p-7 sm:p-12 lg:grid-cols-[0.9fr_1.1fr]">
-                          <Reveal>
-                            <div className="relative flex items-center justify-center">
-                              <div aria-hidden className="absolute h-40 w-40 rounded-full bg-sun-soft blur-2xl" />
-                              <img src={logoUrl} alt="Логотип FonteVita" className="relative w-full max-w-[180px] animate-float-soft object-contain" loading="lazy" />
-                            </div>
-                          </Reveal>
-                          <Reveal delay={120}>
-                            <div>
-                              <h2 className="text-3xl font-bold sm:text-4xl">О бренде FonteVita</h2>
-                              <p className="mt-4 text-base leading-relaxed text-muted-foreground">Мы делаем добавки, которые не стыдно поставить на общий стол: понятные формулы, честные дозировки и упаковка, нарисованная про настоящую семейную жизнь — рыбалку, утреннюю йогу и сборы в школу.</p>
-                              <p className="mt-3 text-base leading-relaxed text-muted-foreground">Каждый продукт производится на сертифицированной площадке, проходит лабораторный контроль и получает маркировку «Честный знак». Мы не обещаем чудес — мы даём рабочие дозировки и прозрачный состав.</p>
-                              <ul className="mt-7 grid gap-3 sm:grid-cols-2">
-                                {["Сырьё европейских поставщиков", "Лабораторный протокол на партию", "Никаких скрытых наполнителей", "Поддержка до конца курса"].map((t) => (
-                                  <li key={t} className="flex items-start gap-2 text-sm leading-relaxed"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-leaf" />{t}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          </Reveal>
-                        </div>
-                      </div>
-                    </section>
-
-                    {/* FAQ */}
-                    <section id="faq" className="scroll-mt-24 py-16 sm:py-20">
-                      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-                        <Reveal>
-                          <div className="mx-auto max-w-2xl text-center">
-                            <h2 className="text-3xl font-bold sm:text-4xl">Частые вопросы</h2>
-                            <p className="mt-3 text-base leading-relaxed text-muted-foreground">Коротко о составах, сочетаниях и доставке.</p>
-                          </div>
-                        </Reveal>
-                        <div className="mt-10"><Reveal delay={100}><Faq /></Reveal></div>
-                      </div>
-                    </section>
+                    <section className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{advantages.map((a, i) => (<Reveal key={a.title} delay={i * 90} className="h-full"><div className="soft-card flex h-full flex-col items-center gap-2 p-6 text-center"><div className="flex h-12 w-12 items-center justify-center rounded-full bg-sun-soft"><a.icon className="h-6 w-6" /></div><h3 className="text-base font-bold">{a.title}</h3><p className="text-sm leading-relaxed text-muted-foreground">{a.text}</p></div></Reveal>))}</div></section>
+                    <section id="products" className="scroll-mt-24 bg-sand py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Наши продукты</h2></div></Reveal><div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{products.map((p, i) => (<Reveal key={p.id} delay={i * 110} className="h-full"><ProductCard product={p} /></Reveal>))}</div></div></section>
+                    <section id="quiz" className="scroll-mt-24 py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto mb-10 max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Какой БАД вам подойдёт</h2></div></Reveal><Reveal delay={100}><Quiz /></Reveal></div></section>
+                    <section id="quality" className="scroll-mt-24 bg-sand py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Качество и подлинность</h2></div></Reveal><div className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Reveal><div className="soft-card h-full p-6 sm:p-8"><h3 className="text-xl font-bold">Четыре уровня защиты банки</h3><ul className="mt-6 grid gap-5 sm:grid-cols-2">{qualityPoints.map((p) => (<li key={p.title} className="flex gap-3"><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-soft"><p.icon className="h-5 w-5" /></span><span><span className="block text-sm font-bold">{p.title}</span><span className="mt-1 block text-sm text-muted-foreground">{p.text}</span></span></li>))}</ul></div></Reveal><Reveal delay={120}><div className="soft-card h-full p-6 sm:p-8"><h3 className="text-xl font-bold">Проверьте подлинность за 10 секунд</h3><ol className="mt-6 space-y-5">{authSteps.map((s, i) => (<li key={s.title} className="flex gap-4"><span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sun-soft font-display text-base font-bold">{i + 1}</span><span><span className="flex items-center gap-2 text-sm font-bold"><s.icon className="h-4 w-4" />{s.title}</span><span className="mt-1 block text-sm text-muted-foreground">{s.text}</span></span></li>))}</ol></div></Reveal></div></div></section>
+                    <section className="bg-sky-soft py-16 sm:py-20"><div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 sm:px-6 lg:grid-cols-2"><Reveal><div className="text-center lg:text-left"><h2 className="text-3xl font-bold sm:text-4xl">Работают лучше вместе</h2><p className="mt-4 text-base leading-relaxed">Сочетайте Омега-3 с витамином D3, магний с B6 — вечером, коллаген — во время еды.</p><a href="#products" className="mt-7 inline-block rounded-full bg-card px-7 py-3.5 text-sm font-extrabold shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95">Собрать комплекс</a></div></Reveal><Reveal delay={120}><img src={comboUrl} alt="Комплекс FonteVita" className="mx-auto w-full max-w-md rounded-[2rem] object-contain" loading="lazy" /></Reveal></div></section>
+                    <section id="reviews" className="scroll-mt-24 py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Отзывы покупателей</h2></div></Reveal><div className="mt-10"><Reveal delay={100}><Reviews /></Reveal></div></div></section>
+                    <section id="about" className="scroll-mt-24 bg-sand py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><div className="soft-card grid items-center gap-10 p-7 sm:p-12 lg:grid-cols-[0.9fr_1.1fr]"><Reveal><div className="relative flex items-center justify-center"><div aria-hidden className="absolute h-40 w-40 rounded-full bg-sun-soft blur-2xl" /><img src={logoUrl} alt="Логотип FonteVita" className="relative w-full max-w-[180px] animate-float-soft object-contain" loading="lazy" /></div></Reveal><Reveal delay={120}><div><h2 className="text-3xl font-bold sm:text-4xl">О бренде FonteVita</h2><p className="mt-4 text-base leading-relaxed text-muted-foreground">Мы делаем добавки с понятными формулами и честными дозировками.</p></div></Reveal></div></div></section>
+                    <section id="faq" className="scroll-mt-24 py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Частые вопросы</h2></div></Reveal><div className="mt-10"><Reveal delay={100}><Faq /></Reveal></div></div></section>
                   </main>
-
-                  <footer className="border-t border-border bg-sand py-10">
-                    <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 px-4 text-center sm:px-6 md:flex-row md:justify-between md:text-left">
-                      <img src={logoUrl} alt="FonteVita" className="h-12 w-auto object-contain" loading="lazy" />
-                      <p className="max-w-md text-xs leading-relaxed text-muted-foreground">БАД. Не является лекарственным средством. Перед применением проконсультируйтесь со специалистом.</p>
-                      <p className="text-xs text-muted-foreground">© 2025 FonteVita</p>
-                    </div>
-                  </footer>
+                  <SiteFooter />
                 </div>
               </CartProvider>
+            );
+          }
+
+          function BlogIndexPage() {
+            const posts = getAllPosts();
+            return (
+              <div className="min-h-dvh overflow-x-hidden">
+                <BlogHeader />
+                <main>
+                  <section className="relative overflow-hidden bg-gradient-to-b from-sand via-background to-background">
+                    <div className="relative mx-auto w-full max-w-4xl px-4 pb-12 pt-8 text-center sm:px-6 sm:pt-12">
+                      <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><Sparkles className="h-4 w-4 text-coral" />Блог FonteVita</span>
+                      <h1 className="mt-5 text-4xl font-bold leading-[1.1] sm:text-5xl">Витамины и БАДы — простыми словами</h1>
+                      <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">Разбираем коллаген, магний B6 и омега-3: как принимать, сочетать и выбирать.</p>
+                      <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">{blogCategories.map((c) => (<CategoryPill key={c.slug} category={c} />))}</div>
+                    </div>
+                  </section>
+                  <section className="mx-auto w-full max-w-6xl px-4 pb-20 sm:px-6"><div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{posts.map((post) => (<ArticleCard key={post.slug} post={post} />))}</div></section>
+                </main>
+                <SiteFooter />
+              </div>
+            );
+          }
+
+          function BlogCategoryPage() {
+            const { category: catSlug } = useParams();
+            const category = getCategoryBySlug(catSlug || "");
+            const posts = category ? getPostsByCategory(category.slug) : [];
+            if (!category) return <div className="p-20 text-center">Категория не найдена</div>;
+            const otherCategories = blogCategories.filter((c) => c.slug !== category.slug);
+            return (
+              <div className="min-h-dvh overflow-x-hidden">
+                <BlogHeader />
+                <main>
+                  <section className="relative overflow-hidden bg-gradient-to-b from-sand via-background to-background">
+                    <div className="relative mx-auto w-full max-w-4xl px-4 pb-12 pt-8 text-center sm:px-6 sm:pt-12">
+                      <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><category.icon className="h-4 w-4" />Раздел блога</span>
+                      <h1 className="mt-5 text-4xl font-bold leading-[1.1] sm:text-5xl">{category.name}</h1>
+                      <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">{category.description}</p>
+                      <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">{otherCategories.map((c) => (<CategoryPill key={c.slug} category={c} />))}</div>
+                    </div>
+                  </section>
+                  <section className="mx-auto w-full max-w-6xl px-4 pb-20 sm:px-6">
+                    {posts.length > 0 ? (<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{posts.map((post) => (<ArticleCard key={post.slug} post={post} />))}</div>) : (<p className="text-center text-muted-foreground">В этом разделе пока нет статей.</p>)}
+                  </section>
+                </main>
+                <SiteFooter />
+              </div>
+            );
+          }
+
+          function BlogArticlePage() {
+            const { slug } = useParams();
+            const post = getPostBySlug(slug || "");
+            if (!post) return <div className="p-20 text-center">Статья не найдена</div>;
+            const category = getCategoryBySlug(post.categorySlug);
+            const related = getRelatedPosts(post);
+            if (!category) return null;
+            return (
+              <div className="min-h-dvh overflow-x-hidden">
+                <BlogHeader />
+                <main>
+                  <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-6 sm:px-6 sm:pt-10">
+                    <Breadcrumbs items={[{ label: "Блог", to: "/blog" }, { label: category.shortName, to: `/blog/category/${category.slug}` }, { label: post.title }]} />
+                    <div className="mt-6"><CategoryPill category={category} /></div>
+                    <h1 className="mt-4 text-3xl font-bold leading-[1.15] sm:text-4xl lg:text-[2.75rem]">{post.title}</h1>
+                    <div className="mt-4 flex flex-wrap items-center gap-3 text-sm font-bold text-muted-foreground">
+                      <span>FonteVita</span><span aria-hidden>·</span>
+                      <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
+                      <span aria-hidden>·</span>
+                      <span className="flex items-center gap-1"><Clock className="h-4 w-4" />{post.readingTime} мин чтения</span>
+                    </div>
+                  </section>
+                  <section className="mx-auto w-full max-w-4xl px-4 sm:px-6"><div className="soft-card overflow-hidden"><ArticleCover category={category} size="hero" /></div></section>
+                  <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+                    <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
+                      <div className="min-w-0 space-y-10">
+                        <ArticleContent blocks={post.content} />
+                        <ArticleFaq items={post.faq} />
+                        {related.length > 0 && (<div><h2 className="text-2xl font-bold sm:text-3xl">Читайте также</h2><div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{related.map((p) => (<ArticleCard key={p.slug} post={p} />))}</div></div>)}
+                      </div>
+                      <aside className="space-y-5 lg:sticky lg:top-24 lg:h-fit">
+                        <TableOfContents blocks={post.content} />
+                        <RelatedProducts productIds={post.relatedProductIds} />
+                      </aside>
+                    </div>
+                  </section>
+                </main>
+                <SiteFooter />
+              </div>
+            );
+          }
+
+          function App() {
+            return (
+              <>
+                <ScrollToTop />
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/blog" element={<BlogIndexPage />} />
+                  <Route path="/blog/category/:category" element={<BlogCategoryPage />} />
+                  <Route path="/blog/:slug" element={<BlogArticlePage />} />
+                  <Route path="*" element={<HomePage />} />
+                </Routes>
+              </>
             );
           }
 
@@ -475,7 +394,6 @@ jobs:
           npm install
           npm run build
           cd ..
-          # Copy miniapp build into the main dist under /miniapp/
           mkdir -p dist-ghpages/miniapp
           cp -r miniapp/dist/* dist-ghpages/miniapp/
           echo "Mini app built and copied to dist-ghpages/miniapp/"
@@ -486,7 +404,6 @@ jobs:
           UPLOAD_DIR="dist-ghpages"
           if [ ! -f "$UPLOAD_DIR/index.html" ]; then
             echo "ERROR: No index.html in $UPLOAD_DIR"
-            ls -la "$UPLOAD_DIR" 2>/dev/null || echo "Directory not found"
             exit 1
           fi
           cp "$UPLOAD_DIR/index.html" "$UPLOAD_DIR/404.html"
