@@ -150,7 +150,7 @@ function Index() {
 
         <main>
           {/* Hero */}
-          <section className="relative bg-gradient-to-b from-sand via-background to-background">
+          <section className="relative -mt-2 bg-gradient-to-b from-sand via-background to-background">
             <div
               aria-hidden
               className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-sun-soft blur-3xl sm:h-[26rem] sm:w-[26rem]"

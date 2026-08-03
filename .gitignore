@@ -32,3 +32,4 @@ dist-ssr
 *.sw?
 fontevita-blog.patch
 screenshot.jpg
+screenshot*.jpg
