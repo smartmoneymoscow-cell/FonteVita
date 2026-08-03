@@ -187,7 +187,7 @@ function Index() {
                       className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]"
                       style={{ animationDelay: "0.6s" }}
                     />
-                    <span className="pointer-events-none absolute right-[10%] top-[34%] z-20 flex flex-col items-center rounded-full bg-sun/90 px-2.5 py-0.5 text-[7px] font-bold leading-none tracking-wide text-foreground shadow-sm sm:text-[9px]"><span>Хит</span><span>продаж</span></span>
+
                   </div>
                 </div>
                 <div className="relative z-20 flex flex-col items-center">
