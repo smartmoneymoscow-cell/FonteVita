@@ -61,9 +61,7 @@ export function ProductCard({ product }: { product: Product }) {
             <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
               {product.capsules}
             </span>
-            {product.id === "collagen" && (
-              <span className="pointer-events-none absolute right-[15%] top-[15%] z-20 flex flex-col items-center rounded-full bg-sun/90 px-2.5 py-0.5 text-[7px] font-bold leading-none tracking-wide text-foreground shadow-sm sm:text-[8px]"><span>Хит</span><span>продаж</span></span>
-            )}
+
           </div>
         </div>
       </div>
