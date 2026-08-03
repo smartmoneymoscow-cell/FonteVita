@@ -238,7 +238,7 @@ jobs:
                   <SiteHeader />
                   <CartPanel />
                   <main>
-                    <section className="relative -mt-2 bg-gradient-to-b from-sand via-background to-background">
+                    <section className="relative -mt-3 bg-gradient-to-b from-sand via-background to-background">
                       <div aria-hidden className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-sun-soft blur-3xl sm:h-[26rem] sm:w-[26rem]" />
                       <div className="relative mx-auto grid w-full max-w-6xl items-start gap-12 px-4 sm:px-6 md:grid-cols-[0.95fr_1.05fr] lg:grid-cols-[0.9fr_1.1fr] lg:gap-16" style={{ paddingTop: 0, paddingBottom: "1.5rem" }}>
                         <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
@@ -292,7 +292,7 @@ jobs:
               <div className="min-h-dvh overflow-x-hidden">
                 <BlogHeader />
                 <main>
-                  <section className="relative -mt-2 bg-gradient-to-b from-sand via-background to-background">
+                  <section className="relative -mt-3 bg-gradient-to-b from-sand via-background to-background">
                     <div className="relative mx-auto w-full max-w-4xl px-4 pb-8 pt-8 text-center sm:px-6 sm:pt-12">
                       <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><Sparkles className="h-4 w-4 text-coral" />Блог FonteVita</span>
                       <h1 className="mt-5 text-4xl font-bold leading-[1.1] sm:text-5xl">Витамины и БАДы — простыми словами</h1>
@@ -349,7 +349,7 @@ jobs:
               <div className="min-h-dvh overflow-x-hidden">
                 <BlogHeader />
                 <main>
-                  <section className="relative -mt-2 bg-gradient-to-b from-sand via-background to-background">
+                  <section className="relative -mt-3 bg-gradient-to-b from-sand via-background to-background">
                     <div className="relative mx-auto w-full max-w-4xl px-4 pb-12 pt-8 text-center sm:px-6 sm:pt-12">
                       <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><category.icon className="h-4 w-4" />Раздел блога</span>
                       <h1 className="mt-5 text-4xl font-bold leading-[1.1] sm:text-5xl">{category.name}</h1>
