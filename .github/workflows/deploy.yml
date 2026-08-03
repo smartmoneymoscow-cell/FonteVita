@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-inprogress: false
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
@@ -28,9 +28,11 @@ jobs:
         run: |
           bun install
           bun add react-router-dom
+          echo "Installed react-router-dom"
 
       - name: Build client SPA for GitHub Pages
         run: |
+          set -ex
           # Create a minimal Vite config for client-only SPA build
           cat > vite.ghpages.config.ts << 'VITEEOF'
           import { defineConfig } from "vite";
