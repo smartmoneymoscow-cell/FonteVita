@@ -150,7 +150,7 @@ jobs:
                     <section className="relative overflow-hidden bg-gradient-to-b from-sand via-background to-background">
                       <div aria-hidden className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-sun-soft blur-3xl sm:h-[26rem] sm:w-[26rem]" />
                       <div aria-hidden className="pointer-events-none absolute -left-24 top-52 h-72 w-72 rounded-full bg-sky-soft blur-3xl" />
-                      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-16 pt-8 sm:px-6 md:grid-cols-[0.95fr_1.05fr] md:pb-20 md:pt-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:pb-24 lg:pt-12">
+                      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-12 pt-2 sm:px-6 md:grid-cols-[0.95fr_1.05fr] md:pb-16 md:pt-4 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:pb-20 lg:pt-6">
                         <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
                           <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
                             <Sparkles className="h-4 w-4 text-coral" />
