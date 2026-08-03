@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { ArrowRight, RotateCcw, Sparkles } from "lucide-react";
+import { ArrowRight, RotateCcw, Sparkles, Check } from "lucide-react";
 import { useCart } from "@/components/cart-context";
 import { products, formatPrice } from "@/data/products";
 
@@ -38,6 +38,7 @@ export function Quiz() {
   const [fillingIdx, setFillingIdx] = useState<number | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [phase, setPhase] = useState<"in" | "out" | "idle">("in");
+  const [showResult, setShowResult] = useState(false);
 
   const results = useMemo(() => {
     if (answers.length < questions.length) return null;
@@ -57,66 +58,89 @@ export function Quiz() {
   const reset = () => {
     setStep(0);
     setAnswers([]);
+    setShowResult(false);
+    setPhase("in");
   };
 
   const progress = (Math.min(step, questions.length) / questions.length) * 100;
 
+  // Trigger result animation after answers complete
+  if (results && !showResult) {
+    setTimeout(() => setShowResult(true), 100);
+  }
+
   return (
     <div className="soft-card overflow-hidden">
       <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr]">
-        <div className="p-6 sm:p-9">
+        {/* Left: questions / results — fixed min-height to prevent layout jump */}
+        <div className="flex flex-col p-6 sm:p-9" style={{ minHeight: "420px" }}>
           <span className="inline-flex items-center gap-2 rounded-full bg-sun-soft px-3 py-1.5 text-xs font-bold">
             <Sparkles className="h-3.5 w-3.5" />
             Мини-подбор за 30 секунд
           </span>
 
           {!results ? (
-            <>
-              <div className="mt-6 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+            <div className="mt-6 flex flex-1 flex-col">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
                 <div
                   className="h-full rounded-full bg-primary transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <div className={phase === "out" ? "quiz-slide-out" : ""}>
-                <p className="mt-4 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+              <div className={`mt-4 flex flex-1 flex-col ${phase === "out" ? "quiz-slide-out" : ""}`}>
+                <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
                   Вопрос {step + 1} из {questions.length}
                 </p>
                 <h3 className={"mt-2 text-2xl font-bold sm:text-3xl" + (phase === "in" ? " quiz-slide-in" : "")}>
                   {questions[step].q}
                 </h3>
                 <div className="mt-6 grid gap-3">
-                {questions[step].options.map((o, i) => (
-                  <button
-                    key={o.value + i}
-                    onClick={() => {
-                      setFillingIdx(i);
-                      setTimeout(() => {
-                        setAnswers((prev) => [...prev, o.value]);
-                        setPhase("out");
+                  {questions[step].options.map((o, i) => (
+                    <button
+                      key={o.value + i}
+                      onClick={() => {
+                        setFillingIdx(i);
                         setTimeout(() => {
-                          setStep((s) => s + 1);
-                          setFillingIdx(null);
-                          setPhase("in");
-                        }, 350);
-                      }, 500);
-                    }}
-                    className={`quiz-fill group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 text-left text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:shadow-soft ${fillingIdx === i ? "filling" : ""}`}
-                    style={{
-                      animationDelay: phase === "in" ? `${i * 80}ms` : "0ms",
-                      animation: phase === "in" ? `rise-in 0.45s cubic-bezier(0.22,1,0.36,1) ${i * 80}ms both` : undefined,
-                    }}
-                  >
-                    {o.label}
-                    <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-foreground" />
-                  </button>
-                ))}
+                          setAnswers((prev) => [...prev, o.value]);
+                          setPhase("out");
+                          setTimeout(() => {
+                            setStep((s) => s + 1);
+                            setFillingIdx(null);
+                            setPhase("in");
+                          }, 350);
+                        }, 500);
+                      }}
+                      className={`quiz-fill group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 text-left text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:shadow-soft active:scale-[0.98] ${fillingIdx === i ? "filling" : ""}`}
+                      style={{
+                        animationDelay: phase === "in" ? `${i * 80}ms` : "0ms",
+                        animation: phase === "in" ? `rise-in 0.45s cubic-bezier(0.22,1,0.36,1) ${i * 80}ms both` : undefined,
+                      }}
+                    >
+                      {o.label}
+                      <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:translate-x-1 group-hover:text-foreground" />
+                    </button>
+                  ))}
+                </div>
               </div>
-              </div>
-            </>
+            </div>
           ) : (
-            <div className="animate-rise-in">
-              <h3 className="mt-6 text-2xl font-bold sm:text-3xl">
+            /* Result with animated entrance */
+            <div
+              className={`mt-6 flex flex-1 flex-col transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                showResult ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              }`}
+            >
+              {/* Animated check icon */}
+              <div
+                className={`mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-leaf/15 transition-all duration-500 ${
+                  showResult ? "scale-100 opacity-100" : "scale-50 opacity-0"
+                }`}
+                style={{ transitionDelay: "200ms" }}
+              >
+                <Check className="h-7 w-7 text-leaf" />
+              </div>
+
+              <h3 className="text-2xl font-bold sm:text-3xl">
                 {results.length === 1
                   ? `Ваш продукт — ${results[0].name}`
                   : `Ваша комбинация — ${results.map((p) => p.name).join(" + ")}`}
@@ -128,10 +152,13 @@ export function Quiz() {
               </p>
 
               <div className="mt-5 grid gap-3">
-                {results.map((p) => (
+                {results.map((p, i) => (
                   <div
                     key={p.id}
-                    className="flex items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3"
+                    className={`flex items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3 transition-all duration-500 ${
+                      showResult ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+                    }`}
+                    style={{ transitionDelay: `${300 + i * 150}ms` }}
                   >
                     <img
                       src={p.image}
@@ -150,20 +177,25 @@ export function Quiz() {
                 ))}
               </div>
 
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div
+                className={`mt-6 flex flex-wrap items-center gap-3 transition-all duration-500 ${
+                  showResult ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                }`}
+                style={{ transitionDelay: "600ms" }}
+              >
                 <button
                   onClick={() => {
                     results.forEach((p) => add(p.id));
                     setOpen(true);
                   }}
-                  className="rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
+                  className="rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-110 hover:shadow-lift active:scale-95"
                 >
                   {results.length === 1 ? "Добавить в корзину" : "Добавить всё в корзину"} ·{" "}
                   {formatPrice(total)}
                 </button>
                 <button
                   onClick={reset}
-                  className="flex items-center gap-2 rounded-full border-2 border-border px-5 py-3 text-sm font-extrabold transition-colors hover:bg-secondary"
+                  className="flex items-center gap-2 rounded-full border-2 border-border px-5 py-3 text-sm font-extrabold transition-all duration-300 hover:bg-secondary hover:border-foreground/20 active:scale-95"
                 >
                   <RotateCcw className="h-4 w-4" />
                   Пройти заново
@@ -173,6 +205,7 @@ export function Quiz() {
           )}
         </div>
 
+        {/* Right: product images */}
         <div className="relative flex items-center justify-center gap-2 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-8">
           <div
             aria-hidden

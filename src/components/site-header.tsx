@@ -5,6 +5,7 @@ import { useCart } from "@/components/cart-context";
 import logo from "@/assets/logo-mark.png.asset.json";
 
 const links = [
+  { href: "#top", label: "Главная" },
   { href: "#products", label: "Продукты" },
   { href: "#quiz", label: "Подбор" },
   { href: "#quality", label: "Качество" },
@@ -54,7 +55,7 @@ export function SiteHeader() {
             <a
               key={l.href}
               href={l.href}
-              className="relative text-base font-bold text-muted-foreground transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100"
+              className="relative text-base font-bold text-muted-foreground transition-all duration-200 after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100 active:scale-95 active:text-foreground"
             >
               {l.label}
             </a>

@@ -97,6 +97,29 @@
     font-family: var(--font-display);
     letter-spacing: -0.01em;
   }
+
+  /* Global button hover/active */
+  button {
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  button:hover {
+    filter: brightness(0.95);
+  }
+  button:active {
+    transform: scale(0.97);
+  }
+
+  /* Global link hover */
+  a {
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+  a:hover {
+    opacity: 0.85;
+  }
+  a:active {
+    opacity: 0.7;
+  }
 }
 
 @utility sun-blob {
@@ -125,10 +148,12 @@
   border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
   transition:
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.35s ease;
+    box-shadow 0.35s ease,
+    border-color 0.25s ease;
   &:hover {
     transform: translateY(-6px);
     box-shadow: var(--shadow-lift);
+    border-color: color-mix(in oklab, var(--primary) 30%, transparent);
   }
 }
 
@@ -251,5 +276,9 @@
   &.filling {
     color: white;
     border-color: var(--leaf);
+  }
+  &:active:not(.filling) {
+    transform: scale(0.98);
+    border-color: var(--primary);
   }
 }

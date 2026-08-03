@@ -84,7 +84,7 @@ export function ProductCard({ product }: { product: Product }) {
         <button
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
-          className="flex items-center gap-1.5 self-start text-sm font-bold text-muted-foreground transition-colors hover:text-foreground"
+          className="flex items-center gap-1.5 self-start text-sm font-bold text-muted-foreground transition-all duration-200 hover:text-foreground hover:scale-[1.02] active:scale-95"
         >
           {expanded ? "Свернуть" : "Подробнее"}
           <ChevronDown
