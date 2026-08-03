@@ -22,6 +22,13 @@ import { Quiz } from "@/components/quiz";
 import { Reviews } from "@/components/reviews";
 import { Faq } from "@/components/faq";
 import { products } from "@/data/products";
+import {
+  organizationSchema,
+  productSchema,
+  websiteSchema,
+  faqSchema,
+  breadcrumbSchema,
+} from "@/lib/seo-schema";
 import logo from "@/assets/logo-mark.png.asset.json";
 import collagenBottle from "@/assets/collagen-bottle.png.asset.json";
 import magnesiumBottle from "@/assets/magnesium-bottle.png.asset.json";
@@ -45,21 +52,40 @@ export const Route = createFileRoute("/")({
           "Коллаген, магний + B6 и омега 3 в честных дозировках. Сертифицированное качество FonteVita.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://fontevita.ru/" },
+      { property: "og:image", content: "https://fontevita.ru/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png" },
+      { property: "og:locale", content: "ru_RU" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "FonteVita — витамины и БАДы для всей семьи" },
+      {
+        name: "twitter:description",
+        content:
+          "Коллаген, магний + B6 и омега 3 в честных дозировках. Сертифицированное качество FonteVita.",
+      },
+      { name: "twitter:image", content: "https://fontevita.ru/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://fontevita.ru/" }],
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "FonteVita",
-          description: "Бренд витаминов и биологически активных добавок для всей семьи.",
-          url: "/",
-        }),
+        children: JSON.stringify(organizationSchema()),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(websiteSchema()),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(breadcrumbSchema()),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(faqSchema()),
+      },
+      ...productSchema().map((schema) => ({
+        type: "application/ld+json" as const,
+        children: JSON.stringify(schema),
+      })),
     ],
   }),
 });

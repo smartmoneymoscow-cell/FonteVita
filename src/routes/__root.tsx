@@ -81,11 +81,39 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "FonteVita — витамины и БАДы для всей семьи" },
       {
         name: "description",
-        content: "Коллаген, магний + B6 и омега 3 от FonteVita в честных дозировках.",
+        content:
+          "FonteVita: коллаген, магний + B6 и омега 3 в проверенных дозировках. Сертифицированные БАДы для энергии, спокойствия и красоты. Доставка по России.",
       },
       { property: "og:site_name", content: "FonteVita" },
       { property: "og:type", content: "website" },
+      { property: "og:title", content: "FonteVita — витамины и БАДы для всей семьи" },
+      {
+        property: "og:description",
+        content:
+          "Коллаген, магний + B6 и омега 3 в честных дозировках. Сертифицированное качество FonteVita. Доставка по России.",
+      },
+      { property: "og:url", content: "https://fontevita.ru/" },
+      {
+        property: "og:image",
+        content:
+          "https://fontevita.ru/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png",
+      },
+      { property: "og:locale", content: "ru_RU" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "FonteVita — витамины и БАДы для всей семьи" },
+      {
+        name: "twitter:description",
+        content:
+          "Коллаген, магний + B6 и омега 3 в честных дозировках. Сертифицированное качество.",
+      },
+      { name: "robots", content: "index, follow" },
+      { name: "theme-color", content: "#f5a623" },
+      { name: "author", content: "FonteVita" },
+      {
+        name: "keywords",
+        content:
+          "FonteVita, витамины, БАДы, коллаген, магний, омега 3, добавки, здоровье, Россия",
+      },
     ],
     links: [
       {
@@ -100,6 +128,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: logoAsset.url, type: "image/png" },
       { rel: "apple-touch-icon", href: logoAsset.url },
+      { rel: "canonical", href: "https://fontevita.ru/" },
+      { rel: "alternate", hrefLang: "ru", href: "https://fontevita.ru/" },
     ],
   }),
 
