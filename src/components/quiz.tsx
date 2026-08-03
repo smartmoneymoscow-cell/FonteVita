@@ -70,10 +70,10 @@ export function Quiz() {
   }
 
   return (
-    <div className="soft-card overflow-hidden">
+    <div className="soft-card overflow-hidden" style={{ minHeight: "520px" }}>
       <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr]">
         {/* Left: questions / results — fixed min-height to prevent layout jump */}
-        <div className="flex flex-col p-6 sm:p-9" style={{ minHeight: "420px" }}>
+        <div className="flex flex-col p-6 sm:p-9">
           <span className="inline-flex items-center gap-2 rounded-full bg-sun-soft px-3 py-1.5 text-xs font-bold">
             <Sparkles className="h-3.5 w-3.5" />
             Мини-подбор за 30 секунд
