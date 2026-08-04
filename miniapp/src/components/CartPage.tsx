@@ -9,9 +9,6 @@ import {
   MapPin,
   Phone,
   User,
-  Home,
-  Building,
-  Mailbox,
   MessageSquare,
 } from "lucide-react";
 import { useCart } from "@/components/CartContext";
@@ -22,11 +19,7 @@ type CheckoutForm = {
   firstName: string;
   lastName: string;
   phone: string;
-  city: string;
-  street: string;
-  building: string;
-  apartment: string;
-  postalCode: string;
+  address: string;
   comment: string;
 };
 
@@ -86,11 +79,7 @@ export function CartPage() {
       firstName: p.firstName ?? "",
       lastName: p.lastName ?? "",
       phone: p.phone ?? "",
-      city: p.city ?? "",
-      street: p.street ?? "",
-      building: p.building ?? "",
-      apartment: p.apartment ?? "",
-      postalCode: p.postalCode ?? "",
+      address: p.address ?? "",
       comment: "",
     };
   });
@@ -104,11 +93,7 @@ export function CartPage() {
         firstName: f.firstName || p.firstName || "",
         lastName: f.lastName || p.lastName || "",
         phone: f.phone || p.phone || "",
-        city: f.city || p.city || "",
-        street: f.street || p.street || "",
-        building: f.building || p.building || "",
-        apartment: f.apartment || p.apartment || "",
-        postalCode: f.postalCode || p.postalCode || "",
+        address: f.address || p.address || "",
       }));
     }
   }, [checkoutMode]);
@@ -116,7 +101,7 @@ export function CartPage() {
   const set = (k: keyof CheckoutForm, v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  const canSubmit = !!(form.firstName && form.phone && form.city && form.street);
+  const canSubmit = !!(form.firstName && form.phone && form.address);
 
   const handleOrder = () => {
     if (!canSubmit) {
@@ -126,7 +111,6 @@ export function CartPage() {
     hapticSuccess();
     setOrdered(true);
     setCheckoutMode(false);
-    // Log order data (ready for backend integration)
     console.log("Order:", {
       items: lines.map((l) => ({ id: l.product.id, qty: l.qty })),
       total: total + (total < 3000 ? 350 : 0),
@@ -158,7 +142,6 @@ export function CartPage() {
   if (checkoutMode) {
     return (
       <div className="mx-auto w-full max-w-lg px-4 pb-28 pt-4">
-        {/* Back button */}
         <button
           onClick={() => {
             haptic("light");
@@ -172,7 +155,7 @@ export function CartPage() {
 
         <h2 className="mb-4 text-lg font-bold">Оформление заказа</h2>
 
-        {/* Contact info */}
+        {/* Contact */}
         <div className="mb-4">
           <h3 className="mb-2 text-sm font-bold text-muted-foreground">
             Контактные данные
@@ -208,49 +191,16 @@ export function CartPage() {
         {/* Address */}
         <div className="mb-4">
           <h3 className="mb-2 text-sm font-bold text-muted-foreground">
-            Адрес доставки
+            Доставка
           </h3>
-          <div className="space-y-2">
-            <InputField
-              icon={<MapPin className="h-4 w-4" />}
-              label="Город"
-              value={form.city}
-              onChange={(v) => set("city", v)}
-              placeholder="Москва"
-              required
-            />
-            <InputField
-              icon={<Home className="h-4 w-4" />}
-              label="Улица"
-              value={form.street}
-              onChange={(v) => set("street", v)}
-              placeholder="ул. Пушкина"
-              required
-            />
-            <div className="grid grid-cols-3 gap-2">
-              <InputField
-                icon={<Building className="h-4 w-4" />}
-                label="Дом"
-                value={form.building}
-                onChange={(v) => set("building", v)}
-                placeholder="10"
-              />
-              <InputField
-                icon={<Home className="h-4 w-4" />}
-                label="Кв"
-                value={form.apartment}
-                onChange={(v) => set("apartment", v)}
-                placeholder="42"
-              />
-              <InputField
-                icon={<Mailbox className="h-4 w-4" />}
-                label="Индекс"
-                value={form.postalCode}
-                onChange={(v) => set("postalCode", v)}
-                placeholder="101000"
-              />
-            </div>
-          </div>
+          <InputField
+            icon={<MapPin className="h-4 w-4" />}
+            label="Адрес"
+            value={form.address}
+            onChange={(v) => set("address", v)}
+            placeholder="Москва, ул. Пушкина, д. 10, кв. 42"
+            required
+          />
         </div>
 
         {/* Comment */}
@@ -272,7 +222,7 @@ export function CartPage() {
           </label>
         </div>
 
-        {/* Order summary */}
+        {/* Summary */}
         <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>Товары ({count})</span>
@@ -299,7 +249,7 @@ export function CartPage() {
           </button>
           {!canSubmit && (
             <p className="text-center text-xs text-muted-foreground/70">
-              Заполните имя, телефон, город и улицу
+              Заполните имя, телефон и адрес
             </p>
           )}
         </div>
