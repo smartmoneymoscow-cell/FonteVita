@@ -336,6 +336,9 @@ jobs:
           </html>
           HTMLEOF
 
+          # 404.html — SPA fallback for GitHub Pages client-side routing
+          cp index.html 404.html
+
       - name: Build client SPA
         run: bunx vite build --config vite.ghpages.config.ts
 
