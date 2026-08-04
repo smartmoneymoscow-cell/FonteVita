@@ -384,6 +384,19 @@ jobs:
           # Copy 404.html for SPA fallback
           cp dist-ghpages/index.html dist-ghpages/404.html
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: miniapp/package-lock.json
+
+      - name: Build Telegram Mini App
+        run: |
+          cd miniapp
+          npm ci
+          npm run build
+          cp -r dist ../dist-ghpages/miniapp
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
