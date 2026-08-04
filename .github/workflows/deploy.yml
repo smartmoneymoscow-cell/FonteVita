@@ -340,7 +340,10 @@ jobs:
           cp index.html 404.html
 
       - name: Build client SPA
-        run: bunx vite build --config vite.ghpages.config.ts
+        run: |
+          bunx vite build --config vite.ghpages.config.ts
+          # Copy 404.html for SPA fallback
+          cp dist-ghpages/index.html dist-ghpages/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
