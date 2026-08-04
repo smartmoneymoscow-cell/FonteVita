@@ -829,8 +829,6 @@ export const blogPosts: BlogPost[] = [
       "kak-vybrat-vitaminy-i-bady",
       "kogda-nachinayut-deystvovat-vitaminy",
     ],
-    coverImage:
-      "https://alsgp0.fds.api.xiaomi.com/chatbot-prod/multimedia/4268246091/IMG_1356-f26a06bb8bf310470cc7ed0a9b310207.jpeg?GalaxyAccessKeyId=AKDFVGPIRVU2J5L22P&Expires=1817362570943&Signature=UCB//7…n0g=",
     content: [
       {
         type: "p",

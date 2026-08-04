@@ -43,7 +43,7 @@ jobs:
             Outlet as RRDOutlet,
           } from "react-router-dom";
 
-          /* ---------- global route registry ---------- */
+          /* ---------- global route registry + loaderData ---------- */
           const routeConfigs: Record<
             string,
             { component?: React.FC; loader?: (ctx: any) => any; head?: (ctx: any) => any }
