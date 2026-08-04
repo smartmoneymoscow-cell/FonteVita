@@ -148,6 +148,23 @@ export function ArticleContent({ blocks }: { blocks: ContentBlock[] }) {
             );
           }
 
+          case "image":
+            return (
+              <figure key={i} className="overflow-hidden rounded-2xl">
+                <img
+                  src={block.src}
+                  alt={block.alt}
+                  className="w-full object-cover"
+                  loading="lazy"
+                />
+                {block.caption && (
+                  <figcaption className="mt-2 text-center text-sm text-muted-foreground">
+                    {block.caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
+
           default:
             return null;
         }

@@ -4,14 +4,30 @@ import { accentClasses } from "@/components/blog/accent";
 export function ArticleCover({
   category,
   size = "card",
+  imageUrl,
 }: {
   category: BlogCategory;
   size?: "card" | "hero";
+  imageUrl?: string;
 }) {
   const accent = accentClasses[category.accent];
   const Icon = category.icon;
   const height = size === "hero" ? "h-48 sm:h-64" : "h-40";
   const iconSize = size === "hero" ? "h-14 w-14 sm:h-16 sm:w-16" : "h-11 w-11";
+
+  if (imageUrl) {
+    return (
+      <div className={`relative ${height} w-full overflow-hidden`}>
+        <img
+          src={imageUrl}
+          alt=""
+          className="h-full w-full object-cover"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div

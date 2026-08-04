@@ -7,7 +7,8 @@ export type ContentBlock =
   | { type: "callout"; variant: "tip" | "warn" | "info"; title: string; text: string }
   | { type: "stats"; items: { value: string; label: string }[] }
   | { type: "table"; headers: string[]; rows: string[][] }
-  | { type: "link"; text: string; to: string; label: string };
+  | { type: "link"; text: string; to: string; label: string }
+  | { type: "image"; src: string; alt: string; caption?: string };
 
 export type FaqItem = { q: string; a: string };
 
@@ -25,6 +26,7 @@ export type BlogPost = {
   readingTime: number;
   relatedProductIds: string[];
   relatedSlugs: string[];
+  coverImage?: string;
   content: ContentBlock[];
   faq: FaqItem[];
 };
@@ -829,6 +831,8 @@ export const blogPosts: BlogPost[] = [
       "kak-vybrat-vitaminy-i-bady",
       "kogda-nachinayut-deystvovat-vitaminy",
     ],
+    coverImage:
+      "https://alsgp0.fds.api.xiaomi.com/chatbot-prod/multimedia/4268246091/IMG_1356-f26a06bb8bf310470cc7ed0a9b310207.jpeg?GalaxyAccessKeyId=AKDFVGPIRVU2J5L22P&Expires=1817362570943&Signature=UCB//7…n0g=",
     content: [
       {
         type: "p",
@@ -870,6 +874,13 @@ export const blogPosts: BlogPost[] = [
         text: "Первый шаг — увеличить потребление жирной рыбы (лосось, скумбрия, сардины, сельдь) до 2–3 порций в неделю. Второй шаг — сократить промышленные масла и готовую еду с высоким содержанием омега-6. Третий шаг — рассмотреть добавку омега-3, особенно если рыба на столе появляется редко.",
       },
       { type: "h2", id: "kakuyu-omega-brat", text: "Какую омега-3 выбрать" },
+      {
+        type: "image",
+        src:
+          "https://alsgp0.fds.api.xiaomi.com/chatbot-prod/multimedia/4268246091/IMG_1356-f26a06bb8bf310470cc7ed0a9b310207.jpeg?GalaxyAccessKeyId=AKDFVGPIRVU2J5L22P&Expires=1817362570943&Signature=UCB//7…n0g=",
+        alt: "Омега-3 липидный комплекс FonteVita — 180 капсул",
+        caption: "Омега-3 липидный комплекс FonteVita: 3000 мг в сутки, 180 капсул, комплекс из 3 источников",
+      },
       {
         type: "p",
         text: "Качественная добавка омега-3 — это не просто «рыбий жир в капсуле». Важно несколько параметров: источник сырья, содержание EPA и DHA, показатель свежести (ТОТОХ) и защита от окисления. Омега-3 FonteVita содержит комплекс из трёх источников — рыбий жир, льняное масло и масло водорослей — в общей дозировке 3000 мг в сутки, с показателем ТОТОХ 17,94 при допустимой норме до 26.",

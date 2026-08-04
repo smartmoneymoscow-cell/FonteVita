@@ -135,7 +135,7 @@ function ArticlePage() {
 
         <section className="mx-auto w-full max-w-4xl px-4 sm:px-6">
           <div className="soft-card overflow-hidden">
-            <ArticleCover category={category} size="hero" />
+            <ArticleCover category={category} size="hero" imageUrl={post.coverImage} />
           </div>
         </section>
 
