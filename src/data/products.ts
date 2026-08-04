@@ -14,7 +14,6 @@ export type Product = {
   oldPrice?: number;
   image: string;
   accent: "sun" | "sky" | "coral";
-  badge?: string;
   highlights: { value: string; label: string }[];
   benefits: string[];
   intake: string;
@@ -32,7 +31,6 @@ export const products: Product[] = [
     oldPrice: 1890,
     image: collagenBottle.url,
     accent: "coral",
-    badge: "Хит продаж",
     highlights: [
       { value: "2000 мг", label: "коллаген гидролизованный" },
       { value: "160 мг", label: "витамин C" },
