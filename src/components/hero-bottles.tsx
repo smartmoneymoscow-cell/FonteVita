@@ -38,7 +38,8 @@ export function HeroBottles() {
           const offset = ((i - active + bottles.length) % bottles.length) as 0 | 1 | 2;
           // 0 = center (front), 1 = right, 2 = left
           const isFront = offset === 0;
-          const x = offset === 0 ? "0%" : offset === 1 ? "78%" : "-78%";
+          const x =
+            offset === 0 ? "0rem" : offset === 1 ? "var(--shift)" : "calc(-1 * var(--shift))";
           const scale = isFront ? 1 : 0.62;
           const rotate = offset === 0 ? "0deg" : offset === 1 ? "6deg" : "-6deg";
 
