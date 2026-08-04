@@ -31,9 +31,7 @@ import {
   breadcrumbSchema,
 } from "@/lib/seo-schema";
 import logo from "@/assets/logo-mark.png.asset.json";
-import collagenBottle from "@/assets/collagen-bottle.png.asset.json";
-import magnesiumBottle from "@/assets/magnesium-bottle.png.asset.json";
-import omegaBottle from "@/assets/omega-bottle.png.asset.json";
+import { HeroBottles } from "@/components/hero-bottles";
 import combo from "@/assets/combo.png.asset.json";
 
 export const Route = createFileRoute("/")({
