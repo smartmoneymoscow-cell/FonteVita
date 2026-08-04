@@ -28,7 +28,7 @@ export function SiteHeader() {
           aria-label="FonteVita — на главную"
         >
           <img
-            src="./logo.png"
+            src="https://fontevita-vitality-hub.lovable.app/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png"
             alt="Логотип FonteVita"
             className="h-10 w-auto object-contain"
             width={140}

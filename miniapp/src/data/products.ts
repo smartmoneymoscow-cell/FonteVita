@@ -14,7 +14,7 @@ export type Product = {
   composition: string;
 };
 
-const base = import.meta.env.BASE_URL;
+const LOVABLE = "https://fontevita-vitality-hub.lovable.app";
 
 export const products: Product[] = [
   {
@@ -25,7 +25,7 @@ export const products: Product[] = [
     capsules: "120 капсул",
     price: 1490,
     oldPrice: 1890,
-    image: `${base}collagen.png`,
+    image: `${LOVABLE}/__l5e/assets-v1/cdcddfb7-2c0a-4e84-8f05-9b44e84e6318/collagen-bottle.png`,
     accent: "coral",
     highlights: [
       { value: "2000 мг", label: "коллаген гидролизованный" },
@@ -49,7 +49,7 @@ export const products: Product[] = [
     capsules: "120 капсул",
     price: 1190,
     oldPrice: 1490,
-    image: `${base}magnesium.png`,
+    image: `${LOVABLE}/__l5e/assets-v1/8708d59b-eff1-4935-b125-2faafd214ea2/magnesium-bottle.png`,
     accent: "sky",
     highlights: [
       { value: "2010 мг", label: "хелат магния" },
@@ -73,7 +73,7 @@ export const products: Product[] = [
     capsules: "180 капсул",
     price: 1690,
     oldPrice: 2090,
-    image: `${base}omega.png`,
+    image: `${LOVABLE}/__l5e/assets-v1/7a62c490-31a6-4603-8620-fc18b1c8b48d/omega-bottle.png`,
     accent: "sky",
     highlights: [
       { value: "3000 мг", label: "в сутки" },
