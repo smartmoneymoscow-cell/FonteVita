@@ -45,13 +45,11 @@ export function HeroBottles() {
           return (
             <div
               key={b.label}
-              className="absolute left-1/2 top-1/2 flex h-full w-full items-center justify-center will-change-transform"
+              className="absolute left-1/2 top-1/2 flex h-full w-full items-center justify-center"
               style={{
                 transform: `translate(-50%, -50%) translateX(${x}) scale(${scale}) rotateY(${rotate})`,
-                transition: `transform 1100ms ${EASE}, opacity 900ms ${EASE}, filter 900ms ${EASE}`,
+                transition: `transform 1100ms ${EASE}`,
                 zIndex: isFront ? 30 : 10,
-                opacity: isFront ? 1 : 0.85,
-                filter: isFront ? "none" : "saturate(0.9) brightness(0.99)",
               }}
               aria-hidden={!isFront}
             >
