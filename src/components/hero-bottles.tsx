@@ -11,6 +11,35 @@ const bottles = [
 
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
+function BottleImg({
+  src,
+  alt,
+  isFront,
+}: {
+  src: string;
+  alt: string;
+  isFront: boolean;
+}) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      onLoad={() => setLoaded(true)}
+      className={`h-full w-auto object-contain transition-opacity duration-300 ${
+        loaded ? "opacity-100" : "opacity-0"
+      } ${
+        isFront
+          ? "drop-shadow-[0_46px_46px_rgba(60,70,90,0.26)]"
+          : "drop-shadow-[0_28px_34px_rgba(60,70,90,0.16)]"
+      }`}
+      loading="eager"
+      decoding="async"
+    />
+  );
+}
+
 export function HeroBottles() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -53,18 +82,7 @@ export function HeroBottles() {
               }}
               aria-hidden={!isFront}
             >
-              <img
-                src={b.src}
-                alt={b.alt}
-                className={`h-full w-auto object-contain ${
-                  isFront
-                    ? "drop-shadow-[0_46px_46px_rgba(60,70,90,0.26)]"
-                    : "drop-shadow-[0_28px_34px_rgba(60,70,90,0.16)]"
-                }`}
-                loading="eager"
-                decoding="async"
-                style={{ background: "transparent" }}
-              />
+              <BottleImg src={b.src} alt={b.alt} isFront={isFront} />
             </div>
           );
         })}
