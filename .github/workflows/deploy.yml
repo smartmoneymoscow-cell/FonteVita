@@ -25,29 +25,250 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: |
-          bun install
-          bun add react-router-dom
-          echo "Installed react-router-dom"
+        run: bun install
 
-      - name: Build client SPA for GitHub Pages
+      - name: Create TanStack Router mock
         run: |
-          set -ex
-          # Create a minimal Vite config for client-only SPA build
+          mkdir -p src/__mocks__
+          cat > src/__mocks__/tanstack-router.tsx << 'MOCKEOF'
+          import React, { useEffect } from "react";
+          import {
+            Link as RRDLink,
+            useLocation,
+            useParams,
+            useNavigate,
+            useSearchParams,
+            Outlet as RRDOutlet,
+          } from "react-router-dom";
+
+          /* ---------- global route registry ---------- */
+          const routeConfigs: Record<
+            string,
+            { component?: React.FC; loader?: (ctx: any) => any; head?: (ctx: any) => any }
+          > = {};
+
+          /* ---------- helpers ---------- */
+          function normalisePath(p: string) {
+            return p === "/" ? "/" : p.replace(/\/+$/, "");
+          }
+
+          function matchRoute(pathname: string) {
+            const clean = normalisePath(pathname);
+            // exact match first
+            if (routeConfigs[clean]) return { key: clean, params: {} as Record<string, string> };
+            // try pattern matching (longest prefix wins)
+            const keys = Object.keys(routeConfigs).sort((a, b) => b.length - a.length);
+            for (const key of keys) {
+              const parts = key.split("/");
+              const pathParts = clean.split("/");
+              if (parts.length !== pathParts.length) continue;
+              const params: Record<string, string> = {};
+              let match = true;
+              for (let i = 0; i < parts.length; i++) {
+                if (parts[i].startsWith("$")) {
+                  params[parts[i].slice(1)] = decodeURIComponent(pathParts[i]);
+                } else if (parts[i] !== pathParts[i]) {
+                  match = false;
+                  break;
+                }
+              }
+              if (match) return { key, params };
+            }
+            return null;
+          }
+
+          /* ---------- exported mocks ---------- */
+          export function createFileRoute(path: string) {
+            return (config: any) => {
+              routeConfigs[normalisePath(path)] = config;
+              return config;
+            };
+          }
+
+          export function createRootRouteWithContext() {
+            return () => ({});
+          }
+
+          export function notFound() {
+            throw new Error("Not found");
+          }
+
+          export function Link({ to, params, hash, children, ...rest }: any) {
+            let href = to || "/";
+            if (params) {
+              for (const [k, v] of Object.entries(params)) {
+                href = href.replace(`$${k}`, String(v));
+              }
+            }
+            if (hash) href += `#${hash}`;
+            return (
+              <RRDLink to={href} {...rest}>
+                {children}
+              </RRDLink>
+            );
+          }
+
+          export const Outlet = RRDOutlet;
+          export const HeadContent = () => null;
+          export const Scripts = () => null;
+          export { useParams, useNavigate, useSearchParams, useLocation };
+
+          /* ---------- router component for App.tsx ---------- */
+          export function MockRouter() {
+            const { pathname } = useLocation();
+            const navigate = useNavigate();
+            const result = matchRoute(pathname);
+
+            useEffect(() => {
+              // process head() for SEO
+              if (result) {
+                const cfg = routeConfigs[result.key];
+                if (cfg?.head) {
+                  try {
+                    const loaderData = cfg.loader
+                      ? cfg.loader({ params: result.params })
+                      : undefined;
+                    const h = cfg.head({ loaderData });
+                    if (h?.meta) {
+                      for (const m of h.meta) {
+                        let el = document.querySelector(
+                          m.name
+                            ? `meta[name="${m.name}"]`
+                            : `meta[property="${m.property}"]`
+                        );
+                        if (!el) {
+                          el = document.createElement("meta");
+                          if (m.name) el.setAttribute("name", m.name);
+                          if (m.property) el.setAttribute("property", m.property);
+                          document.head.appendChild(el);
+                        }
+                        el.setAttribute("content", m.content);
+                      }
+                    }
+                    if (h?.links) {
+                      for (const l of h.links) {
+                        if (l.rel === "canonical") {
+                          let link = document.querySelector('link[rel="canonical"]');
+                          if (!link) {
+                            link = document.createElement("link");
+                            link.setAttribute("rel", "canonical");
+                            document.head.appendChild(link);
+                          }
+                          link.setAttribute("href", l.href);
+                        }
+                      }
+                    }
+                    if (h?.scripts) {
+                      for (const s of h.scripts) {
+                        const script = document.createElement("script");
+                        script.type = "application/ld+json";
+                        script.textContent = s.children;
+                        document.head.appendChild(script);
+                      }
+                    }
+                  } catch {}
+                }
+              }
+            }, [pathname]);
+
+            if (!result) return <p style={{ padding: 40 }}>Страница не найдена</p>;
+
+            const cfg = routeConfigs[result.key];
+            if (!cfg?.component) return null;
+
+            const Component = cfg.component;
+            return <Component />;
+          }
+          MOCKEOF
+
+      - name: Create SPA entry point
+        run: |
+          cat > src/main-ghpages.tsx << 'MAINEOF'
+          import React from "react";
+          import ReactDOM from "react-dom/client";
+          import { BrowserRouter } from "react-router-dom";
+          import { MockRouter } from "./__mocks__/tanstack-router";
+          import "./styles.css";
+
+          // Import route files to register them in the mock
+          import "./routes/index";
+          import "./routes/blog/index";
+          import "./routes/blog/$slug";
+          import "./routes/blog/category/$category";
+
+          function App() {
+            return <MockRouter />;
+          }
+
+          ReactDOM.createRoot(document.getElementById("root")!).render(
+            <React.StrictMode>
+              <BrowserRouter basename="/fontevita-vitality-hub">
+                <App />
+              </BrowserRouter>
+            </React.StrictMode>
+          );
+          MAINEOF
+
+      - name: Create Vite config for GitHub Pages
+        run: |
           cat > vite.ghpages.config.ts << 'VITEEOF'
           import { defineConfig } from "vite";
           import react from "@vitejs/plugin-react";
           import tsconfigPaths from "vite-tsconfig-paths";
           import tailwindcss from "@tailwindcss/vite";
           import path from "path";
+          import fs from "fs";
+
+          // Plugin to handle Lovable .asset.json imports
+          // Transforms: import img from "@/assets/foo.png.asset.json"
+          // Into: { url: "https://fontevita-vitality-hub.lovable.app/__l5e/assets-v1/..." }
+          function lovableAssetPlugin() {
+            const LOVABLE = "https://fontevita-vitality-hub.lovable.app";
+            return {
+              name: "lovable-asset",
+              enforce: "pre" as const,
+              resolveId(source: string, importer: string) {
+                if (source.includes(".asset.json")) {
+                  const resolved = path.resolve(
+                    path.dirname(importer || process.cwd()),
+                    source
+                  );
+                  return resolved + "?lovable-asset";
+                }
+                return null;
+              },
+              load(id: string) {
+                if (id.endsWith("?lovable-asset")) {
+                  const filePath = id.replace("?lovable-asset", "");
+                  try {
+                    const raw = fs.readFileSync(filePath, "utf-8");
+                    const json = JSON.parse(raw);
+                    return `export default ${JSON.stringify({
+                      url: LOVABLE + json.url,
+                    })}`;
+                  } catch {
+                    return `export default { url: "" }`;
+                  }
+                }
+                return null;
+              },
+            };
+          }
 
           export default defineConfig({
             base: "/fontevita-vitality-hub/",
-            plugins: [react(), tsconfigPaths(), tailwindcss()],
+            plugins: [react(), tsconfigPaths(), tailwindcss(), lovableAssetPlugin()],
             resolve: {
               alias: {
                 "@": path.resolve(__dirname, "./src"),
-                "@tanstack/react-router": path.resolve(__dirname, "./src/__mocks__/tanstack-router.tsx"),
+                "@tanstack/react-router": path.resolve(
+                  __dirname,
+                  "./src/__mocks__/tanstack-router"
+                ),
+                "@tanstack/react-start": path.resolve(
+                  __dirname,
+                  "./src/__mocks__/tanstack-router"
+                ),
               },
             },
             build: {
@@ -59,39 +280,8 @@ jobs:
           });
           VITEEOF
 
-          # Create mock for @tanstack/react-router
-          mkdir -p src/__mocks__
-          cat > src/__mocks__/tanstack-router.tsx << 'MOCKEOF'
-          import React from "react";
-          import { Link as RRDLink } from "react-router-dom";
-
-          function resolvePath(to: string, params?: Record<string, string>): string {
-            if (!params) return to;
-            let resolved = to;
-            for (const [key, value] of Object.entries(params)) {
-              resolved = resolved.replace(`$${key}`, value);
-            }
-            return resolved;
-          }
-
-          export function Link({ to, params, hash, children, ...rest }: any) {
-            const href = resolvePath(to, params) + (hash ? `#${hash}` : "");
-            return <RRDLink to={href} {...rest}>{children}</RRDLink>;
-          }
-
-          export function createFileRoute() {
-            return { component: () => null, loader: () => null, head: () => ({}) };
-          }
-          export function createRootRouteWithContext() {
-            return () => ({ component: () => null, head: () => ({}) });
-          }
-          export function notFound() { throw new Error("Not found"); }
-          export const Outlet = () => null;
-          export const HeadContent = () => null;
-          export const Scripts = () => null;
-          MOCKEOF
-
-          # Create index.html entry point
+      - name: Create index.html
+        run: |
           cat > index.html << 'HTMLEOF'
           <!DOCTYPE html>
           <html lang="ru">
@@ -113,7 +303,7 @@ jobs:
               <meta name="robots" content="index, follow" />
               <meta name="theme-color" content="#f5a623" />
               <meta name="author" content="FonteVita" />
-              <meta name="keywords" content="FonteVita, витамины, БАДы, коллаген, магний, омега 3, добавки, здоровье, Россия, блог" />
+              <meta name="keywords" content="FonteVita, витамины, БАДы, коллаген, магний, омега 3, добавки, здоровье" />
               <link rel="canonical" href="https://fontevita.ru/" />
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -136,334 +326,18 @@ jobs:
               <script type="application/ld+json">
               {"@context":"https://schema.org","@type":"Product","name":"FonteVita Омега 3","brand":{"@type":"Brand","name":"FonteVita"},"offers":{"@type":"Offer","priceCurrency":"RUB","price":"1690","availability":"https://schema.org/InStock"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"247"}}
               </script>
-              <script type="application/ld+json">
-              {"@context":"https://schema.org","@type":"Blog","name":"Блог FonteVita","description":"Статьи о витаминах и БАДах","url":"https://fontevita.ru/blog"}
-              </script>
             </head>
             <body>
               <div id="root"></div>
-              <script type="module" src="/src/main.tsx"></script>
+              <script type="module" src="/src/main-ghpages.tsx"></script>
             </body>
           </html>
           HTMLEOF
 
-          # Create SPA entry point with BrowserRouter
-          cat > src/main.tsx << 'MAINEOF'
-          import React from "react";
-          import ReactDOM from "react-dom/client";
-          import { BrowserRouter } from "react-router-dom";
-          import App from "./App";
-          import "./styles.css";
-
-          ReactDOM.createRoot(document.getElementById("root")!).render(
-            <React.StrictMode>
-              <BrowserRouter basename="/fontevita-vitality-hub">
-                <App />
-              </BrowserRouter>
-            </React.StrictMode>
-          );
-          MAINEOF
-
-          # Create App.tsx with routing for main page + blog
-          cat > src/App.tsx << 'APPEOF'
-          import { Routes, Route, useParams, Link as RRDLink, useLocation } from "react-router-dom";
-          import { useEffect, useState, useMemo } from "react";
-          import {
-            Baby, BadgeCheck, Leaf, Lock, QrCode, ScanLine,
-            ShieldCheck, Sparkles, Truck, Droplets, Package, CheckCircle2,
-            Search, X, Clock,
-          } from "lucide-react";
-          import { CartProvider } from "@/components/cart-context";
-          import { CartPanel } from "@/components/cart-panel";
-          import { SiteHeader } from "@/components/site-header";
-          import { ProductCard } from "@/components/product-card";
-          import { Reveal } from "@/components/reveal";
-          import { Quiz } from "@/components/quiz";
-          import { Reviews } from "@/components/reviews";
-          import { Faq } from "@/components/faq";
-          import { SiteFooter } from "@/components/site-footer";
-          import { products } from "@/data/products";
-          import { BlogHeader } from "@/components/blog/blog-header";
-          import { ArticleCard } from "@/components/blog/article-card";
-          import { ArticleContent } from "@/components/blog/article-content";
-          import { ArticleFaq } from "@/components/blog/article-faq";
-          import { ArticleCover } from "@/components/blog/article-cover";
-          import { CategoryPill } from "@/components/blog/category-pill";
-          import { RelatedProducts } from "@/components/blog/related-products";
-          import { TableOfContents } from "@/components/blog/table-of-contents";
-          import { Breadcrumbs } from "@/components/blog/breadcrumbs";
-          import { getAllPosts, getPostBySlug, getPostsByCategory, getRelatedPosts, formatDate } from "@/data/blog-posts";
-          import { blogCategories, getCategoryBySlug } from "@/data/blog-categories";
-
-          const LOVABLE = "https://fontevita-vitality-hub.lovable.app";
-          const logoUrl = LOVABLE + "/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png";
-          const collagenUrl = LOVABLE + "/__l5e/assets-v1/cdcddfb7-2c0a-4e84-8f05-9b44e84e6318/collagen-bottle.png";
-          const magnesiumUrl = LOVABLE + "/__l5e/assets-v1/8708d59b-eff1-4935-b125-2faafd214ea2/magnesium-bottle.png";
-          const omegaUrl = LOVABLE + "/__l5e/assets-v1/7a62c490-31a6-4603-8620-fc18b1c8b48d/omega-bottle.png";
-          const comboUrl = LOVABLE + "/__l5e/assets-v1/b2d76a6b-8d07-47af-bea8-345a6a1917be/combo.png";
-
-          function ScrollToTop() {
-            const { pathname } = useLocation();
-            useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
-            return null;
-          }
-
-          const advantages = [
-            { icon: ShieldCheck, title: "Сертифицировано", text: "Каждая партия проходит контроль качества" },
-            { icon: Leaf, title: "Честный состав", text: "Без лишних добавок и красителей" },
-            { icon: Sparkles, title: "Рабочие дозировки", text: "Дозировки указаны прямо на упаковке" },
-            { icon: Truck, title: "Быстрая доставка", text: "По всей России, бесплатно от 3000 ₽" },
-          ];
-          const qualityPoints = [
-            { icon: Baby, title: "Крышка с защитой от детей", text: "Открывается только с нажатием." },
-            { icon: Lock, title: "Защитная мембрана", text: "Герметичная фольга под крышкой." },
-            { icon: Droplets, title: "Непрозрачная банка", text: "Плотный пластик не пропускает свет." },
-            { icon: Package, title: "Термоусадочная плёнка", text: "Заводская плёнка на крышке." },
-          ];
-          const authSteps = [
-            { icon: QrCode, title: "Найдите код", text: "Код Data Matrix напечатан на упаковке." },
-            { icon: ScanLine, title: "Отсканируйте", text: "Наведите камеру в приложении «Честный знак»." },
-            { icon: BadgeCheck, title: "Проверьте статус", text: "Приложение покажет производителя и партию." },
-          ];
-          const stats = [
-            { value: "12 000+", label: "семей уже с нами" },
-            { value: "4,9", label: "средняя оценка покупателей" },
-            { value: "100%", label: "партий с лабораторным протоколом" },
-          ];
-
-          function HomePage() {
-            return (
-              <CartProvider>
-                <div id="top" className="min-h-dvh overflow-x-hidden">
-                  <SiteHeader />
-                  <CartPanel />
-                  <main>
-                    <section className="relative -mt-3 bg-gradient-to-b from-sand via-background to-background">
-                      <div aria-hidden className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-sun-soft blur-3xl sm:h-[26rem] sm:w-[26rem]" />
-                      <div className="relative mx-auto grid w-full max-w-6xl items-start gap-12 px-4 sm:px-6 md:grid-cols-[0.95fr_1.05fr] lg:grid-cols-[0.9fr_1.1fr] lg:gap-16" style={{ paddingTop: 0, paddingBottom: "1.5rem" }}>
-                        <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
-                          <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><Sparkles className="h-4 w-4 text-coral" />Витамины для всей семьи</span>
-                          <h1 className="mt-6 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-[3.6rem]">Забота, которая<span className="sun-blob mx-2 inline-block px-2">чувствуется</span>каждый день</h1>
-                          <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg lg:mx-0">Коллаген, магний с витамином B6 и омега 3 в честных дозировках.</p>
-                          <div className="mt-7 flex flex-wrap items-center justify-center gap-3 md:justify-start">
-                            <a href="#products" className="rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95">Выбрать продукт</a>
-                            <a href="#quiz" className="rounded-full border-2 border-border px-7 py-3 text-sm font-extrabold transition-colors duration-300 hover:bg-secondary">Подобрать за 30 секунд</a>
-                          </div>
-                          <dl className="mt-9 grid max-w-md grid-cols-3 gap-4 md:mx-0">{stats.map((s) => (<div key={s.label} className="text-center lg:text-left"><dt className="font-display text-2xl font-bold sm:text-3xl">{s.value}</dt><dd className="mt-1 text-xs leading-snug text-muted-foreground">{s.label}</dd></div>))}</dl>
-                        </div>
-                        <div className="relative mx-auto flex w-full max-w-[44rem] items-end justify-center gap-1 sm:gap-3 md:gap-0.5 lg:gap-2">
-                          <div aria-hidden className="absolute bottom-8 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-sun/15 blur-2xl sm:bottom-10 sm:h-[38rem] sm:w-[38rem] lg:bottom-12 lg:h-[46rem] lg:w-[46rem]" />
-                          {[{ src: collagenUrl, alt: "Коллаген", z: "z-10", delay: "0.6s" }, { src: omegaUrl, alt: "Омега 3", z: "z-20", delay: undefined }, { src: magnesiumUrl, alt: "Магний + B6", z: "z-10", delay: "1.2s" }].map((b) => (
-                            <div key={b.alt} className={`relative ${b.z} flex flex-col items-center`}><div className="relative"><div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/3 blur-xl sm:-inset-14 lg:-inset-16" /><img src={b.src} alt={`${b.alt} FonteVita`} className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] lg:h-[54rem]" style={{ animationDelay: b.delay }} /></div></div>
-                          ))}
-                        </div>
-                      </div>
-                    </section>
-                    <section className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6"><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{advantages.map((a, i) => (<Reveal key={a.title} delay={i * 90} className="h-full"><div className="soft-card flex h-full flex-col items-center gap-2 p-6 text-center"><div className="flex h-12 w-12 items-center justify-center rounded-full bg-sun-soft"><a.icon className="h-6 w-6" /></div><h3 className="text-base font-bold">{a.title}</h3><p className="text-sm leading-relaxed text-muted-foreground">{a.text}</p></div></Reveal>))}</div></section>
-                    <section id="products" className="scroll-mt-24 bg-sand py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Наши продукты</h2></div></Reveal><div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{products.map((p, i) => (<Reveal key={p.id} delay={i * 110} className="h-full"><ProductCard product={p} /></Reveal>))}</div></div></section>
-                    <section id="quiz" className="scroll-mt-24 py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto mb-10 max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Какой БАД вам подойдёт</h2></div></Reveal><Reveal delay={100}><Quiz /></Reveal></div></section>
-                    <section id="quality" className="scroll-mt-24 bg-sand py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Качество и подлинность</h2></div></Reveal><div className="mt-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr]"><Reveal><div className="soft-card h-full p-6 sm:p-8"><h3 className="text-xl font-bold">Четыре уровня защиты банки</h3><ul className="mt-6 grid gap-5 sm:grid-cols-2">{qualityPoints.map((p) => (<li key={p.title} className="flex gap-3"><span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-soft"><p.icon className="h-5 w-5" /></span><span><span className="block text-sm font-bold">{p.title}</span><span className="mt-1 block text-sm text-muted-foreground">{p.text}</span></span></li>))}</ul></div></Reveal><Reveal delay={120}><div className="soft-card h-full p-6 sm:p-8"><h3 className="text-xl font-bold">Проверьте подлинность за 10 секунд</h3><ol className="mt-6 space-y-5">{authSteps.map((s, i) => (<li key={s.title} className="flex gap-4"><span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sun-soft font-display text-base font-bold">{i + 1}</span><span><span className="flex items-center gap-2 text-sm font-bold"><s.icon className="h-4 w-4" />{s.title}</span><span className="mt-1 block text-sm text-muted-foreground">{s.text}</span></span></li>))}</ol></div></Reveal></div></div></section>
-                    <section className="bg-sky-soft py-16 sm:py-20"><div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 sm:px-6 lg:grid-cols-2"><Reveal><div className="text-center lg:text-left"><h2 className="text-3xl font-bold sm:text-4xl">Работают лучше вместе</h2><p className="mt-4 text-base leading-relaxed">Сочетайте Омега-3 с витамином D3, магний с B6 — вечером, коллаген — во время еды.</p><a href="#products" className="mt-7 inline-block rounded-full bg-card px-7 py-3.5 text-sm font-extrabold shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95">Собрать комплекс</a></div></Reveal><Reveal delay={120}><img src={comboUrl} alt="Комплекс FonteVita" className="mx-auto w-full max-w-md rounded-[2rem] object-contain" loading="lazy" /></Reveal></div></section>
-                    <section id="reviews" className="scroll-mt-24 py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Отзывы покупателей</h2></div></Reveal><div className="mt-10"><Reveal delay={100}><Reviews /></Reveal></div></div></section>
-                    <section id="about" className="scroll-mt-24 bg-sand py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><div className="soft-card grid items-center gap-10 p-7 sm:p-12 lg:grid-cols-[0.9fr_1.1fr]"><Reveal><div className="relative flex items-center justify-center"><div aria-hidden className="absolute h-40 w-40 rounded-full bg-sun-soft blur-2xl" /><img src={logoUrl} alt="Логотип FonteVita" className="relative w-full max-w-[180px] animate-float-soft object-contain" loading="lazy" /></div></Reveal><Reveal delay={120}><div><h2 className="text-3xl font-bold sm:text-4xl">О бренде FonteVita</h2><p className="mt-4 text-base leading-relaxed text-muted-foreground">Мы делаем добавки с понятными формулами и честными дозировками.</p></div></Reveal></div></div></section>
-                    <section id="faq" className="scroll-mt-24 py-16 sm:py-20"><div className="mx-auto w-full max-w-6xl px-4 sm:px-6"><Reveal><div className="mx-auto max-w-2xl text-center"><h2 className="text-3xl font-bold sm:text-4xl">Частые вопросы</h2></div></Reveal><div className="mt-10"><Reveal delay={100}><Faq /></Reveal></div></div></section>
-                  </main>
-                  <SiteFooter />
-                </div>
-              </CartProvider>
-            );
-          }
-
-          function BlogIndexPage() {
-            const [search, setSearch] = useState("");
-            const [activeCategory, setActiveCategory] = useState(null);
-            const allPosts = getAllPosts();
-            const filtered = useMemo(() => {
-              let result = allPosts;
-              if (activeCategory) result = result.filter((p) => p.categorySlug === activeCategory);
-              if (search.trim()) {
-                const q = search.toLowerCase().trim();
-                result = result.filter((p) => p.title.toLowerCase().includes(q) || p.excerpt.toLowerCase().includes(q) || p.keywords.some((k) => k.toLowerCase().includes(q)));
-              }
-              return result;
-            }, [search, activeCategory]);
-            const toggleCategory = (slug) => setActiveCategory((prev) => prev === slug ? null : slug);
-            return (
-              <div className="min-h-dvh overflow-x-hidden">
-                <BlogHeader />
-                <main>
-                  <section className="relative -mt-3 bg-gradient-to-b from-sand via-background to-background">
-                    <div className="relative mx-auto w-full max-w-4xl px-4 pb-8 pt-8 text-center sm:px-6 sm:pt-12">
-                      <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><Sparkles className="h-4 w-4 text-coral" />Блог FonteVita</span>
-                      <h1 className="mt-5 text-4xl font-bold leading-[1.1] sm:text-5xl">Витамины и БАДы — простыми словами</h1>
-                      <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">Разбираем коллаген, магний B6 и омега-3: как принимать, сочетать и выбирать.</p>
-                    </div>
-                  </section>
-                  <section className="sticky top-16 z-20 border-b border-border bg-background/90 backdrop-blur-md">
-                    <div className="mx-auto flex w-full max-w-4xl flex-col gap-3 px-4 py-4 sm:px-6">
-                      <div className="relative">
-                        <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Поиск по статьям..." className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-10 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20" />
-                        {search && <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:bg-secondary"><X className="h-4 w-4" /></button>}
-                      </div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <button onClick={() => setActiveCategory(null)} className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${!activeCategory ? "bg-primary text-primary-foreground shadow-soft" : "bg-secondary text-muted-foreground hover:text-foreground"}`}>Все</button>
-                        {blogCategories.map((c) => (<button key={c.slug} onClick={() => toggleCategory(c.slug)} className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${activeCategory === c.slug ? "bg-primary text-primary-foreground shadow-soft" : "bg-secondary text-muted-foreground hover:text-foreground"}`}><c.icon className="h-3.5 w-3.5" />{c.shortName}</button>))}
-                      </div>
-                    </div>
-                  </section>
-                  <section className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
-                    {filtered.length > 0 ? (
-                      <div className="space-y-5">{filtered.map((post) => {
-                        const category = getCategoryBySlug(post.categorySlug);
-                        if (!category) return null;
-                        return (
-                          <article key={post.slug} className="soft-card flex flex-col overflow-hidden sm:flex-row">
-                            <RRDLink to={`/blog/${post.slug}`} className="block shrink-0 sm:w-56 md:w-64" tabIndex={-1}><ArticleCover category={category} /></RRDLink>
-                            <div className="flex flex-1 flex-col gap-2.5 p-5 sm:py-5 sm:pr-6">
-                              <div className="flex flex-wrap items-center gap-2"><CategoryPill category={category} /><span className="text-xs font-bold text-muted-foreground">{formatDate(post.publishedAt)}</span><span className="flex items-center gap-1 text-xs font-bold text-muted-foreground"><Clock className="h-3 w-3" />{post.readingTime} мин</span></div>
-                              <h3 className="text-lg font-bold leading-snug sm:text-xl"><RRDLink to={`/blog/${post.slug}`} className="transition-colors hover:text-primary">{post.title}</RRDLink></h3>
-                              <p className="text-sm leading-relaxed text-muted-foreground">{post.excerpt}</p>
-                              <RRDLink to={`/blog/${post.slug}`} className="mt-auto inline-flex w-fit items-center gap-1.5 pt-1 text-sm font-extrabold text-foreground transition-colors hover:text-primary">Читать →</RRDLink>
-                            </div>
-                          </article>
-                        );
-                      })}</div>
-                    ) : (
-                      <div className="flex flex-col items-center gap-4 py-16 text-center"><div className="flex h-16 w-16 items-center justify-center rounded-full bg-sun-soft"><Search className="h-7 w-7 text-muted-foreground" /></div><p className="text-lg font-bold">Ничего не найдено</p><p className="max-w-md text-sm text-muted-foreground">Попробуйте изменить запрос или выбрать другую категорию.</p></div>
-                    )}
-                  </section>
-                </main>
-                <SiteFooter />
-              </div>
-            );
-          }
-
-          function BlogCategoryPage() {
-            const { category: catSlug } = useParams();
-            const category = getCategoryBySlug(catSlug || "");
-            const posts = category ? getPostsByCategory(category.slug) : [];
-            if (!category) return <div className="p-20 text-center">Категория не найдена</div>;
-            const otherCategories = blogCategories.filter((c) => c.slug !== category.slug);
-            return (
-              <div className="min-h-dvh overflow-x-hidden">
-                <BlogHeader />
-                <main>
-                  <section className="relative -mt-3 bg-gradient-to-b from-sand via-background to-background">
-                    <div className="relative mx-auto w-full max-w-4xl px-4 pb-12 pt-8 text-center sm:px-6 sm:pt-12">
-                      <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm"><category.icon className="h-4 w-4" />Раздел блога</span>
-                      <h1 className="mt-5 text-4xl font-bold leading-[1.1] sm:text-5xl">{category.name}</h1>
-                      <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">{category.description}</p>
-                      <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">{otherCategories.map((c) => (<CategoryPill key={c.slug} category={c} />))}</div>
-                    </div>
-                  </section>
-                  <section className="mx-auto w-full max-w-6xl px-4 pb-20 sm:px-6">
-                    {posts.length > 0 ? (<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{posts.map((post) => (<ArticleCard key={post.slug} post={post} />))}</div>) : (<p className="text-center text-muted-foreground">В этом разделе пока нет статей.</p>)}
-                  </section>
-                </main>
-                <SiteFooter />
-              </div>
-            );
-          }
-
-          function BlogArticlePage() {
-            const { slug } = useParams();
-            const post = getPostBySlug(slug || "");
-            if (!post) return <div className="p-20 text-center">Статья не найдена</div>;
-            const category = getCategoryBySlug(post.categorySlug);
-            const related = getRelatedPosts(post);
-            if (!category) return null;
-            return (
-              <div className="min-h-dvh overflow-x-hidden">
-                <BlogHeader />
-                <main>
-                  <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-6 sm:px-6 sm:pt-10">
-                    <Breadcrumbs items={[{ label: "Блог", to: "/blog" }, { label: category.shortName, to: `/blog/category/${category.slug}` }, { label: post.title }]} />
-                    <div className="mt-6"><CategoryPill category={category} /></div>
-                    <h1 className="mt-4 text-3xl font-bold leading-[1.15] sm:text-4xl lg:text-[2.75rem]">{post.title}</h1>
-                    <div className="mt-4 flex flex-wrap items-center gap-3 text-sm font-bold text-muted-foreground">
-                      <span>FonteVita</span><span aria-hidden>·</span>
-                      <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
-                      <span aria-hidden>·</span>
-                      <span className="flex items-center gap-1"><Clock className="h-4 w-4" />{post.readingTime} мин чтения</span>
-                    </div>
-                  </section>
-                  <section className="mx-auto w-full max-w-4xl px-4 sm:px-6"><div className="soft-card overflow-hidden"><ArticleCover category={category} size="hero" /></div></section>
-                  <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-                    <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
-                      <div className="min-w-0 space-y-10">
-                        <ArticleContent blocks={post.content} />
-                        <ArticleFaq items={post.faq} />
-                        {related.length > 0 && (<div><h2 className="text-2xl font-bold sm:text-3xl">Читайте также</h2><div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{related.map((p) => (<ArticleCard key={p.slug} post={p} />))}</div></div>)}
-                      </div>
-                      <aside className="space-y-5 lg:sticky lg:top-24 lg:h-fit">
-                        <TableOfContents blocks={post.content} />
-                        <RelatedProducts productIds={post.relatedProductIds} />
-                      </aside>
-                    </div>
-                  </section>
-                </main>
-                <SiteFooter />
-              </div>
-            );
-          }
-
-          function App() {
-            return (
-              <>
-                <ScrollToTop />
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/blog" element={<BlogIndexPage />} />
-                  <Route path="/blog/category/:category" element={<BlogCategoryPage />} />
-                  <Route path="/blog/:slug" element={<BlogArticlePage />} />
-                  <Route path="*" element={<HomePage />} />
-                </Routes>
-              </>
-            );
-          }
-
-          export default App;
-          APPEOF
-
-          # Patch .asset.json files to use absolute Lovable CDN URLs
-          for f in src/assets/*.asset.json; do
-            sed -i 's|"url": "/__l5e/|"url": "https://fontevita-vitality-hub.lovable.app/__l5e/|g' "$f"
-          done
-
-          # Build with the SPA config
-          bunx vite build --config vite.ghpages.config.ts 2>&1
-
-      - name: Build Telegram Mini App
-        run: |
-          cd miniapp
-          npm install
-          npm run build
-          cd ..
-          mkdir -p dist-ghpages/miniapp
-          cp -r miniapp/dist/* dist-ghpages/miniapp/
-          echo "Mini app built and copied to dist-ghpages/miniapp/"
-
-      - name: Prepare for GitHub Pages
-        id: find
-        run: |
-          UPLOAD_DIR="dist-ghpages"
-          if [ ! -f "$UPLOAD_DIR/index.html" ]; then
-            echo "ERROR: No index.html in $UPLOAD_DIR"
-            exit 1
-          fi
-          cp "$UPLOAD_DIR/index.html" "$UPLOAD_DIR/404.html"
-          echo "upload_dir=$UPLOAD_DIR" >> $GITHUB_OUTPUT
-          echo "Ready to deploy!"
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ${{ steps.find.outputs.upload_dir }}
+      - name: Build client SPA
+        run: bunx vite build --config vite.ghpages.config.ts
 
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_path: dist-ghpages
