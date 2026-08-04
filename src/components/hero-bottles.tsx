@@ -23,7 +23,7 @@ export function HeroBottles() {
 
   return (
     <div
-      className="relative mx-auto flex w-full max-w-[42rem] items-center justify-center"
+      className="relative mx-auto flex w-full max-w-[40rem] items-center justify-center overflow-hidden px-2 [--shift:7rem] sm:[--shift:11rem] lg:[--shift:12.5rem]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
