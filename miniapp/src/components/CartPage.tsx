@@ -10,10 +10,12 @@ import {
   Phone,
   User,
   MessageSquare,
+
 } from "lucide-react";
 import { useCart } from "@/components/CartContext";
 import { useTelegram } from "@/hooks/useTelegram";
 import { formatPrice } from "@/data/products";
+import type { SavedAddress } from "@/components/ProfilePage";
 
 type CheckoutForm = {
   firstName: string;
@@ -29,6 +31,23 @@ function loadProfile(): Partial<CheckoutForm> {
     if (raw) return JSON.parse(raw);
   } catch {}
   return {};
+}
+
+function loadSavedAddresses(): SavedAddress[] {
+  try {
+    const raw = localStorage.getItem("fv_addresses");
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  // Fallback: try to get from profile
+  try {
+    const raw = localStorage.getItem("fv_profile");
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.addresses)) return data.addresses;
+      if (data.address) return [{ id: "legacy", label: "Адрес", address: data.address }];
+    }
+  } catch {}
+  return [];
 }
 
 function InputField({
@@ -73,33 +92,46 @@ export function CartPage() {
   const { haptic, hapticSuccess, hapticError } = useTelegram();
   const [ordered, setOrdered] = useState(false);
   const [checkoutMode, setCheckoutMode] = useState(false);
-  const [form, setForm] = useState<CheckoutForm>(() => {
-    const p = loadProfile();
-    return {
-      firstName: p.firstName ?? "",
-      lastName: p.lastName ?? "",
-      phone: p.phone ?? "",
-      address: p.address ?? "",
-      comment: "",
-    };
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [addressMode, setAddressMode] = useState<"select" | "manual">("select");
+
+  const [form, setForm] = useState<CheckoutForm>({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    address: "",
+    comment: "",
   });
 
-  // Auto-fill from profile when entering checkout
+  // Load profile + addresses when entering checkout
   useEffect(() => {
     if (checkoutMode) {
       const p = loadProfile();
+      const addrs = loadSavedAddresses();
+      setSavedAddresses(addrs);
       setForm((f) => ({
         ...f,
         firstName: f.firstName || p.firstName || "",
         lastName: f.lastName || p.lastName || "",
         phone: f.phone || p.phone || "",
-        address: f.address || p.address || "",
       }));
+      // Auto-select first address if available
+      if (addrs.length > 0) {
+        setAddressMode("select");
+        setForm((f) => ({ ...f, address: f.address || addrs[0].address }));
+      } else {
+        setAddressMode("manual");
+      }
     }
   }, [checkoutMode]);
 
   const set = (k: keyof CheckoutForm, v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
+
+  const selectAddress = (addr: SavedAddress) => {
+    haptic("light");
+    setForm((f) => ({ ...f, address: addr.address }));
+  };
 
   const canSubmit = !!(form.firstName && form.phone && form.address);
 
@@ -121,7 +153,7 @@ export function CartPage() {
     setTimeout(() => setOrdered(false), 5000);
   };
 
-  // Empty cart (but not after ordering)
+  // Empty cart
   if (lines.length === 0 && !ordered) {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center">
@@ -193,14 +225,107 @@ export function CartPage() {
           <h3 className="mb-2 text-sm font-bold text-muted-foreground">
             Доставка
           </h3>
-          <InputField
-            icon={<MapPin className="h-4 w-4" />}
-            label="Адрес"
-            value={form.address}
-            onChange={(v) => set("address", v)}
-            placeholder="Москва, ул. Пушкина, д. 10, кв. 42"
-            required
-          />
+
+          {/* Saved addresses selector */}
+          {savedAddresses.length > 0 && (
+            <div className="mb-2 flex gap-2">
+              <button
+                onClick={() => {
+                  haptic("light");
+                  setAddressMode("select");
+                }}
+                className={`flex-1 rounded-full px-3 py-2 text-xs font-bold transition-all ${
+                  addressMode === "select"
+                    ? "bg-primary text-primary-foreground shadow-soft"
+                    : "bg-secondary text-muted-foreground"
+                }`}
+              >
+                Мои адреса
+              </button>
+              <button
+                onClick={() => {
+                  haptic("light");
+                  setAddressMode("manual");
+                }}
+                className={`flex-1 rounded-full px-3 py-2 text-xs font-bold transition-all ${
+                  addressMode === "manual"
+                    ? "bg-primary text-primary-foreground shadow-soft"
+                    : "bg-secondary text-muted-foreground"
+                }`}
+              >
+                Новый адрес
+              </button>
+            </div>
+          )}
+
+          {addressMode === "select" && savedAddresses.length > 0 ? (
+            /* Saved addresses list */
+            <div className="space-y-2">
+              {savedAddresses.map((addr) => {
+                const isSelected = form.address === addr.address;
+                return (
+                  <button
+                    key={addr.id}
+                    onClick={() => selectAddress(addr)}
+                    className={`flex w-full items-start gap-3 rounded-2xl border p-4 text-left transition-all ${
+                      isSelected
+                        ? "border-primary bg-primary/5 ring-2 ring-primary/20"
+                        : "border-border bg-card hover:border-primary/30"
+                    }`}
+                  >
+                    <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                      isSelected ? "border-primary bg-primary" : "border-muted-foreground/30"
+                    }`}>
+                      {isSelected && <Check className="h-3 w-3 text-primary-foreground" />}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70">
+                        {addr.label}
+                      </p>
+                      <p className="mt-0.5 text-sm font-semibold text-foreground">
+                        {addr.address}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+              <p className="text-center text-xs text-muted-foreground/50">
+                Адреса из профиля ·{" "}
+                <button
+                  onClick={() => {
+                    haptic("light");
+                    setAddressMode("manual");
+                  }}
+                  className="font-bold text-primary underline-offset-2 hover:underline"
+                >
+                  ввести вручную
+                </button>
+              </p>
+            </div>
+          ) : (
+            /* Manual input */
+            <div>
+              <InputField
+                icon={<MapPin className="h-4 w-4" />}
+                label="Адрес"
+                value={form.address}
+                onChange={(v) => set("address", v)}
+                placeholder="Москва, ул. Пушкина, д. 10, кв. 42"
+                required
+              />
+              {savedAddresses.length > 0 && (
+                <button
+                  onClick={() => {
+                    haptic("light");
+                    setAddressMode("select");
+                  }}
+                  className="mt-2 w-full text-center text-xs font-bold text-primary"
+                >
+                  ← Выбрать из сохранённых
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Comment */}

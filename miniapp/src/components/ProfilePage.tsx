@@ -1,13 +1,73 @@
 import { useState, useEffect } from "react";
-import { User, Phone, AtSign, Edit3, Check, X, Package, Heart, Shield, ChevronRight, MapPin } from "lucide-react";
+import {
+  User,
+  Phone,
+  AtSign,
+  Edit3,
+  Check,
+  X,
+  Package,
+  Heart,
+  Shield,
+  ChevronRight,
+  MapPin,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
+
+export type SavedAddress = {
+  id: string;
+  label: string;
+  address: string;
+};
 
 type ProfileData = {
   firstName: string;
   lastName: string;
   phone: string;
-  address: string;
+  addresses: SavedAddress[];
 };
+
+function genId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
+function loadProfile(tgUser?: { first_name?: string; last_name?: string }): ProfileData {
+  try {
+    const raw = localStorage.getItem("fv_profile");
+    if (raw) {
+      const data = JSON.parse(raw);
+      // Migration: old single address → array
+      if (typeof data.address === "string" && data.address.trim()) {
+        data.addresses = [{ id: genId(), label: "Адрес 1", address: data.address }];
+        delete data.address;
+      }
+      if (!Array.isArray(data.addresses)) data.addresses = [];
+      return {
+        firstName: data.firstName ?? tgUser?.first_name ?? "",
+        lastName: data.lastName ?? tgUser?.last_name ?? "",
+        phone: data.phone ?? "",
+        addresses: data.addresses,
+      };
+    }
+  } catch {}
+  return {
+    firstName: tgUser?.first_name ?? "",
+    lastName: tgUser?.last_name ?? "",
+    phone: "",
+    addresses: [],
+  };
+}
+
+function saveProfile(profile: ProfileData) {
+  localStorage.setItem("fv_profile", JSON.stringify(profile));
+}
+
+// Also save addresses separately for CartPage to read
+function syncAddressesToStorage(addresses: SavedAddress[]) {
+  localStorage.setItem("fv_addresses", JSON.stringify(addresses));
+}
 
 export function ProfilePage() {
   const { tg, haptic, hapticSuccess } = useTelegram();
@@ -23,28 +83,21 @@ export function ProfilePage() {
       }
     | undefined;
 
-  const [profile, setProfile] = useState<ProfileData>({
-    firstName: tgUser?.first_name ?? "",
-    lastName: tgUser?.last_name ?? "",
-    phone: "",
-    address: "",
-  });
-
+  const [profile, setProfile] = useState<ProfileData>(() => loadProfile(tgUser));
   const [editing, setEditing] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [addingAddress, setAddingAddress] = useState(false);
+  const [newAddress, setNewAddress] = useState("");
+  const [newLabel, setNewLabel] = useState("");
 
   useEffect(() => {
-    const savedProfile = localStorage.getItem("fv_profile");
-    if (savedProfile) {
-      try {
-        setProfile(JSON.parse(savedProfile));
-      } catch {}
-    }
+    setProfile(loadProfile(tgUser));
   }, []);
 
   const handleSave = () => {
     haptic("medium");
-    localStorage.setItem("fv_profile", JSON.stringify(profile));
+    saveProfile(profile);
+    syncAddressesToStorage(profile.addresses);
     setEditing(false);
     hapticSuccess();
     setSaved(true);
@@ -53,25 +106,48 @@ export function ProfilePage() {
 
   const handleCancel = () => {
     haptic("light");
-    const savedProfile = localStorage.getItem("fv_profile");
-    if (savedProfile) {
-      try {
-        setProfile(JSON.parse(savedProfile));
-      } catch {}
-    } else {
-      setProfile({
-        firstName: tgUser?.first_name ?? "",
-        lastName: tgUser?.last_name ?? "",
-        phone: "",
-        address: "",
-      });
-    }
+    setProfile(loadProfile(tgUser));
     setEditing(false);
+    setAddingAddress(false);
+    setNewAddress("");
+    setNewLabel("");
+  };
+
+  const addAddress = () => {
+    if (!newAddress.trim()) return;
+    haptic("medium");
+    const entry: SavedAddress = {
+      id: genId(),
+      label: newLabel.trim() || `Адрес ${(profile.addresses.length + 1)}`,
+      address: newAddress.trim(),
+    };
+    const updated = {
+      ...profile,
+      addresses: [...profile.addresses, entry],
+    };
+    setProfile(updated);
+    saveProfile(updated);
+    syncAddressesToStorage(updated.addresses);
+    setNewAddress("");
+    setNewLabel("");
+    setAddingAddress(false);
+    hapticSuccess();
+  };
+
+  const removeAddress = (id: string) => {
+    haptic("light");
+    const updated = {
+      ...profile,
+      addresses: profile.addresses.filter((a) => a.id !== id),
+    };
+    setProfile(updated);
+    saveProfile(updated);
+    syncAddressesToStorage(updated.addresses);
   };
 
   return (
     <div className="mx-auto w-full max-w-lg pb-28">
-      {/* Header with gradient */}
+      {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-b from-sun-soft to-background px-4 pb-8 pt-8">
         <div
           aria-hidden
@@ -117,7 +193,6 @@ export function ProfilePage() {
       </div>
 
       <div className="px-4">
-        {/* Saved notification */}
         {saved && (
           <div className="mb-4 flex items-center gap-2 rounded-2xl bg-sky-soft px-4 py-3 text-sm animate-rise-in">
             <Check className="h-4 w-4 text-leaf" />
@@ -145,7 +220,7 @@ export function ProfilePage() {
           ))}
         </div>
 
-        {/* Profile form */}
+        {/* Personal data */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-bold">Личные данные</h3>
@@ -208,15 +283,116 @@ export function ProfilePage() {
           </div>
         </div>
 
-        <div className="mt-2">
-          <Field
-            icon={<MapPin className="h-4 w-4" />}
-            label="Адрес доставки"
-            value={profile.address}
-            editing={editing}
-            onChange={(v) => setProfile((p) => ({ ...p, address: v }))}
-            placeholder="Москва, ул. Пушкина, д. 10, кв. 42"
-          />
+        {/* Addresses */}
+        <div className="mt-6 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold">Адреса доставки</h3>
+            <button
+              onClick={() => {
+                haptic("light");
+                setAddingAddress(true);
+              }}
+              className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold text-primary transition-colors hover:brightness-110"
+            >
+              <Plus className="h-4 w-4" />
+              Добавить
+            </button>
+          </div>
+
+          {/* Address list */}
+          {profile.addresses.length === 0 && !addingAddress && (
+            <div className="rounded-2xl border border-dashed border-border bg-card p-6 text-center">
+              <MapPin className="mx-auto h-8 w-8 text-muted-foreground/40" />
+              <p className="mt-2 text-sm text-muted-foreground">
+                Нет сохранённых адресов
+              </p>
+            </div>
+          )}
+
+          {profile.addresses.map((addr) => (
+            <div
+              key={addr.id}
+              className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4"
+            >
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70">
+                  {addr.label}
+                </p>
+                <p className="mt-0.5 text-sm font-semibold text-foreground">
+                  {addr.address}
+                </p>
+              </div>
+              <button
+                onClick={() => removeAddress(addr.id)}
+                className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:text-destructive"
+                aria-label="Удалить адрес"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+
+          {/* Add address form */}
+          {addingAddress && (
+            <div className="space-y-2 rounded-2xl border border-primary/30 bg-card p-4 animate-rise-in">
+              <label className="flex items-center gap-3 rounded-xl border border-border bg-background px-3 py-2.5 focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/10">
+                <span className="shrink-0 text-muted-foreground">
+                  <Edit3 className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <span className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70">
+                    Название
+                  </span>
+                  <input
+                    type="text"
+                    value={newLabel}
+                    onChange={(e) => setNewLabel(e.target.value)}
+                    placeholder="Дом / Работа / Дача"
+                    className="mt-0.5 w-full bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/40"
+                  />
+                </div>
+              </label>
+              <label className="flex items-center gap-3 rounded-xl border border-border bg-background px-3 py-2.5 focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/10">
+                <span className="shrink-0 text-muted-foreground">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <span className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70">
+                    Адрес <span className="text-coral">*</span>
+                  </span>
+                  <input
+                    type="text"
+                    value={newAddress}
+                    onChange={(e) => setNewAddress(e.target.value)}
+                    placeholder="Москва, ул. Пушкина, д. 10, кв. 42"
+                    className="mt-0.5 w-full bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/40"
+                  />
+                </div>
+              </label>
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  onClick={() => {
+                    haptic("light");
+                    setAddingAddress(false);
+                    setNewAddress("");
+                    setNewLabel("");
+                  }}
+                  className="rounded-full px-4 py-2 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                >
+                  Отмена
+                </button>
+                <button
+                  onClick={addAddress}
+                  disabled={!newAddress.trim()}
+                  className="flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-soft transition-all hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <Check className="h-4 w-4" />
+                  Сохранить адрес
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Links */}
@@ -239,7 +415,6 @@ export function ProfilePage() {
           ))}
         </div>
 
-        {/* App version */}
         <p className="mt-6 text-center text-xs text-muted-foreground/50">
           FonteVita Mini App v1.0
         </p>
