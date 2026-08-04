@@ -63,6 +63,7 @@ export function HeroBottles() {
                 }`}
                 loading="eager"
                 decoding="async"
+                style={{ background: "transparent" }}
               />
             </div>
           );
