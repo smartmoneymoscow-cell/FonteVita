@@ -347,6 +347,7 @@ jobs:
               <link rel="canonical" href="https://fontevita.ru/" />
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+              <link rel="preconnect" href="https://fontevita-vitality-hub.lovable.app" />
               <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
               <script type="application/ld+json">
               {"@context":"https://schema.org","@type":"Organization","name":"FonteVita","url":"https://fontevita.ru","logo":"https://fontevita-vitality-hub.lovable.app/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png","description":"Российский бренд витаминов и БАДов для всей семьи."}

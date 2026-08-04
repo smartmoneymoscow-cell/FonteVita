@@ -61,7 +61,8 @@ export function HeroBottles() {
                     ? "drop-shadow-[0_46px_46px_rgba(60,70,90,0.26)]"
                     : "drop-shadow-[0_28px_34px_rgba(60,70,90,0.16)]"
                 }`}
-                loading={i === 0 ? "eager" : "lazy"}
+                loading="eager"
+                decoding="async"
               />
             </div>
           );
