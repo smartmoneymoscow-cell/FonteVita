@@ -339,7 +339,10 @@ jobs:
       - name: Build client SPA
         run: bunx vite build --config vite.ghpages.config.ts
 
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-ghpages
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-        with:
-          artifact_path: dist-ghpages
