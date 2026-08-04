@@ -88,10 +88,12 @@ export function SiteHeader() {
         </button>
       </div>
       {/* blurred fade-out at the bottom of the header */}
-      <div
-        aria-hidden
-        className="pointer-events-none h-8 bg-gradient-to-b from-background/80 to-transparent backdrop-blur-xl sm:h-10"
-      />
+      {scrolled && (
+        <div
+          aria-hidden
+          className="pointer-events-none h-8 bg-gradient-to-b from-background/80 to-transparent backdrop-blur-xl sm:h-10"
+        />
+      )}
     </header>
   );
 }
