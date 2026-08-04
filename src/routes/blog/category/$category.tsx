@@ -4,7 +4,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { ArticleCard } from "@/components/blog/article-card";
 import { CategoryPill } from "@/components/blog/category-pill";
 import { Breadcrumbs, buildBreadcrumbJsonLd } from "@/components/blog/breadcrumbs";
-import { getPostsByCategory } from "@/data/blog-posts";
+import { getPostsByCategory, type BlogPost } from "@/data/blog-posts";
 import { blogCategories, getCategoryBySlug } from "@/data/blog-categories";
 
 export const Route = createFileRoute("/blog/category/$category")({
@@ -86,7 +86,7 @@ function CategoryPage() {
         <section className="mx-auto w-full max-w-6xl px-4 pb-20 sm:px-6">
           {posts.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post) => (
+              {posts.map((post: BlogPost) => (
                 <ArticleCard key={post.slug} post={post} />
               ))}
             </div>

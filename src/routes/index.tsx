@@ -31,9 +31,7 @@ import {
   breadcrumbSchema,
 } from "@/lib/seo-schema";
 import logo from "@/assets/logo-mark.png.asset.json";
-import collagenBottle from "@/assets/collagen-bottle.png.asset.json";
-import magnesiumBottle from "@/assets/magnesium-bottle.png.asset.json";
-import omegaBottle from "@/assets/omega-bottle.png.asset.json";
+import { HeroBottles } from "@/components/hero-bottles";
 import combo from "@/assets/combo.png.asset.json";
 
 export const Route = createFileRoute("/")({
@@ -150,16 +148,17 @@ function Index() {
 
         <main>
           {/* Hero */}
-          <section className="relative -mt-3 bg-gradient-to-b from-sand via-background to-background">
+          <section className="relative -mt-3 overflow-hidden bg-gradient-to-b from-sand via-background to-background">
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-sun-soft blur-3xl sm:h-[26rem] sm:w-[26rem]"
+              className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_16%,transparent),transparent_72%)] blur-2xl"
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -left-24 top-52 h-72 w-72 rounded-full bg-sky-soft blur-3xl"
+              className="pointer-events-none absolute -left-40 top-40 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sky)_12%,transparent),transparent_72%)] blur-2xl"
             />
-            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-8 pt-0 sm:px-6 sm:pt-0 md:grid-cols-[0.95fr_1.05fr] md:pb-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:pb-12">
+            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-4 pb-10 pt-2 sm:px-6 sm:pb-12 md:grid-cols-[0.95fr_1.05fr] md:gap-10 md:pb-14 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
+
               <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
                 <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
                   <Sparkles className="h-4 w-4 text-coral" />
@@ -199,46 +198,9 @@ function Index() {
                 </dl>
               </div>
 
-              {/* Bottle composition */}
-              <div className="relative mx-auto flex w-full max-w-[44rem] items-end justify-center gap-1 sm:gap-3 md:gap-0.5 lg:gap-2">
-                <div
-                  aria-hidden
-                  className="absolute bottom-8 left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-sun/15 blur-2xl sm:bottom-10 sm:h-[38rem] sm:w-[38rem] md:bottom-8 md:h-[32rem] md:w-[32rem] lg:bottom-12 lg:h-[46rem] lg:w-[46rem]"
-                />
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/3 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
-                    <img
-                      src={collagenBottle.url}
-                      alt="Коллаген FonteVita, 120 капсул"
-                      className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]"
-                      style={{ animationDelay: "0.6s" }}
-                    />
+              {/* Bottle carousel */}
+              <HeroBottles />
 
-                  </div>
-                </div>
-                <div className="relative z-20 flex flex-col items-center">
-                  <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/3 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
-                    <img
-                      src={omegaBottle.url}
-                      alt="Омега 3 FonteVita, 180 капсул"
-                      className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]"
-                    />
-                  </div>
-                </div>
-                <div className="relative z-10 flex flex-col items-center">
-                  <div className="relative">
-                    <div aria-hidden className="absolute -inset-10 rounded-full bg-orange-400/3 blur-xl sm:-inset-14 md:-inset-10 lg:-inset-16" />
-                    <img
-                      src={magnesiumBottle.url}
-                      alt="Магний + B6 FonteVita, 120 капсул"
-                      className="relative h-[30rem] w-auto animate-float-soft object-contain drop-shadow-[0_40px_50px_rgba(60,70,90,0.28)] sm:h-[44rem] md:h-[38rem] lg:h-[54rem]"
-                      style={{ animationDelay: "1.2s" }}
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </section>
 
