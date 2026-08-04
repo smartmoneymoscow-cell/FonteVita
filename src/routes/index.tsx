@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
 import {
   Baby,
   BadgeCheck,
@@ -134,10 +135,47 @@ const authSteps = [
 ];
 
 const stats = [
-  { value: "12 000+", label: "семей уже с нами" },
-  { value: "4,9", label: "средняя оценка покупателей" },
-  { value: "100%", label: "партий с лабораторным протоколом" },
+  { value: 12000, suffix: "+", label: "семей уже с нами" },
+  { value: 4.9, suffix: "", decimals: 1, label: "средняя оценка покупателей" },
+  { value: 100, suffix: "%", label: "партий с лабораторным протоколом" },
 ];
+
+function AnimatedCounter({ value, suffix, decimals = 0 }: { value: number; suffix?: string; decimals?: number }) {
+  const [display, setDisplay] = useState("0");
+  const ref = useRef<HTMLSpanElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const duration = 1800;
+          const start = performance.now();
+          const tick = (now: number) => {
+            const t = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            const current = eased * value;
+            setDisplay(decimals > 0 ? current.toFixed(decimals) : Math.round(current).toLocaleString("ru-RU"));
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [value, decimals]);
+
+  return (
+    <span ref={ref}>
+      {display}{suffix}
+    </span>
+  );
+}
 
 function Index() {
   return (
@@ -160,10 +198,6 @@ function Index() {
             <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-4 pb-10 pt-2 sm:px-6 sm:pb-12 md:grid-cols-[0.95fr_1.05fr] md:gap-10 md:pb-14 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
 
               <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
-                <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
-                  <Sparkles className="h-4 w-4 text-coral" />
-                  Витамины для всей семьи
-                </span>
                 <h1 className="mt-5 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-[3.6rem]">
                   Забота, которая
                   <span className="sun-blob mx-2 inline-block px-2">чувствуется</span>
@@ -176,13 +210,13 @@ function Index() {
                 <div className="mt-7 flex flex-wrap items-center justify-center gap-3 md:justify-start">
                   <a
                     href="#products"
-                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
+                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
                   >
                     Выбрать продукт
                   </a>
                   <a
                     href="#quiz"
-                    className="rounded-full border-2 border-border px-7 py-3 text-sm font-extrabold transition-colors duration-300 hover:bg-secondary"
+                    className="rounded-full border-2 border-border px-7 py-3 text-sm font-extrabold transition-all duration-300 hover:scale-105 hover:border-primary hover:bg-sun-soft hover:shadow-soft active:scale-95"
                   >
                     Подобрать за 30 секунд
                   </a>
@@ -191,7 +225,9 @@ function Index() {
                 <dl className="mt-9 grid max-w-md grid-cols-3 gap-4 md:mx-0">
                   {stats.map((s) => (
                     <div key={s.label} className="text-center lg:text-left">
-                      <dt className="font-display text-2xl font-bold sm:text-3xl">{s.value}</dt>
+                      <dt className="font-display text-2xl font-bold sm:text-3xl">
+                        <AnimatedCounter value={s.value} suffix={s.suffix} decimals={s.decimals} />
+                      </dt>
                       <dd className="mt-1 text-xs leading-snug text-muted-foreground">{s.label}</dd>
                     </div>
                   ))}
@@ -345,7 +381,7 @@ function Index() {
                   </p>
                   <a
                     href="#products"
-                    className="mt-7 inline-block rounded-full bg-card px-7 py-3.5 text-sm font-extrabold shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
+                    className="mt-7 inline-block rounded-full bg-card px-7 py-3.5 text-sm font-extrabold shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
                   >
                     Собрать комплекс
                   </a>

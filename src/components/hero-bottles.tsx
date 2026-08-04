@@ -88,7 +88,7 @@ export function HeroBottles() {
         })}
       </div>
 
-      <div className="absolute -bottom-6 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute -bottom-12 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2">
         {bottles.map((b, i) => (
           <button
             key={b.label}

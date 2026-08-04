@@ -44,9 +44,9 @@ export function SiteHeader() {
           <img
             src={logo.url}
             alt="Логотип FonteVita"
-            className="h-12 w-auto object-contain sm:h-16"
-            width={176}
-            height={128}
+            className="h-9 w-auto object-contain sm:h-11"
+            width={132}
+            height={88}
           />
         </a>
 
@@ -72,7 +72,7 @@ export function SiteHeader() {
           id="cart-button"
           onClick={() => setOpen(true)}
           aria-label={`Открыть корзину, товаров: ${count}`}
-          className="relative flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
+          className="relative flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
         >
           <ShoppingBag className="h-4 w-4" />
           <span className="hidden sm:inline">Корзина</span>
