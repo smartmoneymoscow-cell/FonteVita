@@ -48,6 +48,8 @@ jobs:
             string,
             { component?: React.FC; loader?: (ctx: any) => any; head?: (ctx: any) => any }
           > = {};
+          let currentLoaderData: any = undefined;
+          function useLoaderData() { return currentLoaderData; }
 
           /* ---------- helpers ---------- */
           function normalisePath(p: string) {
@@ -83,7 +85,8 @@ jobs:
           export function createFileRoute(path: string) {
             return (config: any) => {
               routeConfigs[normalisePath(path)] = config;
-              return config;
+              // Return a Route-like object with useLoaderData
+              return { ...config, useLoaderData };
             };
           }
 
@@ -120,64 +123,86 @@ jobs:
             const { pathname } = useLocation();
             const navigate = useNavigate();
             const result = matchRoute(pathname);
+            const [loaderData, setLoaderData] = React.useState<any>(undefined);
+            const [ready, setReady] = React.useState(false);
 
-            useEffect(() => {
-              // process head() for SEO
-              if (result) {
-                const cfg = routeConfigs[result.key];
-                if (cfg?.head) {
-                  try {
-                    const loaderData = cfg.loader
-                      ? cfg.loader({ params: result.params })
-                      : undefined;
-                    const h = cfg.head({ loaderData });
-                    if (h?.meta) {
-                      for (const m of h.meta) {
-                        let el = document.querySelector(
-                          m.name
-                            ? `meta[name="${m.name}"]`
-                            : `meta[property="${m.property}"]`
-                        );
-                        if (!el) {
-                          el = document.createElement("meta");
-                          if (m.name) el.setAttribute("name", m.name);
-                          if (m.property) el.setAttribute("property", m.property);
-                          document.head.appendChild(el);
-                        }
-                        el.setAttribute("content", m.content);
-                      }
-                    }
-                    if (h?.links) {
-                      for (const l of h.links) {
-                        if (l.rel === "canonical") {
-                          let link = document.querySelector('link[rel="canonical"]');
-                          if (!link) {
-                            link = document.createElement("link");
-                            link.setAttribute("rel", "canonical");
-                            document.head.appendChild(link);
-                          }
-                          link.setAttribute("href", l.href);
-                        }
-                      }
-                    }
-                    if (h?.scripts) {
-                      for (const s of h.scripts) {
-                        const script = document.createElement("script");
-                        script.type = "application/ld+json";
-                        script.textContent = s.children;
-                        document.head.appendChild(script);
-                      }
-                    }
-                  } catch {}
-                }
+            React.useEffect(() => {
+              setReady(false);
+              if (!result) return;
+              const cfg = routeConfigs[result.key];
+              if (cfg?.loader) {
+                try {
+                  const r = cfg.loader({ params: result.params });
+                  if (r && typeof r.then === "function") {
+                    r.then((data: any) => { setLoaderData(data); setReady(true); }).catch(() => setReady(true));
+                  } else {
+                    setLoaderData(r);
+                    setReady(true);
+                  }
+                } catch { setReady(true); }
+              } else {
+                setLoaderData(undefined);
+                setReady(true);
               }
             }, [pathname]);
+
+            // process head() for SEO
+            React.useEffect(() => {
+              if (!result || !ready) return;
+              const cfg = routeConfigs[result.key];
+              if (cfg?.head) {
+                try {
+                  const h = cfg.head({ loaderData });
+                  if (h?.meta) {
+                    for (const m of h.meta) {
+                      let el = document.querySelector(
+                        m.name
+                          ? `meta[name="${m.name}"]`
+                          : `meta[property="${m.property}"]`
+                      );
+                      if (!el) {
+                        el = document.createElement("meta");
+                        if (m.name) el.setAttribute("name", m.name);
+                        if (m.property) el.setAttribute("property", m.property);
+                        document.head.appendChild(el);
+                      }
+                      el.setAttribute("content", m.content);
+                    }
+                  }
+                  if (h?.links) {
+                    for (const l of h.links) {
+                      if (l.rel === "canonical") {
+                        let link = document.querySelector('link[rel="canonical"]');
+                        if (!link) {
+                          link = document.createElement("link");
+                          link.setAttribute("rel", "canonical");
+                          document.head.appendChild(link);
+                        }
+                        link.setAttribute("href", l.href);
+                      }
+                    }
+                  }
+                  if (h?.scripts) {
+                    for (const s of h.scripts) {
+                      const script = document.createElement("script");
+                      script.type = "application/ld+json";
+                      script.textContent = s.children;
+                      document.head.appendChild(script);
+                    }
+                  }
+                } catch {}
+              }
+            }, [pathname, ready, loaderData]);
 
             if (!result) return <p style={{ padding: 40 }}>Страница не найдена</p>;
 
             const cfg = routeConfigs[result.key];
             if (!cfg?.component) return null;
 
+            if (cfg.loader && !ready) return null;
+
+            // Set global loaderData so Route.useLoaderData() works
+            currentLoaderData = loaderData;
             const Component = cfg.component;
             return <Component />;
           }
