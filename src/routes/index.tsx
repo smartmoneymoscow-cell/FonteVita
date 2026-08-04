@@ -150,16 +150,17 @@ function Index() {
 
         <main>
           {/* Hero */}
-          <section className="relative -mt-3 bg-gradient-to-b from-sand via-background to-background">
+          <section className="relative -mt-3 overflow-hidden bg-gradient-to-b from-sand via-background to-background">
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full bg-sun-soft blur-3xl sm:h-[26rem] sm:w-[26rem]"
+              className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_16%,transparent),transparent_72%)] blur-2xl"
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -left-24 top-52 h-72 w-72 rounded-full bg-sky-soft blur-3xl"
+              className="pointer-events-none absolute -left-40 top-40 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sky)_12%,transparent),transparent_72%)] blur-2xl"
             />
-            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 pb-8 pt-0 sm:px-6 sm:pt-0 md:grid-cols-[0.95fr_1.05fr] md:pb-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:pb-12">
+            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-4 pb-10 pt-2 sm:px-6 sm:pb-12 md:grid-cols-[0.95fr_1.05fr] md:gap-10 md:pb-14 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
+
               <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
                 <span className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
                   <Sparkles className="h-4 w-4 text-coral" />
