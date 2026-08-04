@@ -39,30 +39,30 @@ export function SiteHeader() {
         scrolled ? "bg-background/85 shadow-soft backdrop-blur-md" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5">
         <a href="#top" className="flex items-center" aria-label="FonteVita — на главную">
           <img
             src={logo.url}
             alt="Логотип FonteVita"
-            className="h-11 w-auto object-contain sm:h-14"
-            width={160}
-            height={112}
+            className="h-12 w-auto object-contain sm:h-16"
+            width={176}
+            height={128}
           />
         </a>
 
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="relative text-base font-bold text-muted-foreground transition-all duration-200 after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100 active:scale-95 active:text-foreground"
+              className="relative rounded-full px-4 py-2 text-sm font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground active:scale-95 active:text-foreground sm:text-base"
             >
               {l.label}
             </a>
           ))}
           <Link
             to="/blog"
-            className="relative text-base font-bold text-muted-foreground transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:origin-bottom-left hover:after:scale-x-100"
+            className="relative rounded-full px-4 py-2 text-sm font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground active:scale-95 sm:text-base"
           >
             Блог
           </Link>
