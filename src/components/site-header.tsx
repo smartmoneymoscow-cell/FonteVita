@@ -36,11 +36,11 @@ export function SiteHeader() {
   return (
     <header
       className={`sticky top-0 z-30 transition-all duration-300 ${
-        scrolled ? "bg-background/85 shadow-soft backdrop-blur-md" : "bg-transparent"
+        scrolled ? "bg-background/80 backdrop-blur-xl" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5">
-        <a href="#top" className="flex items-center" aria-label="FonteVita — на главную">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-4 sm:px-10 sm:py-5">
+        <a href="#top" className="flex shrink-0 items-center" aria-label="FonteVita — на главную">
           <img
             src={logo.url}
             alt="Логотип FonteVita"
@@ -87,6 +87,11 @@ export function SiteHeader() {
           )}
         </button>
       </div>
+      {/* blurred fade-out at the bottom of the header */}
+      <div
+        aria-hidden
+        className="pointer-events-none h-8 bg-gradient-to-b from-background/80 to-transparent backdrop-blur-xl sm:h-10"
+      />
     </header>
   );
 }
