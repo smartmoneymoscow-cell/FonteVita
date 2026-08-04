@@ -193,10 +193,17 @@ jobs:
           import "./styles.css";
 
           // Import route files to register them in the mock
-          import "./routes/index";
-          import "./routes/blog/index";
-          import "./routes/blog/$slug";
-          import "./routes/blog/category/$category";
+          // Route exports are unused but trigger side-effect registration
+          import { Route as IndexRoute } from "./routes/index";
+          import { Route as BlogIndexRoute } from "./routes/blog/index";
+          import { Route as BlogSlugRoute } from "./routes/blog/$slug";
+          import { Route as BlogCategoryRoute } from "./routes/blog/category/$category";
+
+          // Prevent tree-shaking of route imports
+          void IndexRoute;
+          void BlogIndexRoute;
+          void BlogSlugRoute;
+          void BlogCategoryRoute;
 
           function App() {
             return <MockRouter />;
@@ -277,6 +284,9 @@ jobs:
               outDir: "dist-ghpages",
               rollupOptions: {
                 input: "index.html",
+                treeshake: {
+                  moduleSideEffects: true,
+                },
               },
             },
           });
