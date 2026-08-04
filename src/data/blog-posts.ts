@@ -806,8 +806,6 @@ export const blogPosts: BlogPost[] = [
       },
     ],
   },
-];
-
   {
     slug: "pochemu-nam-nuzhna-omega-3",
     categorySlug: "omega-3",
@@ -916,6 +914,8 @@ export const blogPosts: BlogPost[] = [
       },
     ],
   },
+];
+
 
 export const getAllPosts = () =>
   [...blogPosts].sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));
