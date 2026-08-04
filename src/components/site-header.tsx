@@ -44,9 +44,7 @@ export function SiteHeader() {
           <img
             src={logo.url}
             alt="Логотип FonteVita"
-            className="h-9 w-auto object-contain sm:h-11"
-            width={132}
-            height={88}
+            className="h-9 w-auto sm:h-11"
           />
         </a>
 
