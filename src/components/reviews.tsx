@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
-import { getStoredReviews, type ReviewSubmission } from "@/lib/order-service";
-import { products } from "@/data/products";
-import { ReviewForm } from "@/components/review-form";
+
 
 const base = import.meta.env.BASE_URL;
 
@@ -41,54 +38,12 @@ const defaultReviews = [
   },
 ];
 
-type DisplayReview = {
-  name: string;
-  city: string;
-  product: string;
-  text: string;
-  avatar?: string;
-  rating: number;
-};
-
-function getProductName(productId: string): string {
-  return products.find((p) => p.id === productId)?.name ?? productId;
-}
-
 export function Reviews() {
-  const [userReviews, setUserReviews] = useState<DisplayReview[]>([]);
-
-  useEffect(() => {
-    const stored = getStoredReviews();
-    setUserReviews(
-      stored.map((r) => ({
-        name: r.name,
-        city: r.city,
-        product: getProductName(r.productId),
-        text: r.text,
-        rating: r.rating,
-      }))
-    );
-  }, []);
-
-  const handleNewReview = () => {
-    const stored = getStoredReviews();
-    setUserReviews(
-      stored.map((r) => ({
-        name: r.name,
-        city: r.city,
-        product: getProductName(r.productId),
-        text: r.text,
-        rating: r.rating,
-      }))
-    );
-  };
-
-  const allReviews = [...defaultReviews, ...userReviews];
 
   return (
     <div className="space-y-8">
       <div className="grid gap-6 md:grid-cols-2">
-        {allReviews.map((r) => (
+        {defaultReviews.map((r) => (
           <figure
             key={r.name + r.product}
             className="soft-card flex h-full flex-col gap-4 p-6 sm:p-7"
@@ -137,10 +92,6 @@ export function Reviews() {
             </span>
           </figure>
         ))}
-      </div>
-
-      <div className="mx-auto max-w-xl">
-        <ReviewForm onSubmitted={handleNewReview} />
       </div>
     </div>
   );
