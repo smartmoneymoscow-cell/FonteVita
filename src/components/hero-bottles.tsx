@@ -23,7 +23,7 @@ export function HeroBottles() {
 
   return (
     <div
-      className="relative mx-auto flex w-full max-w-[40rem] items-center justify-center overflow-hidden px-2 [--shift:7rem] sm:[--shift:11rem] lg:[--shift:12.5rem]"
+      className="relative mx-auto flex w-full max-w-[40rem] items-center justify-center px-2"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -39,7 +39,7 @@ export function HeroBottles() {
           // 0 = center (front), 1 = right, 2 = left
           const isFront = offset === 0;
           const x = offset === 0 ? "0%" : offset === 1 ? "30%" : "-30%";
-          const scale = isFront ? 1 : 0.62;
+          const scale = isFront ? 1 : 0.58;
           const rotate = offset === 0 ? "0deg" : offset === 1 ? "6deg" : "-6deg";
 
           return (
