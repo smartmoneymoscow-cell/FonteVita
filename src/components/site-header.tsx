@@ -50,7 +50,7 @@ export function SiteHeader() {
           />
         </a>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {links.map((l) => (
             <a
               key={l.href}
