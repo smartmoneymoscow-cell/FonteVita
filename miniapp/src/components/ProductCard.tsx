@@ -11,13 +11,15 @@ const tint: Record<Product["accent"], string> = {
 };
 
 export function ProductCard({ product }: { product: Product }) {
-  const { add } = useCart();
+  const { add, lines } = useCart();
   const { haptic, hapticSuccess } = useTelegram();
   const [expanded, setExpanded] = useState(false);
   const [added, setAdded] = useState(false);
   const [flying, setFlying] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const [fly, setFly] = useState({ x: 0, y: 0, left: 0, top: 0, w: 0, h: 0 });
+
+  const inCart = lines.find((l) => l.product.id === product.id)?.qty ?? 0;
 
   const handleAdd = () => {
     haptic("medium");
@@ -139,13 +141,17 @@ export function ProductCard({ product }: { product: Product }) {
           <button
             onClick={handleAdd}
             className={`flex items-center gap-2 rounded-full px-5 py-3 text-sm font-extrabold shadow-soft transition-all duration-300 active:scale-95 ${
-              added
+              added || inCart > 0
                 ? "bg-leaf text-white"
                 : "bg-primary text-primary-foreground hover:brightness-105"
             }`}
           >
             {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
-            {added ? "Добавлено" : "В корзину"}
+            {added
+              ? `Добавлено!`
+              : inCart > 0
+                ? `В корзине (${inCart})`
+                : "В корзину"}
           </button>
         </div>
       </div>

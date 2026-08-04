@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
-import { User, Phone, AtSign, Edit3, Check, X, Package, Heart, Shield, ChevronRight } from "lucide-react";
+import { User, Phone, AtSign, Edit3, Check, X, Package, Heart, Shield, ChevronRight, MapPin, Building, Hash, Home, Mailbox } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
 
 type ProfileData = {
   firstName: string;
   lastName: string;
   phone: string;
+  city: string;
+  street: string;
+  building: string;
+  apartment: string;
+  postalCode: string;
 };
 
 export function ProfilePage() {
@@ -26,6 +31,11 @@ export function ProfilePage() {
     firstName: tgUser?.first_name ?? "",
     lastName: tgUser?.last_name ?? "",
     phone: "",
+    city: "",
+    street: "",
+    building: "",
+    apartment: "",
+    postalCode: "",
   });
 
   const [editing, setEditing] = useState(false);
@@ -61,6 +71,11 @@ export function ProfilePage() {
         firstName: tgUser?.first_name ?? "",
         lastName: tgUser?.last_name ?? "",
         phone: "",
+        city: "",
+        street: "",
+        building: "",
+        apartment: "",
+        postalCode: "",
       });
     }
     setEditing(false);
@@ -202,6 +217,70 @@ export function ProfilePage() {
               placeholder="+7 (___) ___-__-__"
               type="tel"
             />
+          </div>
+        </div>
+
+        {/* Address section */}
+        <div className="mt-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold">Адрес доставки</h3>
+            {!editing ? (
+              <button
+                onClick={() => {
+                  haptic("light");
+                  setEditing(true);
+                }}
+                className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                <Edit3 className="h-4 w-4" />
+                Изменить
+              </button>
+            ) : null}
+          </div>
+
+          <div className="space-y-2">
+            <Field
+              icon={<MapPin className="h-4 w-4" />}
+              label="Город"
+              value={profile.city}
+              editing={editing}
+              onChange={(v) => setProfile((p) => ({ ...p, city: v }))}
+              placeholder="Москва"
+            />
+            <Field
+              icon={<Home className="h-4 w-4" />}
+              label="Улица"
+              value={profile.street}
+              editing={editing}
+              onChange={(v) => setProfile((p) => ({ ...p, street: v }))}
+              placeholder="ул. Пушкина"
+            />
+            <div className="grid grid-cols-3 gap-2">
+              <Field
+                icon={<Building className="h-4 w-4" />}
+                label="Дом"
+                value={profile.building}
+                editing={editing}
+                onChange={(v) => setProfile((p) => ({ ...p, building: v }))}
+                placeholder="10"
+              />
+              <Field
+                icon={<Home className="h-4 w-4" />}
+                label="Кв"
+                value={profile.apartment}
+                editing={editing}
+                onChange={(v) => setProfile((p) => ({ ...p, apartment: v }))}
+                placeholder="42"
+              />
+              <Field
+                icon={<Mailbox className="h-4 w-4" />}
+                label="Индекс"
+                value={profile.postalCode}
+                editing={editing}
+                onChange={(v) => setProfile((p) => ({ ...p, postalCode: v }))}
+                placeholder="101000"
+              />
+            </div>
           </div>
         </div>
 
