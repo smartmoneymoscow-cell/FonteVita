@@ -148,6 +148,16 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <Scripts />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.replainSettings = { id: 'bdfb7302-81d5-4ce8-bf9b-d92aa1020761' };
+              (function(u){var s=document.createElement('script');s.async=true;s.src=u;
+              var x=document.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);
+              })('https://widget.replain.cc/dist/client.js');
+            `,
+          }}
+        />
       </body>
     </html>
   );
