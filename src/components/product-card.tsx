@@ -44,11 +44,15 @@ export function ProductCard({ product }: { product: Product }) {
     <article id={`product-${product.id}`} className="soft-card flex h-full scroll-mt-24 flex-col overflow-hidden">
       <div className="relative">
         <div
-          className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10`}
+          className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10 pb-10 sm:pb-12`}
         >
           <div
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-8 h-44 w-44 -translate-x-1/2 rounded-full bg-card/70 blur-2xl"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-card via-card/60 to-transparent blur-sm"
           />
           <div className="relative transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2">
             <img
