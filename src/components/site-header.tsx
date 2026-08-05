@@ -19,6 +19,8 @@ export function SiteHeader() {
   const { count, setOpen } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [bump, setBump] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -125,7 +127,7 @@ export function SiteHeader() {
         </div>
       )}
 
-      </div>
+
       {/* blurred fade-out at the bottom of the header */}
       {scrolled && (
         <div
