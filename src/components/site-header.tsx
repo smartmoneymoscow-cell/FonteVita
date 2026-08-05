@@ -42,12 +42,14 @@ export function SiteHeader() {
         scrolled ? "bg-background/80 backdrop-blur-xl" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-6 sm:h-[4.5rem] sm:px-10">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <a href="#top" className="flex shrink-0 items-center" aria-label="FonteVita — на главную">
           <img
             src={logo.url}
             alt="Логотип FonteVita"
-            className="h-9 w-auto sm:h-10"
+            className="h-11 w-auto object-contain sm:h-14"
+            width={160}
+            height={112}
           />
         </a>
 
@@ -56,14 +58,14 @@ export function SiteHeader() {
             <a
               key={l.href}
               href={l.href}
-              className="relative rounded-full px-3.5 py-2 text-sm font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground active:scale-95 active:text-foreground"
+              className="relative rounded-full px-3.5 py-2 text-base font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground active:scale-95 active:text-foreground"
             >
               {l.label}
             </a>
           ))}
           <Link
             to="/blog"
-            className="relative rounded-full px-3.5 py-2 text-sm font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground active:scale-95"
+            className="relative rounded-full px-3.5 py-2 text-base font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground active:scale-95"
           >
             Блог
           </Link>
@@ -71,20 +73,10 @@ export function SiteHeader() {
 
         <div className="flex shrink-0 items-center gap-2">
           <button
-            type="button"
-            onClick={() => setAuthOpen(true)}
-            aria-label="Войти в аккаунт"
-            className="flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-3.5 py-2 text-sm font-bold text-foreground backdrop-blur transition-all duration-300 hover:border-primary hover:bg-sun-soft active:scale-95"
-          >
-            <User className="h-4 w-4" />
-            <span className="hidden sm:inline">Войти</span>
-          </button>
-
-          <button
             id="cart-button"
             onClick={() => setOpen(true)}
             aria-label={`Открыть корзину, товаров: ${count}`}
-            className="relative flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
+            className="relative flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
           >
             <ShoppingBag className="h-4 w-4" />
             <span className="hidden sm:inline">Корзина</span>
@@ -97,6 +89,16 @@ export function SiteHeader() {
                 {count}
               </span>
             )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setAuthOpen(true)}
+            aria-label="Войти в аккаунт"
+            className="flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-3.5 py-2 text-sm font-bold text-foreground backdrop-blur transition-all duration-300 hover:border-primary hover:bg-sun-soft active:scale-95"
+          >
+            <User className="h-4 w-4" />
+            <span className="hidden sm:inline">Войти</span>
           </button>
         </div>
       </div>
