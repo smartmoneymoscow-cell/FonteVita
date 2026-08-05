@@ -59,8 +59,9 @@ export function HeroBottles() {
       {/* single soft premium glow behind the whole composition */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[24rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_22%,transparent),transparent_75%)] blur-2xl sm:h-[32rem] sm:w-[36rem]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[17rem] w-[17rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_26%,transparent),transparent_70%)] blur-xl sm:h-[23rem] sm:w-[23rem]"
       />
+
 
       <div className="relative h-[22rem] w-full sm:h-[30rem] lg:h-[34rem]">
         {bottles.map((b, i) => {
