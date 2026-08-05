@@ -39,7 +39,7 @@ export function SiteHeader() {
   return (
     <header
       className={`sticky top-0 z-30 transition-all duration-300 ${
-        scrolled ? "bg-background/80 backdrop-blur-xl" : "bg-transparent"
+        scrolled ? "bg-background/85 shadow-soft backdrop-blur-md" : "bg-background/60 backdrop-blur-sm"
       }`}
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -130,13 +130,7 @@ export function SiteHeader() {
       )}
 
 
-      {/* blurred fade-out at the bottom of the header */}
-      {scrolled && (
-        <div
-          aria-hidden
-          className="pointer-events-none h-8 bg-gradient-to-b from-background/80 to-transparent backdrop-blur-xl sm:h-10"
-        />
-      )}
+
     </header>
   );
 }
