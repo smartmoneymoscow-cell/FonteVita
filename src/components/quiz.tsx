@@ -71,7 +71,7 @@ export function Quiz() {
 
   return (
     <div className="soft-card overflow-hidden" style={{ minHeight: "520px" }}>
-      <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr]">
+      <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr] md:auto-rows-fr">
         {/* Left: questions / results — fixed min-height to prevent layout jump */}
         <div className="flex flex-col p-6 sm:p-9">
           <span className="inline-flex items-center gap-2 rounded-full bg-sun-soft px-3 py-1.5 text-xs font-bold">
@@ -206,10 +206,10 @@ export function Quiz() {
         </div>
 
         {/* Right: product images */}
-        <div className="relative flex items-center justify-center gap-2 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-8">
+        <div className="relative flex items-center justify-center gap-2 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft">
           <div
             aria-hidden
-            className="pointer-events-none absolute h-56 w-56 rounded-full bg-card/60 blur-3xl"
+            className="pointer-events-none absolute inset-0 rounded-full bg-card/60 blur-3xl"
           />
           {(results ?? [products[1]]).map((p, i) => (
             <img
@@ -217,7 +217,7 @@ export function Quiz() {
               src={p.image}
               alt={`${p.name} FonteVita`}
               style={{ animationDelay: `${i * 0.4}s` }}
-              className="relative h-40 w-auto animate-float-soft object-contain drop-shadow-[0_24px_30px_rgba(60,70,90,0.2)] sm:h-56 md:h-64"
+              className="relative h-full max-h-[520px] w-auto animate-float-soft object-contain drop-shadow-[0_24px_30px_rgba(60,70,90,0.2)]"
               loading="lazy"
             />
           ))}

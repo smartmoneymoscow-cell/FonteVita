@@ -41,7 +41,10 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <article id={`product-${product.id}`} className="soft-card flex h-full scroll-mt-24 flex-col overflow-hidden">
+    <article id={`product-${product.id}`} className="soft-card relative flex h-full scroll-mt-24 flex-col overflow-hidden">
+      <span className="absolute left-4 top-4 z-10 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
+        {product.capsules}
+      </span>
       <div className="relative">
         <div
           className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10 pb-10 sm:pb-12`}
@@ -62,10 +65,6 @@ export function ProductCard({ product }: { product: Product }) {
               className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] sm:h-64"
               loading="lazy"
             />
-            <span className="absolute left-4 top-4 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
-              {product.capsules}
-            </span>
-
           </div>
         </div>
       </div>
