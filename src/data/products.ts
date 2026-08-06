@@ -32,7 +32,7 @@ export const products: Product[] = [
     image: collagenBottle.url,
     accent: "coral",
     highlights: [
-      { value: "2000 мг", label: "коллаген гидролизованный" },
+      { value: "2000 мг", label: "коллаген" },
       { value: "160 мг", label: "витамин C" },
       { value: "60 дней", label: "курс приёма" },
     ],
@@ -81,7 +81,7 @@ export const products: Product[] = [
     accent: "sky",
     highlights: [
       { value: "3000 мг", label: "в сутки" },
-      { value: "17,94", label: "тотох-индекс при норме 26" },
+      { value: "17,94", label: "тотох-индекс" },
       { value: "60 дней", label: "курс приёма" },
     ],
     benefits: [

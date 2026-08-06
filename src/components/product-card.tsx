@@ -84,11 +84,11 @@ export function ProductCard({ product }: { product: Product }) {
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{product.tagline}</p>
         </div>
 
-        <dl className="mt-4 grid grid-cols-3 gap-2.5">
+        <dl className="mt-4 grid grid-cols-3 gap-2">
           {product.highlights.map((h) => (
-            <div key={h.label} className="rounded-2xl bg-secondary/80 px-3 py-3.5 text-center">
-              <dt className="font-display text-base font-bold leading-none">{h.value}</dt>
-              <dd className="mt-1.5 text-[11px] leading-snug text-muted-foreground">{h.label}</dd>
+            <div key={h.label} className="flex flex-col items-center rounded-xl bg-secondary/80 px-2 py-3 text-center">
+              <dt className="font-display text-sm font-bold leading-none">{h.value}</dt>
+              <dd className="mt-1.5 line-clamp-2 text-[10px] leading-tight text-muted-foreground">{h.label}</dd>
             </div>
           ))}
         </dl>
