@@ -30,12 +30,12 @@ export function BlogHeader() {
         scrolled ? "bg-background/85 shadow-soft backdrop-blur-md" : "bg-background/60 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" style={{ paddingTop: '6px', paddingBottom: '6px' }}>
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6">
         <Link to="/" className="flex items-center" aria-label="FonteVita — на главную">
           <img
             src={logo.url}
             alt="Логотип FonteVita"
-            className="h-9 w-auto object-contain sm:h-11"
+            className="h-11 w-auto object-contain sm:h-14"
             width={160}
             height={112}
           />
