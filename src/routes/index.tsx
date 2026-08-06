@@ -186,7 +186,7 @@ function Index() {
 
         <main>
           {/* Hero */}
-          <section className="relative mt-8 overflow-hidden sm:mt-10 bg-gradient-to-b from-sand via-background to-background">
+          <section className="relative overflow-hidden bg-gradient-to-b from-sand via-background to-background">
             <div
               aria-hidden
               className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_16%,transparent),transparent_72%)] blur-2xl"
@@ -195,7 +195,7 @@ function Index() {
               aria-hidden
               className="pointer-events-none absolute -left-40 top-40 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sky)_12%,transparent),transparent_72%)] blur-2xl"
             />
-            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-4 pb-28 pt-10 sm:px-6 sm:pb-36 sm:pt-14 md:grid-cols-[0.95fr_1.05fr] md:gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
+            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-8 px-4 pb-28 pt-8 sm:px-6 sm:pb-36 sm:pt-12 md:grid-cols-[0.95fr_1.05fr] md:gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
 
               <div className="animate-rise-in flex h-full flex-col justify-center text-center md:text-left">
                 <h1 className="mt-5 text-4xl font-bold leading-[1.08] sm:text-5xl lg:text-[3.6rem]">
