@@ -59,7 +59,7 @@ export function ProductCard({ product }: { product: Product }) {
       </span>
       <div className="relative">
         <div
-          className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10 pb-14 sm:pb-16`}
+          className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-16 pb-8 sm:pt-20 sm:pb-10`}
         >
           <div
             aria-hidden

@@ -63,19 +63,19 @@ export function SiteHeader() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {links.map((l) => (
             <Link
               key={l.to}
               to={l.to}
-              className="relative rounded-full px-3.5 py-2 text-base font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-primary active:scale-95 active:text-foreground"
+              className="relative rounded-full px-2 py-2 text-sm font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-primary active:scale-95 active:text-foreground lg:px-3.5 lg:text-base"
             >
               {l.label}
             </Link>
           ))}
           <Link
             to="/blog"
-            className="relative rounded-full px-3.5 py-2 text-base font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-primary active:scale-95"
+            className="relative rounded-full px-2 py-2 text-sm font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-primary active:scale-95 lg:px-3.5 lg:text-base"
           >
             Блог
           </Link>
