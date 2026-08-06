@@ -78,17 +78,17 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div>
           <h3 className="text-xl font-bold sm:text-2xl">{product.name}</h3>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{product.tagline}</p>
         </div>
 
-        <dl className="grid grid-cols-3 gap-2">
+        <dl className="mt-4 grid grid-cols-3 gap-2.5">
           {product.highlights.map((h) => (
-            <div key={h.label} className="rounded-2xl bg-secondary px-2 py-3 text-center">
+            <div key={h.label} className="rounded-2xl bg-secondary/80 px-3 py-3.5 text-center">
               <dt className="font-display text-base font-bold leading-none">{h.value}</dt>
-              <dd className="mt-1 text-[11px] leading-tight text-muted-foreground">{h.label}</dd>
+              <dd className="mt-1.5 text-[11px] leading-snug text-muted-foreground">{h.label}</dd>
             </div>
           ))}
         </dl>
@@ -96,7 +96,7 @@ export function ProductCard({ product }: { product: Product }) {
         <button
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
-          className="flex items-center gap-1.5 self-start text-sm font-bold text-muted-foreground transition-all duration-200 hover:text-foreground hover:scale-[1.02] active:scale-95"
+          className="mt-5 flex items-center gap-1.5 self-start text-sm font-bold text-muted-foreground transition-all duration-200 hover:text-foreground hover:scale-[1.02] active:scale-95"
         >
           {expanded ? "Свернуть" : "Подробнее"}
           <ChevronDown
@@ -136,7 +136,7 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-2">
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-3 pt-2">
           <div className="flex items-baseline gap-2">
             <span className="font-display text-2xl font-bold">{formatPrice(product.price)}</span>
             {product.oldPrice && (

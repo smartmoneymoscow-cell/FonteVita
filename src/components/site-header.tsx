@@ -73,14 +73,14 @@ export function SiteHeader() {
             <a
               key={l.href}
               href={l.href}
-              className="relative rounded-full px-3.5 py-2 text-base font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground active:scale-95 active:text-foreground"
+              className="relative rounded-full px-3.5 py-2 text-base font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground hover:brightness-100 active:scale-95 active:text-foreground"
             >
               {l.label}
             </a>
           ))}
           <Link
             to="/blog"
-            className="relative rounded-full px-3.5 py-2 text-base font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground active:scale-95"
+            className="relative rounded-full px-3.5 py-2 text-base font-bold text-muted-foreground transition-all duration-200 hover:bg-sun-soft hover:text-foreground hover:brightness-100 active:scale-95"
           >
             Блог
           </Link>
