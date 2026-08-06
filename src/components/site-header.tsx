@@ -52,7 +52,7 @@ export function SiteHeader() {
         scrolled ? "bg-background/85 shadow-soft backdrop-blur-md" : "bg-background/60 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" style={{ paddingTop: '4px', paddingBottom: '4px' }}>
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="flex shrink-0 items-center" aria-label="FonteVita — на главную">
           <img
             src={logo.url}
