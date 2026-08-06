@@ -33,7 +33,7 @@ jobs:
         run: |
           mkdir -p src/__mocks__
           cat > src/__mocks__/tanstack-router.tsx << 'MOCKEOF'
-          import React, { useEffect } from "react";
+          import React, { useEffect, useContext, createContext } from "react";
           import {
             Link as RRDLink,
             useLocation,
@@ -43,13 +43,15 @@ jobs:
             Outlet as RRDOutlet,
           } from "react-router-dom";
 
-          /* ---------- global route registry + loaderData ---------- */
+          /* ---------- route registry ---------- */
           const routeConfigs: Record<
             string,
             { component?: React.FC; loader?: (ctx: any) => any; head?: (ctx: any) => any }
           > = {};
-          let currentLoaderData: any = undefined;
-          function useLoaderData() { return currentLoaderData; }
+
+          /* ---------- loader context ---------- */
+          const LoaderCtx = createContext<any>(undefined);
+          function useLoaderData() { return useContext(LoaderCtx); }
 
           /* ---------- helpers ---------- */
           function normalisePath(p: string) {
@@ -85,7 +87,6 @@ jobs:
           export function createFileRoute(path: string) {
             return (config: any) => {
               routeConfigs[normalisePath(path)] = config;
-              // Return a Route-like object with useLoaderData
               return { ...config, useLoaderData };
             };
           }
@@ -121,12 +122,12 @@ jobs:
           /* ---------- router component for App.tsx ---------- */
           export function MockRouter() {
             const { pathname } = useLocation();
-            const navigate = useNavigate();
             const result = matchRoute(pathname);
             const [loaderData, setLoaderData] = React.useState<any>(undefined);
             const [ready, setReady] = React.useState(false);
 
             React.useEffect(() => {
+              let cancelled = false;
               setReady(false);
               if (!result) return;
               const cfg = routeConfigs[result.key];
@@ -134,16 +135,15 @@ jobs:
                 try {
                   const r = cfg.loader({ params: result.params });
                   if (r && typeof r.then === "function") {
-                    r.then((data: any) => { setLoaderData(data); setReady(true); }).catch(() => setReady(true));
+                    r.then((data: any) => { if (!cancelled) { setLoaderData(data); setReady(true); } }).catch(() => { if (!cancelled) setReady(true); });
                   } else {
-                    setLoaderData(r);
-                    setReady(true);
+                    if (!cancelled) { setLoaderData(r); setReady(true); }
                   }
-                } catch { setReady(true); }
+                } catch { if (!cancelled) setReady(true); }
               } else {
-                setLoaderData(undefined);
-                setReady(true);
+                if (!cancelled) { setLoaderData(undefined); setReady(true); }
               }
+              return () => { cancelled = true; };
             }, [pathname]);
 
             // process head() for SEO
@@ -201,10 +201,12 @@ jobs:
 
             if (cfg.loader && !ready) return null;
 
-            // Set global loaderData so Route.useLoaderData() works
-            currentLoaderData = loaderData;
             const Component = cfg.component;
-            return <Component />;
+            return (
+              <LoaderCtx.Provider value={loaderData}>
+                <Component />
+              </LoaderCtx.Provider>
+            );
           }
           MOCKEOF
 
