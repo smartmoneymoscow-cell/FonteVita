@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { CartProvider } from "@/components/cart-context";
 import { CartPanel } from "@/components/cart-panel";
-import { BlogHeader } from "@/components/blog/blog-header";
+import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ProductCard } from "@/components/product-card";
 import { Reveal } from "@/components/reveal";
@@ -181,7 +181,7 @@ function Index() {
   return (
     <CartProvider>
       <div id="top" className="min-h-dvh overflow-x-hidden pb-20">
-        <BlogHeader />
+        <SiteHeader />
         <CartPanel />
 
         <main>
