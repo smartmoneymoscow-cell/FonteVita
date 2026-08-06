@@ -70,19 +70,21 @@ function FeedCard({ post }: { post: BlogPost }) {
   if (!category) return null;
 
   return (
-    <article className="soft-card flex flex-col overflow-hidden sm:flex-row">
+    <article className="soft-card group flex flex-col overflow-hidden sm:flex-row">
       {/* Cover — left on desktop, top on mobile */}
       <Link
         to="/blog/$slug"
         params={{ slug: post.slug }}
-        className="block shrink-0 sm:w-56 md:w-64"
+        className="block shrink-0 overflow-hidden sm:w-56 md:w-64"
         tabIndex={-1}
       >
-        <ArticleCover category={category} imageUrl={post.coverImage} />
+        <div className="h-56 w-full overflow-hidden sm:h-full">
+          <ArticleCover category={category} imageUrl={post.coverImage} />
+        </div>
       </Link>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-2.5 p-5 sm:py-5 sm:pr-6">
+      <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-2">
           <CategoryPill category={category} />
           <span className="text-xs font-bold text-muted-foreground">
@@ -98,7 +100,7 @@ function FeedCard({ post }: { post: BlogPost }) {
           <Link
             to="/blog/$slug"
             params={{ slug: post.slug }}
-            className="transition-colors hover:text-primary"
+            className="transition-colors duration-300 group-hover:text-primary"
           >
             {post.title}
           </Link>
@@ -109,7 +111,7 @@ function FeedCard({ post }: { post: BlogPost }) {
         <Link
           to="/blog/$slug"
           params={{ slug: post.slug }}
-          className="mt-auto inline-flex w-fit items-center gap-1.5 pt-1 text-sm font-extrabold text-foreground transition-colors hover:text-primary"
+          className="mt-auto inline-flex w-fit items-center gap-1.5 pt-1 text-sm font-extrabold text-foreground transition-all duration-300 group-hover:gap-2 group-hover:text-primary"
         >
           Читать →
         </Link>
@@ -164,26 +166,32 @@ function BlogIndex() {
         <section className="relative overflow-hidden bg-gradient-to-b from-sand via-background to-background">
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-sun-soft blur-3xl"
+            className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-sun-soft/80 blur-3xl"
           />
-          <div className="relative mx-auto w-full max-w-4xl px-4 pb-8 pt-8 text-center sm:px-6 sm:pt-12">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -left-16 top-1/3 h-64 w-64 rounded-full bg-sky-soft/60 blur-3xl"
+          />
+          <div className="relative mx-auto w-full max-w-4xl px-4 pb-6 pt-8 text-center sm:px-6 sm:pt-12">
             <Breadcrumbs items={[{ label: "Блог" }]} />
             <span className="mt-6 inline-flex items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-bold shadow-soft sm:text-sm">
               <Sparkles className="h-4 w-4 text-coral" />
               Блог FonteVita
             </span>
-            <h1 className="mt-5 text-4xl font-bold leading-[1.1] sm:text-5xl">
-              Витамины и БАДы — простыми словами
+            <h1 className="mt-5 text-[2.75rem] font-bold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl">
+              Витамины и БАДы
+              <br className="hidden sm:block" />
+              <span className="text-muted-foreground"> — простыми словами</span>
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Разбираем коллаген, магний B6 и омега-3: как принимать, сочетать и выбирать.
             </p>
           </div>
         </section>
 
         {/* Search + Chips */}
-        <section className="sticky top-16 z-20 border-b border-border bg-background/90 backdrop-blur-md">
-          <div className="mx-auto flex w-full max-w-4xl flex-col gap-3 px-4 py-4 sm:px-6">
+        <section className="sticky top-16 z-20 px-4 pb-6 pt-2 sm:px-6">
+          <div className="mx-auto flex w-full max-w-4xl flex-col gap-3 rounded-3xl border border-border/40 bg-card/80 p-4 shadow-soft backdrop-blur-xl transition-shadow duration-300 hover:shadow-lift">
             {/* Search */}
             <div className="relative">
               <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -192,7 +200,7 @@ function BlogIndex() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Поиск по статьям..."
-                className="w-full rounded-2xl border border-border bg-card py-3 pl-11 pr-10 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-2xl border border-border/60 bg-background/70 py-3 pl-11 pr-10 text-sm outline-none transition-all placeholder:text-muted-foreground focus:border-primary/60 focus:bg-background focus:ring-2 focus:ring-primary/15"
               />
               {search && (
                 <button
@@ -212,7 +220,7 @@ function BlogIndex() {
                 className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all duration-200 ${
                   !activeCategory
                     ? "bg-primary text-primary-foreground shadow-soft"
-                    : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
+                    : "bg-secondary/70 text-muted-foreground hover:bg-secondary hover:text-foreground"
                 }`}
               >
                 Все
@@ -224,7 +232,7 @@ function BlogIndex() {
                   className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all duration-200 ${
                     activeCategory === c.slug
                       ? "bg-primary text-primary-foreground shadow-soft"
-                      : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
+                      : "bg-secondary/70 text-muted-foreground hover:bg-secondary hover:text-foreground"
                   }`}
                 >
                   <c.icon className="h-3.5 w-3.5" />
@@ -236,15 +244,15 @@ function BlogIndex() {
         </section>
 
         {/* Feed */}
-        <section className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+        <section className="mx-auto w-full max-w-4xl px-4 pb-20 sm:px-6 sm:pb-24">
           {filtered.length > 0 ? (
-            <div className="space-y-5">
+            <div className="space-y-6">
               {filtered.map((post) => (
                 <FeedCard key={post.slug} post={post} />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-4 py-16 text-center">
+            <div className="flex flex-col items-center gap-4 py-20 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-sun-soft">
                 <Search className="h-7 w-7 text-muted-foreground" />
               </div>
@@ -265,7 +273,7 @@ function BlogIndex() {
 
           {/* Results count */}
           {hasFilters && filtered.length > 0 && (
-            <p className="mt-8 text-center text-xs text-muted-foreground">
+            <p className="mt-10 text-center text-xs text-muted-foreground">
               Найдено: {filtered.length} {filtered.length === 1 ? "статья" : filtered.length < 5 ? "статьи" : "статей"}
             </p>
           )}

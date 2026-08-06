@@ -21,10 +21,10 @@ export function ArticleCover({
         <img
           src={imageUrl}
           alt=""
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-black/5 to-transparent" />
       </div>
     );
   }
