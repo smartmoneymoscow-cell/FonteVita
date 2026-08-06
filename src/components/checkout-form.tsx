@@ -3,7 +3,9 @@ import {
   ArrowLeft,
   Check,
   Copy,
+  CreditCard,
   Loader2,
+  Lock,
   MapPin,
   Phone,
   User,
@@ -20,7 +22,7 @@ import {
   type OrderCustomer,
 } from "@/lib/order-service";
 
-type FormStep = "form" | "success";
+type FormStep = "form" | "payment" | "success";
 
 type FieldErrors = Partial<Record<keyof OrderCustomer, string>>;
 
@@ -76,6 +78,7 @@ export function CheckoutForm({ onBack }: { onBack: () => void }) {
     if (!validate()) return;
 
     setSubmitting(true);
+    setStep("payment");
     try {
       const items: OrderItem[] = lines.map((l) => ({
         productId: l.product.id,
@@ -86,10 +89,13 @@ export function CheckoutForm({ onBack }: { onBack: () => void }) {
 
       const { order, orderText: text } = await submitOrder(items, formData);
       setOrderText(text);
+      // Mark user as authenticated after successful order
+      try { localStorage.setItem("fontevita-authed", "1"); } catch {}
       setStep("success");
       clear();
     } catch (err) {
       console.error("Order submission failed:", err);
+      setStep("form");
     } finally {
       setSubmitting(false);
     }
@@ -104,6 +110,25 @@ export function CheckoutForm({ onBack }: { onBack: () => void }) {
       // fallback
     }
   };
+
+  if (step === "payment") {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-5 p-6 text-center animate-rise-in">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-sun-soft">
+          <CreditCard className="h-8 w-8 text-foreground animate-pulse" />
+        </div>
+        <h3 className="text-xl font-bold">Обработка платежа</h3>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Пожалуйста, подождите... Платёж обрабатывается платёжным шлюзом.
+        </p>
+        <div className="flex items-center gap-2 rounded-2xl bg-secondary px-4 py-3 text-xs text-muted-foreground">
+          <Lock className="h-3.5 w-3.5" />
+          Защищено SSL-шифрованием
+        </div>
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (step === "success") {
     return (
@@ -294,14 +319,17 @@ export function CheckoutForm({ onBack }: { onBack: () => void }) {
           {submitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Оформляем...
+              Обработка...
             </>
           ) : (
-            "Подтвердить заказ"
+            <>
+              <CreditCard className="h-4 w-4" />
+              Оплатить {formatPrice(total + (total >= 3000 ? 0 : 350))}
+            </>
           )}
         </button>
         <p className="text-center text-[11px] leading-relaxed text-muted-foreground">
-          Нажимая «Подтвердить заказ», вы соглашаетесь с условиями обработки персональных данных.
+          Нажимая «Оплатить», вы соглашаетесь с условиями обработки персональных данных.
         </p>
       </footer>
     </form>

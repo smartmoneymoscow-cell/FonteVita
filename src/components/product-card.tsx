@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ChevronDown, ShoppingBag, Check } from "lucide-react";
+import { ChevronDown, ShoppingBag, Check, Minus, Plus } from "lucide-react";
 import { useCart } from "@/components/cart-context";
 import { formatPrice, type Product } from "@/data/products";
 
@@ -10,14 +10,16 @@ const tint: Record<Product["accent"], string> = {
 };
 
 export function ProductCard({ product }: { product: Product }) {
-  const { add, setOpen } = useCart();
+  const { lines, add, inc, dec, setOpen } = useCart();
   const [expanded, setExpanded] = useState(false);
-  const [added, setAdded] = useState(false);
   const [flying, setFlying] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const [fly, setFly] = useState({ x: 0, y: 0, left: 0, top: 0, w: 0, h: 0 });
 
-  const handleAdd = () => {
+  const line = lines.find((l) => l.product.id === product.id);
+  const qty = line?.qty ?? 0;
+
+  const triggerFly = () => {
     const img = imgRef.current;
     const target = document.getElementById("cart-button");
     if (img && target) {
@@ -34,10 +36,17 @@ export function ProductCard({ product }: { product: Product }) {
       setFlying(true);
       setTimeout(() => setFlying(false), 750);
     }
+  };
+
+  const handleAdd = () => {
+    triggerFly();
     add(product.id);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1600);
     setTimeout(() => setOpen(true), 650);
+  };
+
+  const handleInc = () => {
+    triggerFly();
+    inc(product.id);
   };
 
   return (
@@ -69,7 +78,7 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
+      <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
         <div>
           <h3 className="text-xl font-bold sm:text-2xl">{product.name}</h3>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{product.tagline}</p>
@@ -136,13 +145,33 @@ export function ProductCard({ product }: { product: Product }) {
               </span>
             )}
           </div>
-          <button
-            onClick={handleAdd}
-            className="flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
-          >
-            {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
-            {added ? "Добавлено" : "В корзину"}
-          </button>
+          {qty > 0 ? (
+            <div className="flex items-center gap-1 rounded-full bg-leaf px-1 py-1 shadow-soft">
+              <button
+                onClick={() => dec(product.id)}
+                aria-label="Уменьшить количество"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-leaf transition-all duration-200 hover:bg-white hover:scale-110 active:scale-90"
+              >
+                <Minus className="h-4 w-4" />
+              </button>
+              <span className="w-8 text-center text-sm font-extrabold text-white">{qty}</span>
+              <button
+                onClick={handleInc}
+                aria-label="Увеличить количество"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-leaf transition-all duration-200 hover:bg-white hover:scale-110 active:scale-90"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleAdd}
+              className="flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 hover:bg-leaf hover:text-white active:scale-95"
+            >
+              <ShoppingBag className="h-4 w-4" />
+              В корзину
+            </button>
+          )}
         </div>
       </div>
 

@@ -186,7 +186,7 @@ function Index() {
 
         <main>
           {/* Hero */}
-          <section className="relative -mt-3 overflow-hidden bg-gradient-to-b from-sand via-background to-background">
+          <section className="relative mt-2 overflow-hidden bg-gradient-to-b from-sand via-background to-background">
             <div
               aria-hidden
               className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_16%,transparent),transparent_72%)] blur-2xl"
@@ -334,15 +334,15 @@ function Index() {
                 <Reveal delay={120}>
                   <div className="soft-card h-full p-6 sm:p-8">
                     <h3 className="text-xl font-bold">Проверьте подлинность за 10 секунд</h3>
-                    <ol className="mt-6 space-y-5">
+                    <ol className="mt-6">
                       {authSteps.map((s, i) => (
-                        <li key={s.title} className="flex gap-4">
+                        <li key={s.title} className={`flex gap-4 ${i < authSteps.length - 1 ? "pb-6" : ""}`}>
                           <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sun-soft font-display text-base font-bold">
                             {i + 1}
                             {i < authSteps.length - 1 && (
                               <span
                                 aria-hidden
-                                className="absolute left-1/2 top-full h-5 w-px -translate-x-1/2 bg-border"
+                                className="absolute left-1/2 top-full h-full w-px -translate-x-1/2 bg-border"
                               />
                             )}
                           </span>

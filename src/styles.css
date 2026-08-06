@@ -103,8 +103,13 @@
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  button:active {
+  button:hover:not(:disabled) {
+    filter: brightness(0.92);
+  }
+  button:active:not(:disabled) {
     transform: scale(0.97);
+    background-color: var(--leaf) !important;
+    color: white !important;
   }
 
   /* Global link hover */
