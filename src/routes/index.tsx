@@ -186,7 +186,7 @@ function Index() {
 
         <main>
           {/* Hero */}
-          <section className="relative mt-8 overflow-hidden sm:mt-10 bg-gradient-to-b from-sand via-background to-background">
+          <section className="relative overflow-hidden bg-gradient-to-b from-sand via-background to-background">
             <div
               aria-hidden
               className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_16%,transparent),transparent_72%)] blur-2xl"
