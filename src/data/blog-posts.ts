@@ -31,19 +31,12 @@ export type BlogPost = {
   faq: FaqItem[];
 };
 
-import collagenInfo from "@/assets/collagen-info.png.asset.json";
-import magnesiumInfo from "@/assets/magnesium-info.png.asset.json";
-import omegaInfo from "@/assets/omega-info.png.asset.json";
-import comboImg from "@/assets/combo.png.asset.json";
-import qualityImg from "@/assets/quality.png.asset.json";
-import logoImg from "@/assets/logo.jpeg.asset.json";
-import authenticityImg from "@/assets/authenticity.png.asset.json";
-import omegaBottle from "@/assets/omega-bottle.png.asset.json";
+// Blog cover images — real photos from public/blog-covers/
 
 export const blogPosts: BlogPost[] = [
   {
     slug: "kollagen-dlya-chego-nuzhen-i-kak-prinimat",
-    coverImage: collagenInfo.url,
+    coverImage: "/blog-covers/collagen.jpg",
     categorySlug: "kollagen",
     title: "Коллаген: для чего он нужен организму и как его правильно принимать",
     metaDescription:
@@ -167,7 +160,7 @@ export const blogPosts: BlogPost[] = [
 
   {
     slug: "magniy-v6-dlya-chego-nuzhen-kogda-pit",
-    coverImage: magnesiumInfo.url,
+    coverImage: "/blog-covers/magnesium.jpg",
     categorySlug: "magniy",
     title: "Магний + B6: для чего нужен организму и когда его лучше принимать",
     metaDescription:
@@ -281,7 +274,7 @@ export const blogPosts: BlogPost[] = [
 
   {
     slug: "omega-3-polza-i-vred-kak-vybrat",
-    coverImage: omegaInfo.url,
+    coverImage: "/blog-covers/omega.jpg",
     categorySlug: "omega-3",
     title: "Омега-3: польза и вред, как выбрать качественный рыбий жир",
     metaDescription:
@@ -386,7 +379,7 @@ export const blogPosts: BlogPost[] = [
 
   {
     slug: "sovmestimost-kollagen-magniy-omega-3",
-    coverImage: comboImg.url,
+    coverImage: "/blog-covers/combo.jpg",
     categorySlug: "guide",
     title: "Можно ли принимать коллаген, магний и омега-3 вместе: правила совместимости",
     metaDescription:
@@ -476,7 +469,7 @@ export const blogPosts: BlogPost[] = [
 
   {
     slug: "kogda-nachinayut-deystvovat-vitaminy",
-    coverImage: qualityImg.url,
+    coverImage: "/blog-covers/timeline.jpg",
     categorySlug: "guide",
     title: "Когда начинают действовать витамины и БАДы: сроки и признаки эффекта",
     metaDescription:
@@ -565,7 +558,7 @@ export const blogPosts: BlogPost[] = [
 
   {
     slug: "bad-ili-lekarstvo-v-chem-raznitsa",
-    coverImage: logoImg.url,
+    coverImage: "/blog-covers/bad-vs-med.jpg",
     categorySlug: "guide",
     title: "БАД или лекарство: в чём разница и как это влияет на приём",
     metaDescription:
@@ -650,7 +643,7 @@ export const blogPosts: BlogPost[] = [
 
   {
     slug: "kak-proverit-chestny-znak",
-    coverImage: authenticityImg.url,
+    coverImage: "/blog-covers/chestny-znak.jpg",
     categorySlug: "guide",
     title: "Как проверить подлинность БАД через «Честный знак»: пошаговая инструкция",
     metaDescription:
@@ -731,7 +724,7 @@ export const blogPosts: BlogPost[] = [
 
   {
     slug: "kak-vybrat-vitaminy-i-bady",
-    coverImage: comboImg.url,
+    coverImage: "/blog-covers/choose-vitamins.jpg",
     categorySlug: "guide",
     title: "Как выбрать витамины и БАДы: на что смотреть на этикетке",
     metaDescription:
@@ -825,7 +818,7 @@ export const blogPosts: BlogPost[] = [
   },
   {
     slug: "pochemu-nam-nuzhna-omega-3",
-    coverImage: omegaBottle.url,
+    coverImage: "/blog-covers/omega-deficit.jpg",
     categorySlug: "omega-3",
     title: "Почему современному человеку не хватает омега-3 и что с этим делать",
     metaDescription:
