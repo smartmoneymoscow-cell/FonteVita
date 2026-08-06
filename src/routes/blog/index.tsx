@@ -78,7 +78,7 @@ function FeedCard({ post }: { post: BlogPost }) {
         className="block shrink-0 sm:w-56 md:w-64"
         tabIndex={-1}
       >
-        <ArticleCover category={category} />
+        <ArticleCover category={category} imageUrl={post.coverImage} />
       </Link>
 
       {/* Content */}

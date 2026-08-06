@@ -154,7 +154,6 @@ function RootShell({ children }: { children: ReactNode }) {
           }}
         />
         <script
-          async
           src="https://widget.replain.cc/dist/client.js"
         />
       </body>

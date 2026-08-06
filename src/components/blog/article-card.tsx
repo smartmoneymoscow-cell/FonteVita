@@ -13,7 +13,7 @@ export function ArticleCard({ post }: { post: BlogPost }) {
   return (
     <article className="soft-card flex h-full flex-col overflow-hidden">
       <Link to="/blog/$slug" params={{ slug: post.slug }} className="block" tabIndex={-1}>
-        <ArticleCover category={category} />
+        <ArticleCover category={category} imageUrl={post.coverImage} />
       </Link>
       <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
         <CategoryPill category={category} />

@@ -206,7 +206,7 @@ export function Quiz() {
         </div>
 
         {/* Right: product images */}
-        <div className="relative flex items-center justify-center gap-4 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-8">
+        <div className="relative flex items-center justify-center gap-3 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-6">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full bg-card/60 blur-3xl"
@@ -217,7 +217,7 @@ export function Quiz() {
               src={p.image}
               alt={`${p.name} FonteVita`}
               style={{ animationDelay: `${i * 0.4}s` }}
-              className="relative h-[70%] max-h-[400px] w-auto animate-float-soft object-contain drop-shadow-[0_24px_30px_rgba(60,70,90,0.2)]"
+              className="relative max-h-[280px] w-auto animate-float-soft object-contain drop-shadow-[0_24px_30px_rgba(60,70,90,0.2)] sm:max-h-[340px]"
               loading="lazy"
             />
           ))}

@@ -50,7 +50,7 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <article id={`product-${product.id}`} className="soft-card relative flex h-full scroll-mt-24 flex-col overflow-hidden">
+    <article id={`product-${product.id}`} className="soft-card no-lift relative flex h-full scroll-mt-24 flex-col overflow-hidden">
       <span className="absolute left-4 top-4 z-10 rounded-full bg-card/95 px-3 py-1 text-xs font-bold shadow-soft">
         {product.capsules}
       </span>
@@ -66,12 +66,12 @@ export function ProductCard({ product }: { product: Product }) {
             aria-hidden
             className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-card via-card/60 to-transparent blur-sm"
           />
-          <div className="relative transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2">
+          <div className="relative">
             <img
               ref={imgRef}
               src={product.image}
               alt={`${product.name} FonteVita — ${product.capsules}`}
-              className="relative h-56 w-auto object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] sm:h-64"
+              className="relative h-56 w-auto animate-float-soft object-contain drop-shadow-[0_22px_28px_rgba(60,70,90,0.18)] sm:h-64"
               loading="lazy"
             />
           </div>
