@@ -221,6 +221,7 @@ jobs:
           // These imports trigger side effects (createFileRoute registers routes)
           // We must USE the exports to prevent Vite tree-shaking
           import { Route as IndexRoute } from "./routes/index";
+          import { Route as AccountRoute } from "./routes/account";
           import { Route as BlogIndexRoute } from "./routes/blog/index";
           import { Route as BlogSlugRoute } from "./routes/blog/$slug";
           import { Route as BlogCategoryRoute } from "./routes/blog/category/$category";
@@ -228,6 +229,7 @@ jobs:
           // Store routes on window to prevent tree-shaking
           (window as any).__fv_routes = [
             IndexRoute,
+            AccountRoute,
             BlogIndexRoute,
             BlogSlugRoute,
             BlogCategoryRoute,

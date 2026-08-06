@@ -427,14 +427,12 @@ function Index() {
                       aria-hidden
                       className="absolute h-40 w-40 rounded-full bg-sun-soft blur-2xl"
                     />
-                    <div className="animate-pulse-glow relative flex items-center justify-center">
-                      <img
-                        src={logo.url}
-                        alt="Логотип FonteVita"
-                        className="relative w-full max-w-[180px] animate-float-soft object-contain"
-                        loading="lazy"
-                      />
-                    </div>
+                    <img
+                      src={logo.url}
+                      alt="Логотип FonteVita"
+                      className="relative w-full max-w-[180px] animate-float-soft object-contain"
+                      loading="lazy"
+                    />
                   </div>
                 </Reveal>
                 <Reveal delay={120}>
