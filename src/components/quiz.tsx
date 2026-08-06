@@ -206,7 +206,7 @@ export function Quiz() {
         </div>
 
         {/* Right: product images */}
-        <div className="relative flex items-center justify-center gap-4 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-8"
+        <div className="relative flex items-center justify-center gap-4 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-8">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full bg-card/60 blur-3xl"
