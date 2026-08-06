@@ -70,19 +70,21 @@ function FeedCard({ post }: { post: BlogPost }) {
   if (!category) return null;
 
   return (
-    <article className="soft-card flex flex-col overflow-hidden sm:flex-row">
+    <article className="soft-card group flex flex-col overflow-hidden sm:flex-row">
       {/* Cover — left on desktop, top on mobile */}
       <Link
         to="/blog/$slug"
         params={{ slug: post.slug }}
-        className="block shrink-0 sm:w-56 md:w-64"
+        className="block shrink-0 overflow-hidden sm:w-56 md:w-64"
         tabIndex={-1}
       >
-        <ArticleCover category={category} imageUrl={post.coverImage} />
+        <div className="h-56 w-full overflow-hidden sm:h-full">
+          <ArticleCover category={category} imageUrl={post.coverImage} />
+        </div>
       </Link>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-2.5 p-5 sm:py-5 sm:pr-6">
+      <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-2">
           <CategoryPill category={category} />
           <span className="text-xs font-bold text-muted-foreground">
@@ -98,7 +100,7 @@ function FeedCard({ post }: { post: BlogPost }) {
           <Link
             to="/blog/$slug"
             params={{ slug: post.slug }}
-            className="transition-colors hover:text-primary"
+            className="transition-colors duration-300 group-hover:text-primary"
           >
             {post.title}
           </Link>
@@ -109,7 +111,7 @@ function FeedCard({ post }: { post: BlogPost }) {
         <Link
           to="/blog/$slug"
           params={{ slug: post.slug }}
-          className="mt-auto inline-flex w-fit items-center gap-1.5 pt-1 text-sm font-extrabold text-foreground transition-colors hover:text-primary"
+          className="mt-auto inline-flex w-fit items-center gap-1.5 pt-1 text-sm font-extrabold text-foreground transition-all duration-300 group-hover:gap-2 group-hover:text-primary"
         >
           Читать →
         </Link>
