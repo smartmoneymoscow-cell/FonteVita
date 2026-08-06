@@ -375,6 +375,8 @@ jobs:
             <body>
               <div id="root"></div>
               <script type="module" src="/src/main-ghpages.tsx"></script>
+              <script>window.replainSettings = { id: 'bdfb7302-81d5-4ce8-bf9b-d92aa1020761' };</script>
+              <script src="https://widget.replain.cc/dist/client.js"></script>
             </body>
           </html>
           HTMLEOF

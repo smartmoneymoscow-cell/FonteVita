@@ -110,7 +110,7 @@ export function Quiz() {
                           }, 350);
                         }, 500);
                       }}
-                      className={`quiz-fill group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 text-left text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:shadow-soft active:scale-[0.98] ${fillingIdx === i ? "filling" : ""}`}
+                      className={`quiz-fill group flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 text-left text-sm font-semibold transition-all duration-300 hover:border-primary active:scale-[0.98] ${fillingIdx === i ? "filling" : ""}`}
                       style={{
                         animationDelay: phase === "in" ? `${i * 80}ms` : "0ms",
                         animation: phase === "in" ? `rise-in 0.45s cubic-bezier(0.22,1,0.36,1) ${i * 80}ms both` : undefined,
@@ -206,21 +206,25 @@ export function Quiz() {
         </div>
 
         {/* Right: product images */}
-        <div className="relative flex items-center justify-center gap-3 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-6">
+        <div className="relative flex items-center justify-center gap-2 bg-gradient-to-br from-sky-soft to-sun-soft p-6">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full bg-card/60 blur-3xl"
           />
-          {(results ?? [products[1]]).map((p, i) => (
-            <img
-              key={p.id}
-              src={p.image}
-              alt={`${p.name} FonteVita`}
-              style={{ animationDelay: `${i * 0.4}s` }}
-              className="relative max-h-[280px] w-auto animate-float-soft object-contain drop-shadow-[0_24px_30px_rgba(60,70,90,0.2)] sm:max-h-[340px]"
-              loading="lazy"
-            />
-          ))}
+          {(results ?? [products[1]]).map((p, i) => {
+            const count = (results ?? [products[1]]).length;
+            const maxH = count >= 3 ? "max-h-[200px] sm:max-h-[260px]" : "max-h-[280px] sm:max-h-[340px]";
+            return (
+              <img
+                key={p.id}
+                src={p.image}
+                alt={`${p.name} FonteVita`}
+                style={{ animationDelay: `${i * 0.4}s` }}
+                className={`relative w-auto animate-float-soft object-contain drop-shadow-[0_24px_30px_rgba(60,70,90,0.2)] ${maxH}`}
+                loading="lazy"
+              />
+            );
+          })}
         </div>
       </div>
     </div>

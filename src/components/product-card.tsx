@@ -23,7 +23,10 @@ export function ProductCard({ product }: { product: Product }) {
     const img = imgRef.current;
     const target = document.getElementById("cart-button");
     if (img && target) {
+      // Pause float animation to get stable position
+      img.style.animationPlayState = "paused";
       const a = img.getBoundingClientRect();
+      img.style.animationPlayState = "";
       const b = target.getBoundingClientRect();
       setFly({
         left: a.left,
@@ -56,7 +59,7 @@ export function ProductCard({ product }: { product: Product }) {
       </span>
       <div className="relative">
         <div
-          className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10 pb-10 sm:pb-12`}
+          className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-10 pb-14 sm:pb-16`}
         >
           <div
             aria-hidden
