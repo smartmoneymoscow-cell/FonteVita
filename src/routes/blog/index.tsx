@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { Search, Sparkles, Clock, X } from "lucide-react";
-import { BlogHeader } from "@/components/blog/blog-header";
+import { CartProvider } from "@/components/cart-context";
+import { SiteHeader } from "@/components/site-header";
+import { CartPanel } from "@/components/cart-panel";
 import { SiteFooter } from "@/components/site-footer";
 import { ArticleCover } from "@/components/blog/article-cover";
 import { CategoryPill } from "@/components/blog/category-pill";
@@ -152,8 +154,10 @@ function BlogIndex() {
   const hasFilters = search.trim() || activeCategory;
 
   return (
+    <CartProvider>
     <div className="min-h-dvh overflow-x-hidden">
-      <BlogHeader />
+      <SiteHeader />
+      <CartPanel />
 
       <main>
         {/* Hero */}
@@ -270,5 +274,6 @@ function BlogIndex() {
 
       <SiteFooter />
     </div>
+    </CartProvider>
   );
 }

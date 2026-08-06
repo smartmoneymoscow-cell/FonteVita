@@ -1,6 +1,8 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { Clock } from "lucide-react";
-import { BlogHeader } from "@/components/blog/blog-header";
+import { CartProvider } from "@/components/cart-context";
+import { SiteHeader } from "@/components/site-header";
+import { CartPanel } from "@/components/cart-panel";
 import { SiteFooter } from "@/components/site-footer";
 import { ArticleContent } from "@/components/blog/article-content";
 import { ArticleFaq } from "@/components/blog/article-faq";
@@ -102,8 +104,10 @@ function ArticlePage() {
   if (!category) return null;
 
   return (
+    <CartProvider>
     <div className="min-h-dvh overflow-x-hidden">
-      <BlogHeader />
+      <SiteHeader />
+      <CartPanel />
 
       <main>
         <section className="mx-auto w-full max-w-4xl px-4 pb-6 pt-6 sm:px-6 sm:pt-10">
@@ -167,5 +171,6 @@ function ArticlePage() {
 
       <SiteFooter />
     </div>
+    </CartProvider>
   );
 }

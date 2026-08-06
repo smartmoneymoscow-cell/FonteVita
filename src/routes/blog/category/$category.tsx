@@ -1,5 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { BlogHeader } from "@/components/blog/blog-header";
+import { CartProvider } from "@/components/cart-context";
+import { SiteHeader } from "@/components/site-header";
+import { CartPanel } from "@/components/cart-panel";
 import { SiteFooter } from "@/components/site-footer";
 import { ArticleCard } from "@/components/blog/article-card";
 import { CategoryPill } from "@/components/blog/category-pill";
@@ -59,8 +61,10 @@ function CategoryPage() {
   const otherCategories = blogCategories.filter((c) => c.slug !== category.slug);
 
   return (
+    <CartProvider>
     <div className="min-h-dvh overflow-x-hidden">
-      <BlogHeader />
+      <SiteHeader />
+      <CartPanel />
 
       <main>
         <section className="relative overflow-hidden bg-gradient-to-b from-sand via-background to-background">
@@ -100,5 +104,6 @@ function CategoryPage() {
 
       <SiteFooter />
     </div>
+    </CartProvider>
   );
 }
