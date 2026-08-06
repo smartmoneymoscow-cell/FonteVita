@@ -70,8 +70,8 @@ export function Quiz() {
   }
 
   return (
-    <div className="soft-card overflow-hidden" style={{ minHeight: "520px" }}>
-      <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr] md:auto-rows-fr">
+    <div className="soft-card overflow-hidden">
+      <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr]" style={{ minHeight: "520px" }}>
         {/* Left: questions / results — fixed min-height to prevent layout jump */}
         <div className="flex flex-col p-6 sm:p-9">
           <span className="inline-flex items-center gap-2 rounded-full bg-sun-soft px-3 py-1.5 text-xs font-bold">
@@ -206,7 +206,7 @@ export function Quiz() {
         </div>
 
         {/* Right: product images */}
-        <div className="relative flex items-center justify-center gap-4 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-10">
+        <div className="relative flex items-center justify-center gap-4 overflow-hidden bg-gradient-to-br from-sky-soft to-sun-soft p-8"
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 rounded-full bg-card/60 blur-3xl"
