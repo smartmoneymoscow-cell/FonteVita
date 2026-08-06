@@ -244,15 +244,15 @@ function BlogIndex() {
         </section>
 
         {/* Feed */}
-        <section className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+        <section className="mx-auto w-full max-w-4xl px-4 pb-20 sm:px-6 sm:pb-24">
           {filtered.length > 0 ? (
-            <div className="space-y-5">
+            <div className="space-y-6">
               {filtered.map((post) => (
                 <FeedCard key={post.slug} post={post} />
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-4 py-16 text-center">
+            <div className="flex flex-col items-center gap-4 py-20 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-sun-soft">
                 <Search className="h-7 w-7 text-muted-foreground" />
               </div>
@@ -273,7 +273,7 @@ function BlogIndex() {
 
           {/* Results count */}
           {hasFilters && filtered.length > 0 && (
-            <p className="mt-8 text-center text-xs text-muted-foreground">
+            <p className="mt-10 text-center text-xs text-muted-foreground">
               Найдено: {filtered.length} {filtered.length === 1 ? "статья" : filtered.length < 5 ? "статьи" : "статей"}
             </p>
           )}
