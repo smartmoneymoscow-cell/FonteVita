@@ -70,7 +70,7 @@ export function Quiz() {
   }
 
   return (
-    <div className="soft-card overflow-hidden">
+    <div className="soft-card no-lift overflow-hidden">
       <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr]" style={{ minHeight: "520px" }}>
         {/* Left: questions / results — fixed min-height to prevent layout jump */}
         <div className="flex flex-col p-6 sm:p-9">

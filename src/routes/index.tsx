@@ -180,13 +180,13 @@ function AnimatedCounter({ value, suffix, decimals = 0 }: { value: number; suffi
 function Index() {
   return (
     <CartProvider>
-      <div id="top" className="min-h-dvh overflow-x-hidden">
+      <div id="top" className="min-h-dvh overflow-x-hidden pb-20">
         <SiteHeader />
         <CartPanel />
 
         <main>
           {/* Hero */}
-          <section className="relative mt-2 overflow-hidden bg-gradient-to-b from-sand via-background to-background">
+          <section className="relative mt-4 overflow-hidden sm:mt-6 bg-gradient-to-b from-sand via-background to-background">
             <div
               aria-hidden
               className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_16%,transparent),transparent_72%)] blur-2xl"

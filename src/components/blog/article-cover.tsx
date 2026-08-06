@@ -12,7 +12,7 @@ export function ArticleCover({
 }) {
   const accent = accentClasses[category.accent];
   const Icon = category.icon;
-  const height = size === "hero" ? "h-48 sm:h-64" : "h-40";
+  const height = size === "hero" ? "h-48 sm:h-64" : "h-56";
   const iconSize = size === "hero" ? "h-14 w-14 sm:h-16 sm:w-16" : "h-11 w-11";
 
   if (imageUrl) {
