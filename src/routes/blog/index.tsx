@@ -263,7 +263,7 @@ function BlogIndex() {
               {hasFilters && (
                 <button
                   onClick={clearFilters}
-                  className="rounded-full bg-primary px-5 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all hover:brightness-105"
+                  className="cta-lift rounded-full bg-primary px-5 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft"
                 >
                   Сбросить фильтры
                 </button>

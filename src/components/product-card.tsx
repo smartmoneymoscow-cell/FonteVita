@@ -144,29 +144,29 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center justify-between gap-3 pt-2">
-          <div className="flex items-baseline gap-2">
+        <div className="mt-2 flex min-w-0 items-center justify-between gap-2 pt-2">
+          <div className="min-w-0 flex-1">
             <span className="font-display text-2xl font-bold">{formatPrice(product.price)}</span>
             {product.oldPrice && (
-              <span className="text-sm text-muted-foreground line-through">
+              <span className="ml-2 block text-xs text-muted-foreground line-through min-[380px]:inline sm:text-sm lg:block xl:inline">
                 {formatPrice(product.oldPrice)}
               </span>
             )}
           </div>
           {qty > 0 ? (
-            <div className="flex h-[3.125rem] w-[9.5rem] items-center justify-between rounded-full bg-leaf px-1.5 shadow-soft">
+            <div className="flex h-[3.125rem] w-[9.25rem] shrink-0 items-center justify-between rounded-full bg-leaf px-1.5 shadow-soft sm:w-[9.5rem]">
               <button
                 onClick={() => dec(product.id)}
                 aria-label="Уменьшить количество"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/90 text-leaf transition-all duration-200 hover:bg-white hover:scale-110 active:scale-90"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-card/90 text-leaf transition-all duration-200 hover:scale-110 hover:bg-card active:scale-90"
               >
                 <Minus className="h-4 w-4" />
               </button>
-              <span className="text-sm font-extrabold text-white">{qty}</span>
+              <span className="text-sm font-extrabold text-card">{qty}</span>
               <button
                 onClick={handleInc}
                 aria-label="Увеличить количество"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/90 text-leaf transition-all duration-200 hover:bg-white hover:scale-110 active:scale-90"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-card/90 text-leaf transition-all duration-200 hover:scale-110 hover:bg-card active:scale-90"
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -174,7 +174,7 @@ export function ProductCard({ product }: { product: Product }) {
           ) : (
             <button
               onClick={handleAdd}
-              className="flex h-[3.125rem] w-[9.5rem] items-center justify-center gap-2 rounded-full bg-primary text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
+              className="cta-lift flex h-[3.125rem] w-[9.25rem] shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-sm font-extrabold text-primary-foreground shadow-soft sm:w-[9.5rem]"
             >
               <ShoppingBag className="h-4 w-4" />
               В корзину

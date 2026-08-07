@@ -210,13 +210,13 @@ function Index() {
                 <div className="mt-7 flex flex-wrap items-center justify-center gap-3 md:justify-start">
                   <a
                     href="#products"
-                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
+                    className="cta-lift rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft"
                   >
                     Выбрать продукт
                   </a>
                   <a
                     href="#quiz"
-                    className="rounded-full border-2 border-border px-7 py-3 text-sm font-extrabold transition-all duration-300 hover:scale-105 hover:border-primary hover:bg-sun-soft hover:shadow-soft active:scale-95"
+                    className="cta-lift rounded-full border-2 border-border px-7 py-3 text-sm font-extrabold hover:border-primary hover:bg-sun-soft"
                   >
                     Подобрать за 30 секунд
                   </a>
@@ -276,9 +276,9 @@ function Index() {
                   </p>
                 </div>
               </Reveal>
-              <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <div className="-mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-3">
                 {products.map((p, i) => (
-                  <Reveal key={p.id} delay={i * 110} className="h-full">
+                  <Reveal key={p.id} delay={i * 110} className="h-auto w-[88%] shrink-0 snap-center sm:w-[72%] md:h-full md:w-auto">
                     <ProductCard product={p} />
                   </Reveal>
                 ))}
@@ -411,7 +411,7 @@ function Index() {
                   </ul>
                   <a
                     href="#products"
-                    className="mt-7 inline-block rounded-full bg-card px-7 py-3.5 text-sm font-extrabold shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
+                    className="cta-lift mt-7 inline-block rounded-full bg-card px-7 py-3.5 text-sm font-extrabold shadow-soft"
                   >
                     Собрать комплекс
                   </a>
@@ -455,52 +455,48 @@ function Index() {
           </section>
 
           {/* About */}
-          <section id="about" className="scroll-mt-24 bg-sand py-16 sm:py-20">
-            <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-              <div className="soft-card grid items-center gap-10 p-7 sm:p-12 lg:grid-cols-[0.9fr_1.1fr]">
-                <Reveal>
-                  <div className="relative flex items-center justify-center">
-                    <div
-                      aria-hidden
-                      className="absolute h-40 w-40 rounded-full bg-sun-soft blur-2xl"
-                    />
-                    <img
-                      src={logo.url}
-                      alt="Логотип FonteVita"
-                      className="relative w-full max-w-[180px] animate-float-soft object-contain"
-                      loading="lazy"
-                    />
+          <section id="about" className="relative scroll-mt-24 overflow-hidden bg-sand py-16 sm:py-24">
+            <div aria-hidden className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-sun-soft/70 to-transparent" />
+            <div className="relative mx-auto grid w-full max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
+              <Reveal>
+                <div className="relative mx-auto flex min-h-[22rem] w-full max-w-md items-center justify-center overflow-hidden rounded-[2rem] border border-card/80 bg-card/60 shadow-soft backdrop-blur-sm">
+                  <span className="absolute left-6 top-6 font-display text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">С 2021 года</span>
+                  <div aria-hidden className="absolute h-64 w-64 rounded-full border border-sun/40" />
+                  <div aria-hidden className="absolute h-48 w-48 rounded-full bg-sun-soft blur-2xl" />
+                  <img src={logo.url} alt="Логотип FonteVita" className="relative w-full max-w-[150px] object-contain" loading="lazy" />
+                  <div className="absolute inset-x-6 bottom-6 grid grid-cols-2 gap-3">
+                    <div className="rounded-2xl bg-card/90 px-4 py-3 shadow-soft backdrop-blur">
+                      <strong className="block font-display text-xl">12 000+</strong>
+                      <span className="text-xs text-muted-foreground">семей выбирают нас</span>
+                    </div>
+                    <div className="rounded-2xl bg-card/90 px-4 py-3 shadow-soft backdrop-blur">
+                      <strong className="block font-display text-xl">100%</strong>
+                      <span className="text-xs text-muted-foreground">контроль партий</span>
+                    </div>
                   </div>
-                </Reveal>
-                <Reveal delay={120}>
-                  <div>
-                    <h2 className="text-3xl font-bold sm:text-4xl">О бренде FonteVita</h2>
-                    <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-                      Мы делаем добавки, которые не стыдно поставить на общий стол: понятные формулы,
-                      честные дозировки и упаковка, нарисованная про настоящую семейную жизнь —
-                      рыбалку, утреннюю йогу и сборы в школу.
-                    </p>
-                    <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-                      Каждый продукт производится на сертифицированной площадке, проходит
-                      лабораторный контроль и получает маркировку «Честный знак». Мы не обещаем
-                      чудес — мы даём рабочие дозировки и прозрачный состав.
-                    </p>
-                    <ul className="mt-7 grid gap-3 sm:grid-cols-2">
-                      {[
-                        "Сырьё европейских поставщиков",
-                        "Лабораторный протокол на партию",
-                        "Никаких скрытых наполнителей",
-                        "Поддержка до конца курса",
-                      ].map((t) => (
-                        <li key={t} className="flex items-start gap-2 text-sm leading-relaxed">
-                          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-leaf" />
-                          {t}
-                        </li>
-                      ))}
-                    </ul>
+                </div>
+              </Reveal>
+              <Reveal delay={120}>
+                <div>
+                  <span className="inline-flex rounded-full bg-card px-4 py-2 text-xs font-extrabold uppercase tracking-wide text-muted-foreground shadow-soft">Философия FonteVita</span>
+                  <h2 className="mt-5 text-3xl font-bold leading-tight sm:text-4xl">Здоровье начинается<br className="hidden sm:block" /> с честного состава</h2>
+                  <p className="mt-5 max-w-xl text-lg leading-relaxed text-foreground">
+                    Мы создаём понятные добавки для настоящей семейной жизни — без громких обещаний и скрытых компонентов.
+                  </p>
+                  <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
+                    Каждый продукт производится на сертифицированной площадке, проходит лабораторный контроль и получает маркировку «Честный знак».
+                  </p>
+                  <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2">
+                    {["Сырьё проверенных поставщиков", "Протокол на каждую партию", "Без скрытых наполнителей", "Поддержка до конца курса"].map((t, i) => (
+                      <div key={t} className="flex items-center gap-3 bg-background/90 p-4 text-sm font-bold">
+                        <span className="font-display text-xs text-muted-foreground">0{i + 1}</span>
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-leaf" />
+                        {t}
+                      </div>
+                    ))}
                   </div>
-                </Reveal>
-              </div>
+                </div>
+              </Reveal>
             </div>
           </section>
 
