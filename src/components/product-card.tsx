@@ -14,21 +14,20 @@ export function ProductCard({ product }: { product: Product }) {
   const [expanded, setExpanded] = useState(false);
   const [flying, setFlying] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [fly, setFly] = useState({ x: 0, y: 0, left: 0, top: 0, w: 0, h: 0 });
 
   const line = lines.find((l) => l.product.id === product.id);
   const qty = line?.qty ?? 0;
 
   const triggerFly = () => {
-    const img = imgRef.current;
+    const stage = stageRef.current;
     const target = document.getElementById("cart-button");
-    if (img && target) {
-      // Pause float animation to get stable position
-      img.style.animationPlayState = "paused";
-      const a = img.getBoundingClientRect();
-      img.style.animationPlayState = "";
+    if (stage && target) {
+      // anchor on the image stage (identical geometry for every card),
+      // not on the <img> box, whose size depends on the artwork ratio
+      const a = stage.getBoundingClientRect();
       const b = target.getBoundingClientRect();
-      // normalized clone size so every card animates identically
       const size = 140;
       const cx = a.left + a.width / 2;
       const cy = a.top + a.height / 2;
@@ -44,6 +43,7 @@ export function ProductCard({ product }: { product: Product }) {
       setTimeout(() => setFlying(false), 750);
     }
   };
+
 
   const handleAdd = () => {
     triggerFly();
