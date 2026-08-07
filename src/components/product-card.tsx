@@ -63,6 +63,7 @@ export function ProductCard({ product }: { product: Product }) {
       </span>
       <div className="relative">
         <div
+          ref={stageRef}
           className={`relative flex items-end justify-center overflow-hidden bg-gradient-to-b ${tint[product.accent]} px-6 pt-16 pb-8 sm:pt-20 sm:pb-10`}
         >
           <div
