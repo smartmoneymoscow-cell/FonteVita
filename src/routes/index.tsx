@@ -377,15 +377,38 @@ function Index() {
           </section>
 
           {/* Combo */}
-          <section className="bg-sky-soft py-16 sm:py-20">
-            <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-4 sm:px-6 lg:grid-cols-2">
+          <section className="relative overflow-hidden bg-gradient-to-b from-sky-soft via-sky-soft to-background py-16 sm:py-20">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-32 top-10 h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sky)_28%,transparent),transparent_72%)] blur-2xl"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-24 bottom-0 h-[20rem] w-[20rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_22%,transparent),transparent_72%)] blur-2xl"
+            />
+            <div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2">
               <Reveal>
                 <div className="text-center lg:text-left">
-                  <h2 className="text-3xl font-bold sm:text-4xl">Работают лучше вместе</h2>
-                  <p className="mt-4 text-base leading-relaxed">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-xs font-extrabold uppercase tracking-wide text-muted-foreground shadow-soft backdrop-blur">
+                    Комплексный приём
+                  </span>
+                  <h2 className="mt-4 text-3xl font-bold sm:text-4xl">Работают лучше вместе</h2>
+                  <p className="mt-4 max-w-md text-base leading-relaxed lg:mx-0">
                     Для укрепления иммунитета сочетайте приём Омега-3 с витамином D3. Магний с B6
                     поддержит спокойствие, а коллаген — кожу, волосы и суставы.
                   </p>
+                  <ul className="mx-auto mt-6 max-w-md space-y-2.5 text-left">
+                    {[
+                      "Омега 3 + D3 — иммунитет и сосуды",
+                      "Магний + B6 — сон и спокойствие",
+                      "Коллаген — кожа, волосы, суставы",
+                    ].map((t) => (
+                      <li key={t} className="flex items-start gap-2.5 text-sm leading-relaxed">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-leaf" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
                   <a
                     href="#products"
                     className="mt-7 inline-block rounded-full bg-card px-7 py-3.5 text-sm font-extrabold shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
@@ -395,15 +418,22 @@ function Index() {
                 </div>
               </Reveal>
               <Reveal delay={120}>
-                <img
-                  src={combo.url}
-                  alt="Омега 3 и витамин D3+K2 FonteVita рядом"
-                  className="mx-auto w-full max-w-md rounded-[2rem] object-contain"
-                  loading="lazy"
-                />
+                <div className="relative mx-auto w-full max-w-md">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-6 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--card)_75%,transparent),transparent_72%)] blur-2xl"
+                  />
+                  <img
+                    src={combo.url}
+                    alt="Омега 3 и витамин D3+K2 FonteVita рядом"
+                    className="relative w-full rounded-[2rem] object-contain drop-shadow-[0_30px_40px_rgba(60,70,90,0.18)]"
+                    loading="lazy"
+                  />
+                </div>
               </Reveal>
             </div>
           </section>
+
 
           {/* Reviews */}
           <section id="reviews" className="scroll-mt-24 py-16 sm:py-20">
