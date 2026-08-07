@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import collagenBottle from "@/assets/collagen-bottle.png.asset.json";
 import magnesiumBottle from "@/assets/magnesium-bottle.png.asset.json";
 import omegaBottle from "@/assets/omega-bottle.png.asset.json";
