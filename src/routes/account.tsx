@@ -298,7 +298,7 @@ function AuthScreen({ onAuthed }: { onAuthed: () => void }) {
   };
 
   return (
-    <div className="soft-card w-full max-w-md p-6 text-left sm:p-8">
+    <div className="soft-card no-lift w-full max-w-md p-6 text-left sm:p-8">
       <div className="flex flex-col items-center text-center">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-sun-soft">
           <User className="h-8 w-8 text-foreground" />
@@ -326,7 +326,7 @@ function AuthScreen({ onAuthed }: { onAuthed: () => void }) {
               setSent(false);
               setMode("login");
             }}
-            className="w-full rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
+            className="cta-lift w-full rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft"
           >
             Вернуться ко входу
           </button>
@@ -389,7 +389,7 @@ function AuthScreen({ onAuthed }: { onAuthed: () => void }) {
 
           <button
             type="submit"
-            className="w-full rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
+            className="cta-lift w-full rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft"
           >
             {mode === "login" ? "Войти" : mode === "register" ? "Создать аккаунт" : "Отправить ссылку"}
           </button>
