@@ -7,6 +7,7 @@ import {
   Phone,
   Mail,
   Edit3,
+  Lock,
   Check,
   Clock,
   Truck,
@@ -255,6 +256,197 @@ function ProfileEditor() {
   );
 }
 
+
+/* ─── Auth (login / register / reset) ─── */
+type AuthMode = "login" | "register" | "reset";
+
+function AuthScreen({ onAuthed }: { onAuthed: () => void }) {
+  const [mode, setMode] = useState<AuthMode>("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const inputCls =
+    "mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20";
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (mode === "reset") {
+      if (!email.includes("@")) return setError("Введите корректный email");
+      setSent(true);
+      return;
+    }
+
+    if (!email.includes("@")) return setError("Введите корректный email");
+    if (password.length < 6) return setError("Пароль должен быть не короче 6 символов");
+    if (mode === "register" && name.trim().length < 2) return setError("Укажите имя");
+
+    try {
+      localStorage.setItem("fontevita-authed", "1");
+      const raw = localStorage.getItem("fontevita-profile");
+      const profile = raw ? JSON.parse(raw) : {};
+      localStorage.setItem(
+        "fontevita-profile",
+        JSON.stringify({ ...profile, email, ...(mode === "register" ? { name } : {}) }),
+      );
+    } catch {}
+    onAuthed();
+  };
+
+  return (
+    <div className="soft-card w-full max-w-md p-6 text-left sm:p-8">
+      <div className="flex flex-col items-center text-center">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-sun-soft">
+          <User className="h-8 w-8 text-foreground" />
+        </div>
+        <h1 className="mt-4 text-2xl font-bold sm:text-3xl">
+          {mode === "login" ? "Вход в кабинет" : mode === "register" ? "Регистрация" : "Восстановление пароля"}
+        </h1>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          {mode === "login"
+            ? "Войдите, чтобы видеть заказы и личные данные."
+            : mode === "register"
+              ? "Создайте аккаунт — это займёт минуту."
+              : "Пришлём ссылку для смены пароля на почту."}
+        </p>
+      </div>
+
+      {mode === "reset" && sent ? (
+        <div className="mt-6 space-y-5 text-center">
+          <div className="rounded-2xl bg-leaf/10 p-5 text-sm leading-relaxed text-foreground">
+            Если аккаунт с адресом <span className="font-bold">{email}</span> существует, мы отправили
+            письмо со ссылкой для восстановления пароля.
+          </div>
+          <button
+            onClick={() => {
+              setSent(false);
+              setMode("login");
+            }}
+            className="w-full rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
+          >
+            Вернуться ко входу
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          {mode === "register" && (
+            <div>
+              <label className="flex items-center gap-2 text-sm font-bold" htmlFor="auth-name">
+                <User className="h-4 w-4" />
+                Имя
+              </label>
+              <input
+                id="auth-name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Иван Иванов"
+                autoComplete="name"
+                className={inputCls}
+              />
+            </div>
+          )}
+
+          <div>
+            <label className="flex items-center gap-2 text-sm font-bold" htmlFor="auth-email">
+              <Mail className="h-4 w-4" />
+              Email
+            </label>
+            <input
+              id="auth-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@mail.ru"
+              autoComplete="email"
+              className={inputCls}
+            />
+          </div>
+
+          {mode !== "reset" && (
+            <div>
+              <label className="flex items-center gap-2 text-sm font-bold" htmlFor="auth-password">
+                <Lock className="h-4 w-4" />
+                Пароль
+              </label>
+              <input
+                id="auth-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Минимум 6 символов"
+                autoComplete={mode === "login" ? "current-password" : "new-password"}
+                className={inputCls}
+              />
+            </div>
+          )}
+
+          {error && <p className="text-sm font-bold text-destructive">{error}</p>}
+
+          <button
+            type="submit"
+            className="w-full rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
+          >
+            {mode === "login" ? "Войти" : mode === "register" ? "Создать аккаунт" : "Отправить ссылку"}
+          </button>
+        </form>
+      )}
+
+      <div className="mt-5 space-y-2 text-center text-sm">
+        {mode === "login" && (
+          <>
+            <button
+              onClick={() => {
+                setMode("reset");
+                setError("");
+              }}
+              className="font-bold text-muted-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+            >
+              Забыли пароль?
+            </button>
+            <p className="text-muted-foreground">
+              Нет аккаунта?{" "}
+              <button
+                onClick={() => {
+                  setMode("register");
+                  setError("");
+                }}
+                className="font-bold text-primary underline-offset-4 transition-colors hover:underline"
+              >
+                Зарегистрироваться
+              </button>
+            </p>
+          </>
+        )}
+        {mode !== "login" && (
+          <button
+            onClick={() => {
+              setMode("login");
+              setError("");
+              setSent(false);
+            }}
+            className="font-bold text-primary underline-offset-4 transition-colors hover:underline"
+          >
+            Вернуться ко входу
+          </button>
+        )}
+      </div>
+
+      <Link
+        to="/"
+        className="mt-6 flex items-center justify-center gap-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        На главную
+      </Link>
+    </div>
+  );
+}
+
 /* ─── Main Account Page ─── */
 function AccountPage() {
   const [isAuthed, setIsAuthed] = useState(false);
@@ -283,24 +475,11 @@ function AccountPage() {
   if (!isAuthed) {
     return (
       <CartProvider>
-        <div className="min-h-dvh overflow-x-hidden">
+        <div className="min-h-dvh overflow-x-hidden bg-gradient-to-b from-sand via-background to-background">
           <SiteHeader />
           <CartPanel />
-          <main className="mx-auto flex w-full max-w-6xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-sun-soft">
-              <User className="h-10 w-10 text-foreground" />
-            </div>
-            <h1 className="mt-6 text-3xl font-bold sm:text-4xl">Личный кабинет</h1>
-            <p className="mt-3 max-w-md text-base leading-relaxed text-muted-foreground">
-              Войдите, чтобы видеть свои заказы и управлять личными данными.
-            </p>
-            <Link
-              to="/"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:brightness-110 active:scale-95"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              На главную — войти через шапку
-            </Link>
+          <main className="mx-auto flex w-full max-w-6xl flex-col items-center justify-center px-4 py-14 sm:px-6 sm:py-20">
+            <AuthScreen onAuthed={() => setIsAuthed(true)} />
           </main>
           <SiteFooter />
         </div>
