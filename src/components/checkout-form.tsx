@@ -151,7 +151,7 @@ export function CheckoutForm({ onBack }: { onBack: () => void }) {
           </button>
           <button
             onClick={onBack}
-            className="flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all hover:brightness-105"
+            className="flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95"
           >
             <ArrowLeft className="h-4 w-4" />
             Продолжить покупки
@@ -314,7 +314,7 @@ export function CheckoutForm({ onBack }: { onBack: () => void }) {
         <button
           type="submit"
           disabled={submitting || lines.length === 0}
-          className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-40"
         >
           {submitting ? (
             <>

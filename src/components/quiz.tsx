@@ -188,7 +188,7 @@ export function Quiz() {
                     results.forEach((p) => add(p.id));
                     setOpen(true);
                   }}
-                  className="rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-110 hover:shadow-lift active:scale-95"
+                  className="rounded-full bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
                 >
                   {results.length === 1 ? "Добавить в корзину" : "Добавить всё в корзину"} ·{" "}
                   {formatPrice(total)}
