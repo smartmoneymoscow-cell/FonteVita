@@ -245,17 +245,24 @@ function Index() {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {advantages.map((a, i) => (
                 <Reveal key={a.title} delay={i * 90} className="h-full">
-                  <div className="soft-card flex h-full flex-col items-center gap-2 p-6 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sun-soft">
-                      <a.icon className="h-6 w-6" />
+                  <div className="group soft-card relative flex h-full items-start gap-4 overflow-hidden p-5 text-left sm:p-6">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--sun)_28%,transparent),transparent_70%)] opacity-70 blur-xl transition-opacity duration-500 group-hover:opacity-100"
+                    />
+                    <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sun-soft to-sand shadow-soft transition-transform duration-500 group-hover:scale-105">
+                      <a.icon className="h-5 w-5 text-primary-foreground/80" />
                     </div>
-                    <h3 className="text-base font-bold">{a.title}</h3>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{a.text}</p>
+                    <div className="relative min-w-0">
+                      <h3 className="text-base font-bold leading-snug">{a.title}</h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{a.text}</p>
+                    </div>
                   </div>
                 </Reveal>
               ))}
             </div>
           </section>
+
 
           {/* Products */}
           <section id="products" className="scroll-mt-24 bg-sand py-16 sm:py-20">
