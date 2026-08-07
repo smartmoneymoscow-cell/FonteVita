@@ -28,13 +28,17 @@ export function ProductCard({ product }: { product: Product }) {
       const a = img.getBoundingClientRect();
       img.style.animationPlayState = "";
       const b = target.getBoundingClientRect();
+      // normalized clone size so every card animates identically
+      const size = 140;
+      const cx = a.left + a.width / 2;
+      const cy = a.top + a.height / 2;
       setFly({
-        left: a.left,
-        top: a.top,
-        w: a.width,
-        h: a.height,
-        x: b.left + b.width / 2 - (a.left + a.width / 2),
-        y: b.top + b.height / 2 - (a.top + a.height / 2),
+        left: cx - size / 2,
+        top: cy - size / 2,
+        w: size,
+        h: size,
+        x: b.left + b.width / 2 - cx,
+        y: b.top + b.height / 2 - cy,
       });
       setFlying(true);
       setTimeout(() => setFlying(false), 750);
