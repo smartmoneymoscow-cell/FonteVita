@@ -392,7 +392,7 @@ function AccountPage() {
                   </p>
                   <Link
                     to="/"
-                    className="mt-2 rounded-full bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all hover:brightness-105 active:scale-95"
+                    className="mt-2 rounded-full bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95"
                   >
                     Перейти к продуктам
                   </Link>

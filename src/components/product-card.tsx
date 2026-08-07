@@ -169,7 +169,7 @@ export function ProductCard({ product }: { product: Product }) {
           ) : (
             <button
               onClick={handleAdd}
-              className="flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 hover:bg-leaf hover:text-white active:scale-95"
+              className="flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95 active:brightness-95"
             >
               <ShoppingBag className="h-4 w-4" />
               В корзину
