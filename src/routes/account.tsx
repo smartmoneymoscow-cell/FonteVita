@@ -240,7 +240,7 @@ function ProfileEditor() {
       <div className="flex items-center gap-3">
         <button
           type="submit"
-          className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:brightness-105 active:scale-95"
+          className="cta-lift flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow-soft"
         >
           <Check className="h-4 w-4" />
           Сохранить
@@ -571,7 +571,7 @@ function AccountPage() {
                   </p>
                   <Link
                     to="/"
-                    className="mt-2 rounded-full bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow-soft transition-all duration-300 hover:scale-105 hover:shadow-lift hover:brightness-110 active:scale-95"
+                    className="cta-lift mt-2 rounded-full bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow-soft"
                   >
                     Перейти к продуктам
                   </Link>
