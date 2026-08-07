@@ -20,10 +20,17 @@ function BottleImg({
   alt: string;
   isFront: boolean;
 }) {
+  const ref = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    // если картинка уже в кеше, onLoad может не сработать
+    if (ref.current?.complete) setLoaded(true);
+  }, []);
 
   return (
     <img
+      ref={ref}
       src={src}
       alt={alt}
       onLoad={() => setLoaded(true)}
@@ -39,6 +46,7 @@ function BottleImg({
     />
   );
 }
+
 
 export function HeroBottles() {
   const [active, setActive] = useState(0);
