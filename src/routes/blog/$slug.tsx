@@ -98,10 +98,12 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function ArticlePage() {
   const post = Route.useLoaderData();
-  const category = getCategoryBySlug(post.categorySlug);
+  const category = post ? getCategoryBySlug(post.categorySlug) : undefined;
+
+  if (!post || !category) return null;
+
   const related = getRelatedPosts(post);
 
-  if (!category) return null;
 
   return (
     <CartProvider>
