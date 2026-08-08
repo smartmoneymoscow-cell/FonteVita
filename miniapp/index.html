@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="telegram-web-app-capable" content="true" />
+    <meta name="telegram-web-app-status-bar-style" content="default" />
+    <title>FonteVita — витамины и БАДы</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      html { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+      body { margin: 0; }
+
+      /* Preloader */
+      #preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        background: oklch(0.985 0.006 95);
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+      #preloader.fade-out {
+        opacity: 0;
+        visibility: hidden;
+      }
+      #preloader img {
+        width: 120px;
+        height: auto;
+        animation: preloader-float 2s ease-in-out infinite;
+      }
+      #preloader .donut {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 4px solid oklch(0.92 0.02 90);
+        border-top-color: oklch(0.86 0.135 88);
+        animation: preloader-spin 0.9s linear infinite;
+      }
+
+      @keyframes preloader-float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      @keyframes preloader-spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+    <script type="module" crossorigin src="/FonteVita/miniapp/assets/index-DaeIhwT5.js"></script>
+    <link rel="stylesheet" crossorigin href="/FonteVita/miniapp/assets/index-DP32aOyN.css">
+  </head>
+  <body>
+    <!-- Preloader -->
+    <div id="preloader">
+      <img src="https://fontevita-vitality-hub.lovable.app/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png" alt="FonteVita" />
+      <div class="donut"></div>
+    </div>
+
+    <div id="root"></div>
+  </body>
+</html>
