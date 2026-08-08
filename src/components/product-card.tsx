@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, ShoppingBag, Check, Minus, Plus } from "lucide-react";
 import { useCart } from "@/components/cart-context";
 import { formatPrice, type Product } from "@/data/products";
