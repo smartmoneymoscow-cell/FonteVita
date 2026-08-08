@@ -57,8 +57,11 @@ export const Route = createFileRoute("/blog/category/$category")({
 });
 
 function CategoryPage() {
-  const { category, posts } = Route.useLoaderData();
+  const data = Route.useLoaderData();
+  if (!data?.category) return null;
+  const { category, posts } = data;
   const otherCategories = blogCategories.filter((c) => c.slug !== category.slug);
+
 
   return (
     <CartProvider>
