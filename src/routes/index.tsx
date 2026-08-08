@@ -291,7 +291,7 @@ function Index() {
             <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
               <Reveal>
                 <div className="mx-auto mb-10 max-w-2xl text-center">
-                  <h2 className="text-3xl font-bold sm:text-4xl">Какой БАД вам подойдёт</h2>
+                  <h2 className="text-3xl font-bold sm:text-4xl">Быстрый подбор</h2>
                   <p className="mt-3 text-base leading-relaxed text-muted-foreground">
                     Три вопроса о самочувствии — и мы подскажем формулу, с которой стоит начать.
                   </p>
