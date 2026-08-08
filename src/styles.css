@@ -329,3 +329,8 @@
   transform: none !important;
   visibility: visible !important;
 }
+
+/* Prevent chat panel from clipping at the top */
+#__replain_widget_iframe {
+  max-height: calc(100vh - 40px) !important;
+}
