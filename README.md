@@ -4,7 +4,7 @@
 
 ## 🌐 Live
 
-- **GitHub Pages**: https://smartmoneymoscow-cell.github.io/fontevita-vitality-hub/
+- **GitHub Pages**: https://smartmoneymoscow-cell.github.io/FonteVita/
 - **Lovable**: https://fontevita-vitality-hub.lovable.app
 
 ## Технологии
