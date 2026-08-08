@@ -62,7 +62,7 @@ function CategoryPage() {
 
   return (
     <CartProvider>
-    <div className="min-h-dvh overflow-x-hidden">
+    <div className="flex min-h-dvh flex-col overflow-x-hidden">
       <SiteHeader />
       <CartPanel />
 

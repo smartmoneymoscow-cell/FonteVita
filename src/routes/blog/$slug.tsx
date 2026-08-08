@@ -105,7 +105,7 @@ function ArticlePage() {
 
   return (
     <CartProvider>
-    <div className="min-h-dvh overflow-x-hidden">
+    <div className="flex min-h-dvh flex-col overflow-x-hidden">
       <SiteHeader />
       <CartPanel />
 
@@ -148,17 +148,6 @@ function ArticlePage() {
             <div className="min-w-0 space-y-10">
               <ArticleContent blocks={post.content} />
               <ArticleFaq items={post.faq} />
-
-              {related.length > 0 && (
-                <div>
-                  <h2 className="text-2xl font-bold sm:text-3xl">Читайте также</h2>
-                  <div className="mt-5 grid gap-6 sm:grid-cols-2">
-                    {related.map((p) => (
-                      <ArticleCard key={p.slug} post={p} />
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
 
             <aside className="space-y-5 lg:sticky lg:top-24 lg:h-fit">
@@ -167,6 +156,17 @@ function ArticlePage() {
             </aside>
           </div>
         </section>
+
+        {related.length > 0 && (
+          <section className="mx-auto w-full max-w-6xl px-4 pb-10 sm:px-6 sm:pb-14">
+            <h2 className="text-2xl font-bold sm:text-3xl">Читайте также</h2>
+            <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((p) => (
+                <ArticleCard key={p.slug} post={p} />
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <SiteFooter />

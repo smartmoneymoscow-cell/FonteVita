@@ -89,6 +89,14 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
+  }
+
+  body::after {
+    content: "";
+    display: block;
+    height: 0;
   }
 
   h1,

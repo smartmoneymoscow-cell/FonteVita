@@ -24,27 +24,62 @@
 
 ```
 src/
-├── assets/              # Изображения баночек, логотип, аватары
+├── assets/                        # Изображения баночек, логотип, аватары
 ├── components/
-│   ├── cart-context.tsx  # Контекст корзины с localStorage
-│   ├── cart-panel.tsx    # Боковая панель корзины
-│   ├── faq.tsx           # Аккордеон FAQ
-│   ├── product-card.tsx  # Карточка товара с раскрытием
-│   ├── quiz.tsx          # Интерактивный подбор БАДа
-│   ├── reveal.tsx        # Анимация появления (Intersection Observer)
-│   ├── reviews.tsx       # Карточки отзывов
-│   └── site-header.tsx   # Шапка сайта
+│   ├── blog/
+│   │   ├── article-card.tsx       # Карточка статьи для списков
+│   │   ├── article-content.tsx    # Контент статьи (блоки)
+│   │   ├── article-cover.tsx      # Обложка статьи
+│   │   ├── article-faq.tsx        # FAQ внутри статьи
+│   │   ├── blog-header.tsx        # Шапка блога
+│   │   ├── breadcrumbs.tsx        # Хлебные крошки
+│   │   ├── category-pill.tsx      # Бейдж категории
+│   │   ├── related-products.tsx   # Рекомендованные товары
+│   │   └── table-of-contents.tsx  # Оглавление статьи
+│   ├── cart-context.tsx           # Контекст корзины с localStorage
+│   ├── cart-panel.tsx             # Боковая панель корзины
+│   ├── checkout-form.tsx          # Форма оформления заказа
+│   ├── faq.tsx                    # Аккордеон FAQ
+│   ├── hero-bottles.tsx           # Анимированные баночки на главной
+│   ├── product-card.tsx           # Карточка товара с раскрытием
+│   ├── quiz.tsx                   # Интерактивный подбор БАДа
+│   ├── reveal.tsx                 # Анимация появления (Intersection Observer)
+│   ├── reviews.tsx                # Карточки отзывов
+│   ├── site-footer.tsx            # Подвал сайта
+│   └── site-header.tsx            # Шапка сайта
 ├── data/
-│   └── products.ts       # Данные о продуктах (цены, состав, дозировки)
-├── hooks/                # Пользовательские хуки
-├── lib/                  # Утилиты (обработка ошибок)
+│   ├── blog-categories.ts         # Категории блога
+│   ├── blog-posts.ts              # Статьи блога
+│   └── products.ts                # Данные о продуктах (цены, состав, дозировки)
+├── hooks/
+│   └── use-mobile.tsx             # Определение мобильного устройства
+├── lib/
+│   ├── error-capture.ts           # Перехват ошибок
+│   ├── error-page.ts              # Страница ошибки
+│   ├── lovable-error-reporting.ts # Отчёт об ошибках
+│   ├── order-service.ts           # Сервис оформления заказов
+│   └── seo-schema.ts              # JSON-LD схемы для SEO
 ├── routes/
-│   ├── __root.tsx        # Корневой layout (шрифты, мета, 404)
-│   └── index.tsx         # Главная страница
-├── styles.css            # Глобальные стили, тема, анимации
-├── router.tsx            # Конфигурация TanStack Router
-├── server.ts             # SSR entry point
-└── start.ts              # TanStack Start instance
+│   ├── __root.tsx                 # Корневой layout (шрифты, мета, 404)
+│   ├── account.tsx                # Личный кабинет
+│   ├── blog/
+│   │   ├── index.tsx              # Список статей блога
+│   │   ├── $slug.tsx              # Страница отдельной статьи
+│   │   └── category/$category.tsx # Статьи по категории
+│   └── index.tsx                  # Главная страница
+├── styles.css                     # Глобальные стили, тема, анимации
+├── router.tsx                     # Конфигурация TanStack Router
+├── server.ts                      # SSR entry point
+└── start.ts                       # TanStack Start instance
+
+miniapp/                           # Telegram Mini App
+├── src/
+│   ├── App.tsx                    # Корневой компонент
+│   ├── components/                # UI-компоненты мини-приложения
+│   ├── data/products.ts           # Данные о продуктах
+│   ├── hooks/useTelegram.ts       # Хук Telegram WebApp API
+│   └── styles.css                 # Стили мини-приложения
+└── package.json
 ```
 
 ## Продукты
@@ -70,8 +105,8 @@ src/
 ## Разработка
 
 ```sh
-git clone https://github.com/smartmoneymoscow-cell/fontevita-vitality-hub.git
-cd fontevita-vitality-hub
+git clone https://github.com/smartmoneymoscow-cell/FonteVita.git
+cd FonteVita
 npm i
 npm run dev
 ```

@@ -13,8 +13,11 @@ import {
   MapPin,
   Plus,
   Trash2,
+  Star,
+  ShoppingBag,
 } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
+import { formatPrice } from "@/data/products";
 
 export type SavedAddress = {
   id: string;
@@ -38,7 +41,6 @@ function loadProfile(tgUser?: { first_name?: string; last_name?: string }): Prof
     const raw = localStorage.getItem("fv_profile");
     if (raw) {
       const data = JSON.parse(raw);
-      // Migration: old single address → array
       if (typeof data.address === "string" && data.address.trim()) {
         data.addresses = [{ id: genId(), label: "Адрес 1", address: data.address }];
         delete data.address;
@@ -64,9 +66,33 @@ function saveProfile(profile: ProfileData) {
   localStorage.setItem("fv_profile", JSON.stringify(profile));
 }
 
-// Also save addresses separately for CartPage to read
 function syncAddressesToStorage(addresses: SavedAddress[]) {
   localStorage.setItem("fv_addresses", JSON.stringify(addresses));
+}
+
+function getOrderStats() {
+  try {
+    const raw = localStorage.getItem("fv_orders");
+    if (raw) {
+      const orders = JSON.parse(raw);
+      return {
+        count: orders.length,
+        totalSpent: orders.reduce((s: number, o: { total: number }) => s + o.total, 0),
+      };
+    }
+  } catch {}
+  return { count: 0, totalSpent: 0 };
+}
+
+function getCartCount() {
+  try {
+    const raw = localStorage.getItem("fv_cart");
+    if (raw) {
+      const items = JSON.parse(raw);
+      return Object.values(items).reduce((s: number, q) => s + (q as number), 0) as number;
+    }
+  } catch {}
+  return 0;
 }
 
 export function ProfilePage() {
@@ -89,9 +115,11 @@ export function ProfilePage() {
   const [addingAddress, setAddingAddress] = useState(false);
   const [newAddress, setNewAddress] = useState("");
   const [newLabel, setNewLabel] = useState("");
+  const [stats, setStats] = useState({ count: 0, totalSpent: 0 });
 
   useEffect(() => {
     setProfile(loadProfile(tgUser));
+    setStats(getOrderStats());
   }, []);
 
   const handleSave = () => {
@@ -172,8 +200,8 @@ export function ProfilePage() {
               </div>
             )}
             {tgUser?.is_premium && (
-              <span className="absolute -bottom-1 -right-1 rounded-full bg-sun px-2 py-0.5 text-[10px] font-bold shadow-soft">
-                ⭐ Premium
+              <span className="absolute -bottom-1 -right-1 flex items-center gap-1 rounded-full bg-sun px-2 py-0.5 text-[10px] font-bold shadow-soft">
+                <Star className="h-3 w-3" /> Premium
               </span>
             )}
           </div>
@@ -199,6 +227,20 @@ export function ProfilePage() {
             Данные сохранены
           </div>
         )}
+
+        {/* Stats */}
+        <div className="mb-6 grid grid-cols-2 gap-2">
+          <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-4">
+            <span className="font-display text-2xl font-bold">{stats.count}</span>
+            <span className="text-xs text-muted-foreground">заказов</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-4">
+            <span className="font-display text-2xl font-bold">
+              {stats.totalSpent > 0 ? formatPrice(stats.totalSpent) : "—"}
+            </span>
+            <span className="text-xs text-muted-foreground">потрачено</span>
+          </div>
+        </div>
 
         {/* Quick actions */}
         <div className="mb-6 grid grid-cols-3 gap-2">
@@ -299,7 +341,6 @@ export function ProfilePage() {
             </button>
           </div>
 
-          {/* Address list */}
           {profile.addresses.length === 0 && !addingAddress && (
             <div className="rounded-2xl border border-dashed border-border bg-card p-6 text-center">
               <MapPin className="mx-auto h-8 w-8 text-muted-foreground/40" />
@@ -333,7 +374,6 @@ export function ProfilePage() {
             </div>
           ))}
 
-          {/* Add address form */}
           {addingAddress && (
             <div className="space-y-2 rounded-2xl border border-primary/30 bg-card p-4 animate-rise-in">
               <label className="flex items-center gap-3 rounded-xl border border-border bg-background px-3 py-2.5 focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/10">
@@ -416,7 +456,7 @@ export function ProfilePage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground/50">
-          FonteVita Mini App v1.0
+          FonteVita Mini App v2.0
         </p>
       </div>
     </div>

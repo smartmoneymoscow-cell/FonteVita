@@ -1,8 +1,8 @@
-import { ShoppingBag, User, Store } from "lucide-react";
+import { ShoppingBag, User, Store, Package } from "lucide-react";
 import { useCart } from "@/components/CartContext";
 import { useTelegram } from "@/hooks/useTelegram";
 
-type Tab = "catalog" | "cart" | "profile";
+type Tab = "catalog" | "cart" | "orders" | "profile";
 
 export function BottomNav({
   active,
@@ -17,6 +17,7 @@ export function BottomNav({
   const tabs: { id: Tab; label: string; icon: typeof Store; badge?: number }[] = [
     { id: "catalog", label: "Каталог", icon: Store },
     { id: "cart", label: "Корзина", icon: ShoppingBag, badge: count },
+    { id: "orders", label: "Заказы", icon: Package },
     { id: "profile", label: "Профиль", icon: User },
   ];
 
@@ -29,11 +30,12 @@ export function BottomNav({
           return (
             <button
               key={tab.id}
+              data-tab={tab.id}
               onClick={() => {
                 haptic("light");
                 onChange(tab.id);
               }}
-              className={`relative flex flex-1 flex-col items-center gap-0.5 py-2 pt-2.5 text-[11px] font-bold transition-colors ${
+              className={`relative flex flex-1 flex-col items-center gap-0.5 py-2 pt-2.5 text-[10px] font-bold transition-colors sm:text-[11px] ${
                 isActive ? "text-primary" : "text-muted-foreground"
               }`}
             >

@@ -16,6 +16,7 @@ import { useCart } from "@/components/CartContext";
 import { useTelegram } from "@/hooks/useTelegram";
 import { formatPrice } from "@/data/products";
 import type { SavedAddress } from "@/components/ProfilePage";
+import { saveOrder } from "@/components/OrdersPage";
 
 type CheckoutForm = {
   firstName: string;
@@ -143,6 +144,17 @@ export function CartPage() {
     hapticSuccess();
     setOrdered(true);
     setCheckoutMode(false);
+    saveOrder({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      date: new Date().toISOString(),
+      items: lines.map((l) => ({
+        name: l.product.name,
+        qty: l.qty,
+        price: l.product.price,
+      })),
+      total: total + (total < 3000 ? 350 : 0),
+      status: "confirmed",
+    });
     console.log("Order:", {
       items: lines.map((l) => ({ id: l.product.id, qty: l.qty })),
       total: total + (total < 3000 ? 350 : 0),

@@ -475,7 +475,7 @@ function AccountPage() {
   if (!isAuthed) {
     return (
       <CartProvider>
-        <div className="min-h-dvh overflow-x-hidden bg-gradient-to-b from-sand via-background to-background">
+        <div className="flex min-h-dvh flex-col overflow-x-hidden bg-gradient-to-b from-sand via-background to-background">
           <SiteHeader />
           <CartPanel />
           <main className="mx-auto flex w-full max-w-6xl flex-col items-center justify-center px-4 py-14 sm:px-6 sm:py-20">
@@ -489,7 +489,7 @@ function AccountPage() {
 
   return (
     <CartProvider>
-      <div className="min-h-dvh overflow-x-hidden">
+      <div className="flex min-h-dvh flex-col overflow-x-hidden">
         <SiteHeader />
         <CartPanel />
 
