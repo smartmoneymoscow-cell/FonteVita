@@ -405,7 +405,7 @@ export function CartPage() {
       )}
 
       <h2 className="mb-4 text-lg font-bold">
-        Корзина <span className="text-muted-foreground">({count})</span>
+        Товары <span className="text-muted-foreground">({count})</span>
       </h2>
 
       <ul className="space-y-3">

@@ -15,7 +15,10 @@ export default function App() {
   return (
     <CartProvider>
       <div className="min-h-dvh overflow-x-hidden bg-background">
-        <SiteHeader title={tab === "catalog" ? "Каталог" : tab === "cart" ? "Корзина" : "Профиль"} />
+        <SiteHeader
+          title={tab === "catalog" ? "Каталог" : tab === "cart" ? "Корзина" : "Профиль"}
+          className={tab === "profile" ? "bg-gradient-to-b from-sun-soft to-background" : undefined}
+        />
 
         <main>
           {tab === "catalog" && <CatalogPage />}
