@@ -6,18 +6,13 @@ import {
   Edit3,
   Check,
   X,
-  Package,
-  Heart,
-  Shield,
   ChevronRight,
   MapPin,
   Plus,
   Trash2,
   Star,
-  ShoppingBag,
 } from "lucide-react";
 import { useTelegram } from "@/hooks/useTelegram";
-import { formatPrice } from "@/data/products";
 
 export type SavedAddress = {
   id: string;
@@ -70,31 +65,6 @@ function syncAddressesToStorage(addresses: SavedAddress[]) {
   localStorage.setItem("fv_addresses", JSON.stringify(addresses));
 }
 
-function getOrderStats() {
-  try {
-    const raw = localStorage.getItem("fv_orders");
-    if (raw) {
-      const orders = JSON.parse(raw);
-      return {
-        count: orders.length,
-        totalSpent: orders.reduce((s: number, o: { total: number }) => s + o.total, 0),
-      };
-    }
-  } catch {}
-  return { count: 0, totalSpent: 0 };
-}
-
-function getCartCount() {
-  try {
-    const raw = localStorage.getItem("fv_cart");
-    if (raw) {
-      const items = JSON.parse(raw);
-      return Object.values(items).reduce((s: number, q) => s + (q as number), 0) as number;
-    }
-  } catch {}
-  return 0;
-}
-
 export function ProfilePage() {
   const { tg, haptic, hapticSuccess } = useTelegram();
 
@@ -115,11 +85,8 @@ export function ProfilePage() {
   const [addingAddress, setAddingAddress] = useState(false);
   const [newAddress, setNewAddress] = useState("");
   const [newLabel, setNewLabel] = useState("");
-  const [stats, setStats] = useState({ count: 0, totalSpent: 0 });
-
   useEffect(() => {
     setProfile(loadProfile(tgUser));
-    setStats(getOrderStats());
   }, []);
 
   const handleSave = () => {
@@ -227,40 +194,6 @@ export function ProfilePage() {
             Данные сохранены
           </div>
         )}
-
-        {/* Stats */}
-        <div className="mb-6 grid grid-cols-2 gap-2">
-          <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-4">
-            <span className="font-display text-2xl font-bold">{stats.count}</span>
-            <span className="text-xs text-muted-foreground">заказов</span>
-          </div>
-          <div className="flex flex-col items-center gap-1 rounded-2xl border border-border bg-card p-4">
-            <span className="font-display text-2xl font-bold">
-              {stats.totalSpent > 0 ? formatPrice(stats.totalSpent) : "—"}
-            </span>
-            <span className="text-xs text-muted-foreground">потрачено</span>
-          </div>
-        </div>
-
-        {/* Quick actions */}
-        <div className="mb-6 grid grid-cols-3 gap-2">
-          {[
-            { icon: Package, label: "Заказы", color: "bg-sky-soft text-sky" },
-            { icon: Heart, label: "Избранное", color: "bg-coral-soft text-coral" },
-            { icon: Shield, label: "Гарантия", color: "bg-sun-soft text-sun" },
-          ].map((item) => (
-            <button
-              key={item.label}
-              onClick={() => haptic("light")}
-              className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 transition-all active:scale-95"
-            >
-              <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${item.color}`}>
-                <item.icon className="h-5 w-5" />
-              </span>
-              <span className="text-xs font-bold">{item.label}</span>
-            </button>
-          ))}
-        </div>
 
         {/* Personal data */}
         <div className="space-y-4">

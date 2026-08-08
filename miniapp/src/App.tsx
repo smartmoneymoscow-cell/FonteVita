@@ -3,12 +3,11 @@ import { CartProvider } from "@/components/CartContext";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ProductCard } from "@/components/ProductCard";
 import { CartPage } from "@/components/CartPage";
-import { OrdersPage } from "@/components/OrdersPage";
 import { ProfilePage } from "@/components/ProfilePage";
 import { BottomNav } from "@/components/BottomNav";
 import { products } from "@/data/products";
 
-type Tab = "catalog" | "cart" | "orders" | "profile";
+type Tab = "catalog" | "cart" | "profile";
 
 export default function App() {
   const [tab, setTab] = useState<Tab>("catalog");
@@ -21,7 +20,6 @@ export default function App() {
         <main>
           {tab === "catalog" && <CatalogPage />}
           {tab === "cart" && <CartPage />}
-          {tab === "orders" && <OrdersPage />}
           {tab === "profile" && <ProfilePage />}
         </main>
 

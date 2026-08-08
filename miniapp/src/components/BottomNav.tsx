@@ -1,8 +1,8 @@
-import { ShoppingBag, User, Store, Package } from "lucide-react";
+import { ShoppingBag, User, Store } from "lucide-react";
 import { useCart } from "@/components/CartContext";
 import { useTelegram } from "@/hooks/useTelegram";
 
-type Tab = "catalog" | "cart" | "orders" | "profile";
+type Tab = "catalog" | "cart" | "profile";
 
 export function BottomNav({
   active,
@@ -17,7 +17,6 @@ export function BottomNav({
   const tabs: { id: Tab; label: string; icon: typeof Store; badge?: number }[] = [
     { id: "catalog", label: "Каталог", icon: Store },
     { id: "cart", label: "Корзина", icon: ShoppingBag, badge: count },
-    { id: "orders", label: "Заказы", icon: Package },
     { id: "profile", label: "Профиль", icon: User },
   ];
 
