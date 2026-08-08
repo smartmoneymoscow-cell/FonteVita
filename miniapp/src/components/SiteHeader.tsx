@@ -20,7 +20,7 @@ export function SiteHeader({ title, className }: { title?: string; className?: s
       }`}
     >
       <div className="mx-auto flex w-full max-w-lg items-center justify-center px-4 py-3">
-        <span className="text-base font-bold text-foreground">
+        <span className="text-xl font-bold text-foreground">
           {title || "Каталог"}
         </span>
       </div>

@@ -17,7 +17,7 @@ export default function App() {
       <div className="min-h-dvh overflow-x-hidden bg-background">
         <SiteHeader
           title={tab === "catalog" ? "Каталог" : tab === "cart" ? "Корзина" : "Профиль"}
-          className={tab === "profile" ? "bg-gradient-to-b from-sun-soft to-background" : undefined}
+          className={tab === "profile" ? "bg-gradient-to-b from-sun-soft to-transparent" : undefined}
         />
 
         <main>
