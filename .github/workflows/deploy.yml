@@ -124,73 +124,81 @@ jobs:
             const [loaderData, setLoaderData] = React.useState<any>(undefined);
             const [ready, setReady] = React.useState(false);
 
+            const [missing, setMissing] = React.useState(false);
+
             React.useEffect(() => {
               let cancelled = false;
               setReady(false);
+              setMissing(false);
               if (!result) return;
               const cfg = routeConfigs[result.key];
               if (cfg?.loader) {
                 try {
                   const r = cfg.loader({ params: result.params });
                   if (r && typeof r.then === "function") {
-                    r.then((data: any) => { if (!cancelled) { setLoaderData(data); setReady(true); } }).catch(() => { if (!cancelled) setReady(true); });
+                    r.then((data: any) => { if (!cancelled) { setLoaderData(data); setReady(true); } })
+                     .catch(() => { if (!cancelled) { setLoaderData(undefined); setMissing(true); setReady(true); } });
                   } else {
                     if (!cancelled) { setLoaderData(r); setReady(true); }
                   }
-                } catch { if (!cancelled) setReady(true); }
+                } catch { if (!cancelled) { setLoaderData(undefined); setMissing(true); setReady(true); } }
               } else {
                 if (!cancelled) { setLoaderData(undefined); setReady(true); }
               }
               return () => { cancelled = true; };
             }, [pathname]);
 
+            // scroll to top on route change (articles otherwise open mid-page)
+            React.useEffect(() => {
+              window.scrollTo(0, 0);
+            }, [pathname]);
+
             // process head() for SEO
             React.useEffect(() => {
-              if (!result || !ready) return;
+              if (!result || !ready || missing) return;
               const cfg = routeConfigs[result.key];
-              if (cfg?.head) {
-                try {
-                  const h = cfg.head({ loaderData });
-                  if (h?.meta) {
-                    for (const m of h.meta) {
-                      let el = document.querySelector(
-                        m.name
-                          ? `meta[name="${m.name}"]`
-                          : `meta[property="${m.property}"]`
-                      );
-                      if (!el) {
-                        el = document.createElement("meta");
-                        if (m.name) el.setAttribute("name", m.name);
-                        if (m.property) el.setAttribute("property", m.property);
-                        document.head.appendChild(el);
-                      }
-                      el.setAttribute("content", m.content);
-                    }
+              if (!cfg?.head) return;
+              const SITE = "https://fontevita.ru";
+              const abs = (u: string) => (!u ? u : /^https?:/.test(u) ? u : SITE + (u.startsWith("/") ? u : "/" + u));
+              // drop tags injected for the previous route
+              document.querySelectorAll("[data-fv-head]").forEach((el) => el.remove());
+              try {
+                const h = cfg.head({ loaderData, params: result.params });
+                for (const m of h?.meta ?? []) {
+                  if (m.title) { document.title = m.title; continue; }
+                  const sel = m.name ? 'meta[name="' + m.name + '"]' : 'meta[property="' + m.property + '"]';
+                  let el = document.querySelector(sel);
+                  if (!el) {
+                    el = document.createElement("meta");
+                    if (m.name) el.setAttribute("name", m.name);
+                    if (m.property) el.setAttribute("property", m.property);
+                    el.setAttribute("data-fv-head", "");
+                    document.head.appendChild(el);
                   }
-                  if (h?.links) {
-                    for (const l of h.links) {
-                      if (l.rel === "canonical") {
-                        let link = document.querySelector('link[rel="canonical"]');
-                        if (!link) {
-                          link = document.createElement("link");
-                          link.setAttribute("rel", "canonical");
-                          document.head.appendChild(link);
-                        }
-                        link.setAttribute("href", l.href);
-                      }
-                    }
+                  const isUrl = m.property === "og:url" || m.property === "og:image" || m.name === "twitter:image";
+                  el.setAttribute("content", isUrl ? abs(m.content) : m.content);
+                }
+                for (const l of h?.links ?? []) {
+                  if (l.rel !== "canonical") continue;
+                  let link = document.querySelector('link[rel="canonical"]');
+                  if (!link) {
+                    link = document.createElement("link");
+                    link.setAttribute("rel", "canonical");
+                    link.setAttribute("data-fv-head", "");
+                    document.head.appendChild(link);
                   }
-                  if (h?.scripts) {
-                    for (const s of h.scripts) {
-                      const script = document.createElement("script");
-                      script.type = "application/ld+json";
-                      script.textContent = s.children;
-                      document.head.appendChild(script);
-                    }
-                  }
-                } catch {}
-              }
-            }, [pathname, ready, loaderData]);
+                  link.setAttribute("href", abs(l.href));
+                }
+                for (const s of h?.scripts ?? []) {
+                  if (!s?.children) continue;
+                  const script = document.createElement("script");
+                  script.type = "application/ld+json";
+                  script.setAttribute("data-fv-head", "");
+                  script.textContent = s.children;
+                  document.head.appendChild(script);
+                }
+              } catch {}
+            }, [pathname, ready, missing, loaderData]);
 
             if (!result) return <p style={{ padding: 40 }}>Страница не найдена</p>;
 
@@ -198,6 +206,7 @@ jobs:
             if (!cfg?.component) return null;
 
             if (cfg.loader && !ready) return null;
+            if (missing) return <p style={{ padding: 40 }}>Статья не найдена</p>;
 
             const Component = cfg.component;
             return (
