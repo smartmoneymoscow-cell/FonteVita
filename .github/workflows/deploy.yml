@@ -241,7 +241,7 @@ jobs:
 
           ReactDOM.createRoot(document.getElementById("root")!).render(
             <React.StrictMode>
-              <BrowserRouter basename="/fontevita-vitality-hub">
+              <BrowserRouter basename="/FonteVita">
                 <App />
               </BrowserRouter>
             </React.StrictMode>
@@ -295,7 +295,7 @@ jobs:
           }
 
           export default defineConfig({
-            base: "/fontevita-vitality-hub/",
+            base: "/FonteVita/",
             plugins: [react(), tsconfigPaths(), tailwindcss(), lovableAssetPlugin()],
             resolve: {
               alias: {

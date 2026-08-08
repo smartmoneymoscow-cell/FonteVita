@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/fontevita-vitality-hub/miniapp/",
+  base: "/FonteVita/miniapp/",
   resolve: {
     alias: {
       "@": import.meta.dirname + "/src",
