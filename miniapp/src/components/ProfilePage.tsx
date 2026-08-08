@@ -143,7 +143,7 @@ export function ProfilePage() {
   return (
     <div className="mx-auto w-full max-w-lg pb-28">
       {/* Header */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-sun-soft to-transparent px-4 pb-8 pt-8">
+      <div className="relative overflow-hidden bg-sun-soft px-4 pb-8 pt-8">
         <div
           aria-hidden
           className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-sun/20 blur-3xl"
