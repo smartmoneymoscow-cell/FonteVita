@@ -349,7 +349,8 @@ function Index() {
                             {i < authSteps.length - 1 && (
                               <span
                                 aria-hidden
-                                className="absolute left-1/2 top-full h-full w-px -translate-x-1/2 bg-border"
+                                className="absolute left-1/2 top-full w-px -translate-x-1/2 bg-border"
+                                style={{ height: "calc(100% + 24px)" }}
                               />
                             )}
                           </span>
