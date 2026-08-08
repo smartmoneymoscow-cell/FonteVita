@@ -184,25 +184,30 @@ export function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      {flying && (
-        <img
-          src={product.image}
-          alt=""
-          aria-hidden
-          className="pointer-events-none fixed z-[60] object-contain"
-          style={
-            {
-              left: fly.left,
-              top: fly.top,
-              width: fly.w,
-              height: fly.h,
-              "--fly-x": `${fly.x}px`,
-              "--fly-y": `${fly.y}px`,
-              animation: "fly-to-cart 0.7s cubic-bezier(0.5,0,0.75,0) forwards",
-            } as React.CSSProperties
-          }
-        />
-      )}
+      {/* rendered in a portal: ancestors with transform (reveal animation)
+          would otherwise become the containing block for position: fixed */}
+      {flying &&
+        mounted &&
+        createPortal(
+          <img
+            src={product.image}
+            alt=""
+            aria-hidden
+            className="pointer-events-none fixed z-[60] object-contain"
+            style={
+              {
+                left: fly.left,
+                top: fly.top,
+                width: fly.w,
+                height: fly.h,
+                "--fly-x": `${fly.x}px`,
+                "--fly-y": `${fly.y}px`,
+                animation: "fly-to-cart 0.7s cubic-bezier(0.5,0,0.75,0) forwards",
+              } as React.CSSProperties
+            }
+          />,
+          document.body,
+        )}
     </article>
   );
 }
