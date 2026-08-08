@@ -344,12 +344,12 @@ function Index() {
                     <ol className="mt-6">
                       {authSteps.map((s, i) => (
                         <li key={s.title} className={`flex gap-4 ${i < authSteps.length - 1 ? "pb-6" : ""}`}>
-                          <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sun to-primary font-display text-lg font-bold text-primary-foreground shadow-soft">
+                          <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sun-soft font-display text-base font-bold">
                             {i + 1}
                             {i < authSteps.length - 1 && (
                               <span
                                 aria-hidden
-                                className="absolute left-1/2 top-full h-full w-0.5 -translate-x-1/2 rounded-full bg-gradient-to-b from-primary/40 to-transparent"
+                                className="absolute left-1/2 top-full h-full w-px -translate-x-1/2 bg-border"
                               />
                             )}
                           </span>
