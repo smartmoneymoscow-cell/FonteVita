@@ -17,6 +17,8 @@ export function ProductCard({ product }: { product: Product }) {
   const imgRef = useRef<HTMLImageElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const [fly, setFly] = useState({ x: 0, y: 0, left: 0, top: 0, w: 0, h: 0 });
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const line = lines.find((l) => l.product.id === product.id);
   const qty = line?.qty ?? 0;
