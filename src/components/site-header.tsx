@@ -86,7 +86,7 @@ export function SiteHeader() {
             id="cart-button"
             onClick={() => setOpen(true)}
             aria-label={`Открыть корзину, товаров: ${count}`}
-            className="cta-lift relative flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-extrabold text-primary-foreground shadow-soft"
+            className="cta-lift relative inline-flex h-11 items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-extrabold text-primary-foreground shadow-soft"
           >
             <ShoppingBag className="h-4 w-4" />
             <span className="hidden sm:inline">Корзина</span>
@@ -104,7 +104,7 @@ export function SiteHeader() {
           <Link
             to="/account"
             aria-label={isAuthed ? "Личный кабинет" : "Войти в аккаунт"}
-            className="cta-lift flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-3.5 py-2 text-sm font-bold text-foreground backdrop-blur hover:border-primary hover:bg-sun-soft"
+            className="cta-lift inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border/70 bg-card/70 px-4 text-sm font-bold text-foreground backdrop-blur hover:border-primary hover:bg-sun-soft"
           >
             <User className="h-4 w-4" />
             <span className="hidden sm:inline">{isAuthed ? "Личный кабинет" : "Войти"}</span>
