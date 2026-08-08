@@ -160,7 +160,7 @@ function ArticlePage() {
         {related.length > 0 && (
           <section className="mx-auto w-full max-w-6xl px-4 pb-10 sm:px-6 sm:pb-14">
             <h2 className="text-2xl font-bold sm:text-3xl">Читайте также</h2>
-            <div className="mt-5 grid gap-6 sm:grid-cols-2">
+            <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((p) => (
                 <ArticleCard key={p.slug} post={p} />
               ))}

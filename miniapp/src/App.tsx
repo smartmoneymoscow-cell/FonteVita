@@ -15,7 +15,7 @@ export default function App() {
   return (
     <CartProvider>
       <div className="min-h-dvh overflow-x-hidden bg-background">
-        <SiteHeader title={tab === "catalog" ? "Каталог" : tab === "cart" ? "Корзина" : "Профиль"} />
+        {tab === "catalog" && <SiteHeader />}
 
         <main>
           {tab === "catalog" && <CatalogPage />}

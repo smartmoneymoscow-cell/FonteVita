@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useTelegram } from "@/hooks/useTelegram";
 
-export function SiteHeader({ title }: { title?: string }) {
+export function SiteHeader() {
+  const { haptic } = useTelegram();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -18,9 +20,24 @@ export function SiteHeader({ title }: { title?: string }) {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex w-full max-w-lg items-center justify-center px-4 py-3">
-        <span className="text-sm font-bold text-foreground">
-          {title || "Каталог"}
+      <div className="mx-auto flex w-full max-w-lg items-center justify-between px-4 py-3">
+        <a
+          href="#top"
+          onClick={() => haptic("light")}
+          className="flex items-center"
+          aria-label="FonteVita — на главную"
+        >
+          <img
+            src="https://fontevita-vitality-hub.lovable.app/__l5e/assets-v1/ace176ff-1b22-489c-a209-196f67f2c7b6/logo-mark.png"
+            alt="Логотип FonteVita"
+            className="h-10 w-auto object-contain"
+            width={140}
+            height={100}
+          />
+        </a>
+
+        <span className="text-xs font-bold text-muted-foreground/60">
+          Каталог БАДов
         </span>
       </div>
     </header>
