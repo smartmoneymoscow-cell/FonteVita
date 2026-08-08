@@ -226,6 +226,20 @@ jobs:
           import { Route as BlogSlugRoute } from "./routes/blog/$slug";
           import { Route as BlogCategoryRoute } from "./routes/blog/category/$category";
 
+          // Force-include blog components that Vite tree-shakes out
+          // These are used dynamically by the mock router and get removed
+          import { ArticleContent } from "./components/blog/article-content";
+          import { ArticleFaq } from "./components/blog/article-faq";
+          import { ArticleCard } from "./components/blog/article-card";
+          import { ArticleCover } from "./components/blog/article-cover";
+          import { CategoryPill } from "./components/blog/category-pill";
+          import { RelatedProducts } from "./components/blog/related-products";
+          import { TableOfContents } from "./components/blog/table-of-contents";
+          import { Breadcrumbs } from "./components/blog/breadcrumbs";
+          import { BlogHeader } from "./components/blog/blog-header";
+          import { getPostBySlug, getRelatedPosts, getAllPosts, formatDate } from "./data/blog-posts";
+          import { blogCategories, getCategoryBySlug } from "./data/blog-categories";
+
           // Store routes on window to prevent tree-shaking
           (window as any).__fv_routes = [
             IndexRoute,
@@ -234,6 +248,14 @@ jobs:
             BlogSlugRoute,
             BlogCategoryRoute,
           ];
+
+          // Store blog components on window to prevent tree-shaking
+          (window as any).__fv_blog = {
+            ArticleContent, ArticleFaq, ArticleCard, ArticleCover,
+            CategoryPill, RelatedProducts, TableOfContents, Breadcrumbs, BlogHeader,
+            getPostBySlug, getRelatedPosts, getAllPosts, formatDate,
+            blogCategories, getCategoryBySlug,
+          };
 
           function App() {
             return <MockRouter />;
