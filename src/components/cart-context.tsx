@@ -42,9 +42,16 @@ function loadStoredItems(): Record<string, number> {
 const Ctx = createContext<CartCtx | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<Record<string, number>>(loadStoredItems);
+  const [items, setItems] = useState<Record<string, number>>({});
   const [open, setOpen] = useState(false);
   const skipSave = useRef(true);
+
+  // Hydrate from localStorage after mount so SSR and client markup match
+  useEffect(() => {
+    const stored = loadStoredItems();
+    if (Object.keys(stored).length > 0) setItems(stored);
+  }, []);
+
 
   // Persist to localStorage (skip initial render since we just loaded)
   useEffect(() => {
